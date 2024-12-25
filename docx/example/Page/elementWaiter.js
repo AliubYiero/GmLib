@@ -1,5 +1,5 @@
 /**
- * ElementWaiter.js
+ * elementWaiter.js
  * @file 示例 (无法直接运行)
  * */
 import { elementWaiter } from '@yiero/gmlib';

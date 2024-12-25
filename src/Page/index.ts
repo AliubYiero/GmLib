@@ -1,1 +1,1 @@
-export * from './ElementWaiter.ts'
+export * from './elementWaiter.ts';
