@@ -3,10 +3,10 @@ name: Build and Release
 on:
     push:
         branches:
-            - main  # 可以根据需求修改触发分支
+            - master  # 可以根据需求修改触发分支
     pull_request:
         branches:
-            - main  # 当创建或更新PR时也会触发
+            - master  # 当创建或更新PR时也会触发
 
 jobs:
     build:
@@ -14,35 +14,35 @@ jobs:
         
         steps:
             # Step 1: Check out the code
-            - name: Check out the repository
-              uses: actions/checkout@v3
+            -   name: Check out the repository
+                uses: actions/checkout@v3
             
             # Step 2: Set up Node.js
-            - name: Set up Node.js
-              uses: actions/setup-node@v3
-              with:
-                  node-version: '16'  # 设置 Node.js 版本，依据实际情况修改
+            -   name: Set up Node.js
+                uses: actions/setup-node@v3
+                with:
+                    node-version: '16'  # 设置 Node.js 版本，依据实际情况修改
             
             # Step 3: Install dependencies
-            - name: Install dependencies
-              run: npm install
+            -   name: Install dependencies
+                run: npm install
             
             # Step 4: Run build command
-            - name: Run npm build
-              run: npm run build  # 这里运行你项目的构建命令
+            -   name: Run npm build
+                run: npm run build  # 这里运行你项目的构建命令
             
             # Step 5: Create a release asset (ZIP file)
-            - name: Create zip file for release
-              run: |
-                  mkdir release
-                  cp README.md package.json -r dist release/
-                  cd release
-                  zip -r release.zip .  # 压缩文件夹内的内容到 release.zip 文件
+            -   name: Create zip file for release
+                run: |
+                    mkdir release
+                    cp README.md package.json -r dist release/
+                    cd release
+                    zip -r release.zip .  # 压缩文件夹内的内容到 release.zip 文件
             
             # Step 6: Upload the release asset to GitHub Releases
-            - name: Upload release asset
-              uses: softprops/action-gh-release@v1  # 用于上传文件到 GitHub Releases
-              with:
-                  files: release/release.zip  # 这里指定上传的文件路径
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # 使用 GitHub 自动生成的 token
+            -   name: Upload release asset
+                uses: softprops/action-gh-release@v1  # 用于上传文件到 GitHub Releases
+                with:
+                    files: release/release.zip  # 这里指定上传的文件路径
+                env:
+                    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # 使用 GitHub 自动生成的 token
