@@ -1,0 +1,43 @@
+{
+	"name": "@yiero/gmlib",
+	"author": "Yiero",
+	"vertion": "0.0.1",
+	"description": "GM Lib for Tampermonkey",
+	"license": "MIT",
+	"keywords": [
+		"tampermonkey",
+		"lib",
+		"scriptcat",
+		"utils"
+	],
+	"version": "0.1.0",
+	"type": "module",
+	"scripts": {
+		"build": "tsc && vite build"
+	},
+	"publishConfig": {
+		"access": "public"
+	},
+	"devDependencies": {
+		"typescript": "^5.2.2",
+		"vite": "^5.1.4"
+	},
+	"main": "dist/index.mjs",
+	"types": "dist/index.d.ts",
+	"exports": {
+		".": {
+			"import": "./dist/index.mjs",
+			"types": "./dist/index.d.ts"
+		}
+	},
+	"dependencies": {
+		"@types/tampermonkey": "^5.0.4"
+	},
+	"private": false,
+	"files": [
+		"dist"
+	],
+	"repository": {
+		"url": "https://github.com/AliubYiero/GmLib"
+	}
+}
