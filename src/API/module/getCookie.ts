@@ -1,3 +1,5 @@
+import { environmentTest } from '../../Env';
+
 /**
  * 获取 cookie 内容
  * @param domain 域名
@@ -14,6 +16,11 @@ export function getCookie( domain: string, key: string ): Promise<string>;
 
 export function getCookie( domain: string, key?: string ): Promise<string | ICookie[]> {
 	return new Promise( ( resolve, reject ) => {
+		const env = environmentTest();
+		if ( env !== 'ScriptCat' ) {
+			reject( `当前脚本不支持 ${ env } 环境, 仅支持 ScriptCat .` );
+		}
+		
 		// @ts-ignore
 		GM_cookie( 'list', {
 			domain,
@@ -44,4 +51,4 @@ export function getCookie( domain: string, key?: string ): Promise<string | ICoo
 			resolve( userIdCookie.value );
 		} );
 	} );
-};
+}

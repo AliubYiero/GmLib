@@ -1,7 +1,7 @@
 {
 	"name": "@yiero/gmlib",
 	"author": "Yiero",
-	"vertion": "0.1.2",
+	"vertion": "0.1.3",
 	"description": "GM Lib for Tampermonkey",
 	"license": "MIT",
 	"keywords": [
@@ -34,7 +34,8 @@
 	},
 	"private": false,
 	"files": [
-		"dist"
+		"dist",
+		"LICENSE"
 	],
 	"repository": {
 		"url": "https://github.com/AliubYiero/GmLib"

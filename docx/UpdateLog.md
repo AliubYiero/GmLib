@@ -1,5 +1,10 @@
 # 更新日志
 
+### 0.1.3 - update
+
+- 支持函数: `environmentTest`, 用于输出脚本安装的环境, 需要授权函数 `GM_info`. 
+- `getCookie` 函数会先执行一遍安装环境判断, 相应的也需要授权函数 `GM_info`. 
+
 ### 0.1.2 - update
 
 - 支持函数: `isIframe`, 用于判断当前脚本载入的页面是否为 iframe 页面. 

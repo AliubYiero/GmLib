@@ -34,3 +34,59 @@ if ( isIframe ) {
 }
 ```
 
+### environmentTest
+
+输出当前脚本的安装环境是 `ScriptCat` 还是 `TamperMonkey` .
+
+#### 说明
+
+> [Warn] 需要授权函数 `GM_info`
+
+#### 类型
+
+```ts
+export const environmentTest: () => IEnvironment;
+
+export type IEnvironment = 'ScriptCat' | 'Tampermonkey';
+```
+
+#### 使用
+
+> 引入
+
+```js
+import { environmentTest } from '@yiero/gmlib';
+```
+
+> 判断脚本安装环境
+
+```js
+// 脚本猫 (ScriptCat) 环境
+environmentTest();      // -> 'ScriptCat'
+// 篡改猴 (TamperMonkey) 环境
+environmentTest();      // -> 'TamperMonkey'
+```
+
+> 根据脚本安装环境调用对应函数
+
+```js
+/**
+ * TamperMonkey 环境执行函数
+ */
+const handleForTampermonkey = () => {};
+/**
+ * ScriptCat 环境执行函数
+ */
+const handleForScriptcat = () => {};
+/**
+ * 环境判断映射
+ */
+const handleMapper = {
+	'ScriptCat': handleForScriptcat,
+	'TamperMonkey': handleForTampermonkey,
+};
+// 获取脚本安装环境
+const environment = environmentTest();
+// 运行对应函数
+handleMapper[environment]();
+```
