@@ -1,1 +1,1 @@
-export * from './elementWaiter.ts';
+export * from './module/elementWaiter.ts';

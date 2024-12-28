@@ -4,6 +4,10 @@
 
 ### getCookie
 
+获取指定域名网页的 **Cookie** . 
+
+#### 说明
+
 > **[Warning] 只能在 `ScriptCat` 环境中使用.** 
 
 #### 类型

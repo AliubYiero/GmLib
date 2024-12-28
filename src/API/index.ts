@@ -1,1 +1,1 @@
-export * from './getCookie.ts'
+export * from './module/getCookie.ts';
