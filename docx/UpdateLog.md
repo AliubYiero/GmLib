@@ -1,5 +1,13 @@
 # 更新日志
 
+### 0.1.4 - update
+
+- 支持函数:
+  `GMRequest`, 简化
+  `GM_xmlhttpRequest` 请求, 并通过 Promise 返回. 需要授权函数
+  `GM_xmlhttpRequest`.
+- 优化文档超链接跳转, 让其可以在 Github/Npm 中正确跳转.
+
 ### 0.1.3 - update
 
 - 支持函数: `environmentTest`, 用于输出脚本安装的环境, 需要授权函数 `GM_info`. 

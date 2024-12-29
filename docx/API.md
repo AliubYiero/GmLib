@@ -70,3 +70,173 @@ getCookie( 'bilibili.com', 'DedeUserID' )
 	} );
 ```
 
+### gmRequest
+
+通过
+`GM_xmlhttpRequest` 发送网络请求 (Promise).
+
+#### 说明
+
+>
+*
+*[Warning]
+需要授权函数
+`GM_xmlhttpRequest` .
+**
+
+#### 类型
+
+```ts
+/**
+ * 通过 GM_xmlhttpRequest, 发送 GET 请求
+ *
+ * @see https://www.tampermonkey.net/documentation.php?ext=dhdg#api:GM_xmlhttpRequest
+ */
+declare function gmRequest<T extends string | Record<string, any> | Document>(
+	url: string,
+	method: 'GET',
+	param?: Record<string, string>,
+	GMXmlHttpRequestConfig?: Partial<Tampermonkey.Request>,
+): Promise<T>;
+
+/**
+ * 通过 GM_xmlhttpRequest, 发送 POST 请求
+ *
+ * @see https://www.tampermonkey.net/documentation.php?ext=dhdg#api:GM_xmlhttpRequest
+ */
+declare function gmRequest<T extends string | Record<string, any> | Document, K extends any>(
+	url: string,
+	method: 'POST',
+	data?: Record<string, K>,
+	GMXmlHttpRequestConfig?: Partial<Tampermonkey.Request>,
+): Promise<T>;
+
+/**
+ * 调用油猴API配置参数, 进行网络请求
+ *
+ * @see https://www.tampermonkey.net/documentation.php?ext=dhdg#api:GM_xmlhttpRequest
+ */
+declare function gmRequest<T extends string | Record<string, any> | Document>(
+	GMXmlHttpRequestConfig: Tampermonkey.Request,
+): Promise<T>
+```
+
+#### 参数
+
+*
+*重载1
+**
+
+| 参数     | 类型                     | 内容     | 必须 | 默认值  | 备注 |
+| -------- | ------------------------ | -------- | ---- | ------- | ---- |
+| `url`    | `string`                 | 请求地址 | √    |         |      |
+| `method` | `string`                 | "GET"    |      | `"GET"` |      |
+| `param`  | `Record<string, string>` | 网页参数 |      |         |      |
+
+*
+*重载2
+**
+
+> 如果一个
+*
+*POST
+请求
+**中, 既有网页参数, 也有 data 参数, 网页参数只能直接写入请求地址, 不支持通过 Object 对象写入网页参数.
+
+| 参数     | 类型                  | 内容           | 必须 | 默认值  | 备注                                |
+| -------- | --------------------- | -------------- | ---- | ------- | ----------------------------------- |
+| `url`    | `string`              | 请求地址       | √    |         |                                     |
+| `method` | `string`              | "POST"         |      | `"GET"` | `method` 参数为空, 默认为 **重载1** |
+| `data`   | `Record<string, any>` | 请求体携带数据 |      |         |                                     |
+
+*
+*重载3
+**
+
+| 参数                     | 类型                   | 内容             | 必须 | 默认值 | 备注                                                         |
+| ------------------------ | ---------------------- | ---------------- | ---- | ------ | ------------------------------------------------------------ |
+| `GMXmlHttpRequestConfig` | `Tampermonkey.Request` | 油猴网络请求参数 | √    |        | 见文档 [GM_xmlhttpRequest](https://www.tampermonkey.net/documentation.php?ext=dhdg#api:GM_xmlhttpRequest) |
+
+#### 使用
+
+> 引入
+
+```js
+import {
+	getCookie
+} from '@yiero/gmlib';
+```
+
+> 基础 GET 网络请求, 请求
+*
+*网页
+** 内容.
+
+```js
+/**
+ * 基础 GET 网络请求.
+ * 发送 GET 请求获取网页数据.
+ *
+ * 函数会自动将 html 文本内容解析为文档对象模型, 即 Document
+ */
+gmRequest( 'https://baidu.com' ).then( document => {
+	console.log( document.body );
+} );
+```
+
+> 基础 GET 网络请求, 请求接口
+*
+*JSON
+** 内容.
+>
+>@See [Bilibili-API-获取当前时间戳](https://github.com/SocialSisterYi/bilibili-API-collect/blob/master/docs/misc/time_stamp.md)
+
+```js
+/**
+ * 基础 GET 网络请求.
+ * 发送 GET 请求获取接口数据 (JSON).
+ *
+ * 函数会自动将 JSON 文本内容解析为 Object 对象.
+ */
+gmRequest( 'https://api.bilibili.com/x/report/click/now' ).then( response => {
+	console.log( '响应码: ', response.code );
+	console.log( '时间戳: ', response.data.now );
+} );
+```
+
+> 发送 GET 网络请求, 并携带网页参数.
+>
+>@See [Bilibili-API-获取视频快照](https://github.com/SocialSisterYi/bilibili-API-collect/blob/master/docs/video/snapshot.md#%E8%8E%B7%E5%8F%96%E8%A7%86%E9%A2%91%E5%BF%AB%E7%85%A7web%E7%AB%AF)
+
+```js
+// 直接在请求地址中写入网页参数
+gmRequest( 'https://api.bilibili.com/x/player/videoshot?aid=999' );
+// or 通过 param 参数写入网页参数
+gmRequest( 'https://api.bilibili.com/x/player/videoshot', 'GET', {
+	aid: 999,
+} ).then( response => {
+	console.log( response );
+} );
+```
+
+> 发送 POST 网络请求, 并携带数据.
+>
+>@See [reqres.in](https://reqres.in/)
+
+```js
+gmRequest( 'https://reqres.in/api/users', 'POST', {
+	name: 'paul rudd',
+	movies: [ 'I Love You Man', 'Role Models' ],
+} ).then( response => console.log( response ) );
+// or 使用重载3写在一个对象中
+gmRequest( {
+	url: 'https://reqres.in/api/users',
+	method: 'POST',
+	name: 'paul rudd',
+	movies: [ 'I Love You Man', 'Role Models' ],
+	headers: {
+		'Content-Type': 'application/json',
+	},
+} ).then( response => console.log( response ) );
+
+```
