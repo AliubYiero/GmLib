@@ -1,7 +1,7 @@
 {
 	"name": "@yiero/gmlib",
 	"author": "Yiero",
-	"version": "0.1.4",
+	"version": "0.1.5",
 	"description": "GM Lib for Tampermonkey",
 	"license": "MIT",
 	"keywords": [
@@ -12,14 +12,16 @@
 	],
 	"type": "module",
 	"scripts": {
-		"build": "tsc && vite build"
+		"build": "tsc && vite build",
+		"publish": "npm run build & nrm use npm & npm publish "
 	},
 	"publishConfig": {
 		"access": "public"
 	},
 	"devDependencies": {
 		"typescript": "^5.2.2",
-		"vite": "^5.1.4"
+		"vite": "^5.1.4",
+		"vite-plugin-banner": "^0.8.0"
 	},
 	"main": "dist/index.mjs",
 	"types": "dist/index.d.ts",

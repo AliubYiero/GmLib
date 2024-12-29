@@ -1,4 +1,6 @@
 import { defineConfig } from 'vite';
+import banner from 'vite-plugin-banner';
+import pkg from './package.json';
 
 export default defineConfig( {
 	esbuild: {
@@ -26,6 +28,19 @@ export default defineConfig( {
 					entryFileNames: 'index.mjs',
 					format: 'es',
 				},
+			],
+			plugins: [
+				banner( [
+					'/*',
+					`* @module      : ${ pkg.name }`,
+					`* @author      : ${ pkg.author }`,
+					`* @version     : ${ pkg.version }`,
+					`* @description : ${ pkg.description }`,
+					`* @keywords    : ${ pkg.keywords.join( ', ' ) }`,
+					`* @license     : ${ pkg.license }`,
+					`* @repository  : ${ pkg.repository.url }`,
+					'*/',
+				].join( '\n' ) ),
 			],
 		},
 	},

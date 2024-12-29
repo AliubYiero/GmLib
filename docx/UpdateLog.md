@@ -1,12 +1,19 @@
 # 更新日志
 
+### 0.1.5 - update
+
+- 拓展函数功能:
+  `getCookie`, 现在可以传入网页中的普通 Cookie 文本 (即通过
+  `document.cookie` 获取的文本), 获取到其中具体的某一项 Cookie 的值了.
+- 给打包文件添加上顶部注释信息.
+
 ### 0.1.4 - update
 
 - 支持函数:
-  `GMRequest`, 简化
+  `gmRequest`, 简化
   `GM_xmlhttpRequest` 请求, 并通过 Promise 返回. 需要授权函数
   `GM_xmlhttpRequest`.
-- 优化文档超链接跳转, 让其可以在 Github/Npm 中正确跳转.
+- 优化文档超链接跳转, 让其可以在 Github / Npm 中正确跳转.
 
 ### 0.1.3 - update
 
