@@ -3,7 +3,7 @@
  */
 export function gmRequest<T extends string | Record<string, any> | Document>(
 	url: string,
-	method: 'GET',
+	method?: 'GET',
 	param?: Record<string, string>,
 	GMXmlHttpRequestConfig?: Partial<Tampermonkey.Request>,
 ): Promise<T>;
