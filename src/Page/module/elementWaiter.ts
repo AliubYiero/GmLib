@@ -22,7 +22,7 @@ export function elementWaiter(
 		const returnElement = ( selector: string ) => {
 			// 延时触发
 			setTimeout( () => {
-				const element = document.querySelector<HTMLElement>( selector );
+				const element = parent.querySelector<HTMLElement>( selector );
 				// 空元素, 抛出异常
 				if ( !element ) {
 					reject( new Error( 'Void Element' ) );
@@ -38,7 +38,7 @@ export function elementWaiter(
 		};
 		
 		// 分支1 - 元素已经载入, 直接获取到元素
-		const element = document.querySelector<HTMLElement>( selector );
+		const element = parent.querySelector<HTMLElement>( selector );
 		if ( element ) {
 			returnElement( selector );
 			return;
