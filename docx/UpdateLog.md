@@ -1,5 +1,17 @@
 # 更新日志
 
+### 0.1.7 - fix
+
+- 修复函数错误:
+  -
+  `elementWaiter`:
+    - 修复在某些情况下不是使用
+      `configs.parent` 指定的容器, 而是使用
+      `document` 获取元素的问题.
+    - 拓展类型提示, 现在的
+      `configs.parent` 也支持类型
+      `DocumentFragment` 了.
+
 ### 0.1.6 - fix
 
 - 修复类型提示:
