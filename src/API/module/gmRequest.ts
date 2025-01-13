@@ -1,3 +1,5 @@
+import { parseResponseText } from './util/parseResponseText.ts';
+
 /**
  * 通过 GM_xmlhttpRequest, 发送 GET 请求
  *
@@ -116,23 +118,11 @@ export function gmRequest<T extends string | Record<string, any> | Document, K e
 			url: params.url,
 			method: params.method,
 			onload( response: Tampermonkey.ResponseBase ) {
-				try {
-					// 响应体是 Object
-					const res = JSON.parse( response.response ) as T;
-					resolve( res );
-				}
-				catch ( e ) {
-					try {
-						// 响应体是文档对象
-						const domParser = new DOMParser();
-						const document = domParser.parseFromString( response.response as string, 'text/html' );
-						resolve( document as T );
-					}
-					catch ( e ) {
-						// 响应体是文本 (无法解析为 Object / Document)
-						resolve( response.response as T );
-					}
-				}
+				// 解析文本内容,
+				// 如果是对象文本则解析为对象
+				// 如果是文档对象文本则解析为文档对象
+				// 否则返回字符串
+				resolve( parseResponseText( response.responseText ) );
 			},
 			onerror( error: any ) {
 				reject( error );

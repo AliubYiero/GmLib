@@ -2,15 +2,15 @@
 
 > **网络请求** 相关函数
 
-### getCookie
+## getCookie
 
 获取指定域名网页的 **Cookie** . 
 
-#### 说明
+### 说明
 
 > **[Warning] 只能在 `ScriptCat` 环境中使用.** 
 
-#### 类型
+### 类型
 
 ```ts
 /**
@@ -68,27 +68,23 @@ declare interface ICookie {
 }
 ```
 
-#### 参数
+### 参数
 
-*
-*重载1
-** - 通过域名获取 Cookie
+**重载1** - 通过域名获取 Cookie
 
 | 参数     | 类型     | 内容                 | 必须 | 默认值 | 备注                                     |
 | -------- | -------- | -------------------- | ---- | ------ | ---------------------------------------- |
 | `domain` | `string` | 需要获取网站的域名   | √    |        |                                          |
 | `key`    | `string` | 需要获取 Cookie 的键 |      |        | 如果为空, 返回一个包含所有 Cookie 的数组 |
 
-*
-*重载2
-** - 通过网页 Cookie 获取Cookie
+**重载2** - 通过网页 Cookie 获取Cookie
 
 | 参数             | 类型     | 内容                 | 必须 | 默认值 | 备注                                   |
 | ---------------- | -------- | -------------------- | ---- | ------ | -------------------------------------- |
 | `documentCookie` | `string` | 网站 Cookie 文本内容 | √    |        | 正常情况下通过 `document.cookie` 拿到. |
 | `key`            | `string` | 需要获取 Cookie 的键 | √    |        | 如果为空, 报错                         |
 
-#### 使用
+### 使用
 
 > 引入
 
@@ -120,24 +116,11 @@ getCookie( 'bilibili.com', 'DedeUserID' )
 	} );
 ```
 
+>> **脚本加载在 bilibili.com 上使用该函数时**
 >
-*
-*脚本加载在
-bilibili.com
-上使用该函数
-**
+>获取 Bilibili Uid
 >
-> 获取 Bilibili Uid
->
-*只能获取普通
-Cookie,
-如果想获取特殊
-Cookie (
-如
-http-only ),
-还是需要用上面的通过域名获取
-Cookie
-重载*
+>*只能获取普通Cookie,如果想获取特殊Cookie (如 http-only ),还是需要用上面的通过域名获取Cookio重载*
 
 ```js
 getCookie( document.cookie, 'DedeUserID' )
@@ -149,21 +132,15 @@ getCookie( document.cookie, 'DedeUserID' )
 	} );
 ```
 
-### gmRequest
+## gmRequest
 
-通过
-`GM_xmlhttpRequest` 发送网络请求 (Promise).
+通过 `GM_xmlhttpRequest` 发送网络请求 (Promise).
 
-#### 说明
+### 说明
 
->
-*
-*[Warning]
-需要授权函数
-`GM_xmlhttpRequest` .
-**
+>**[Warning]需要授权函数`GM_xmlhttpRequest` .**
 
-#### 类型
+### 类型
 
 ```ts
 /**
@@ -200,11 +177,9 @@ declare function gmRequest<T extends string | Record<string, any> | Document>(
 ): Promise<T>
 ```
 
-#### 参数
+### 参数
 
-*
-*重载1
-**
+**重载1**
 
 | 参数     | 类型                     | 内容     | 必须 | 默认值  | 备注 |
 | -------- | ------------------------ | -------- | ---- | ------- | ---- |
@@ -212,15 +187,9 @@ declare function gmRequest<T extends string | Record<string, any> | Document>(
 | `method` | `string`                 | "GET"    |      | `"GET"` |      |
 | `param`  | `Record<string, string>` | 网页参数 |      |         |      |
 
-*
-*重载2
-**
+**重载2**
 
-> 如果一个
-*
-*POST
-请求
-**中, 既有网页参数, 也有 data 参数, 网页参数只能直接写入请求地址, 不支持通过 Object 对象写入网页参数.
+> 如果一个 **POST请求** 中, 既有网页参数, 也有 data 参数, 网页参数只能直接写入请求地址, 不支持通过 Object 对象写入网页参数.
 
 | 参数     | 类型                  | 内容           | 必须 | 默认值  | 备注                                |
 | -------- | --------------------- | -------------- | ---- | ------- | ----------------------------------- |
@@ -228,15 +197,13 @@ declare function gmRequest<T extends string | Record<string, any> | Document>(
 | `method` | `string`              | "POST"         |      | `"GET"` | `method` 参数为空, 默认为 **重载1** |
 | `data`   | `Record<string, any>` | 请求体携带数据 |      |         |                                     |
 
-*
-*重载3
-**
+**重载3**
 
 | 参数                     | 类型                   | 内容             | 必须 | 默认值 | 备注                                                         |
 | ------------------------ | ---------------------- | ---------------- | ---- | ------ | ------------------------------------------------------------ |
 | `GMXmlHttpRequestConfig` | `Tampermonkey.Request` | 油猴网络请求参数 | √    |        | 见文档 [GM_xmlhttpRequest](https://www.tampermonkey.net/documentation.php?ext=dhdg#api:GM_xmlhttpRequest) |
 
-#### 使用
+### 使用
 
 > 引入
 
@@ -246,10 +213,7 @@ import {
 } from '@yiero/gmlib';
 ```
 
-> 基础 GET 网络请求, 请求
-*
-*网页
-** 内容.
+> 基础 GET 网络请求, 请求 **网页** 内容.
 
 ```js
 /**
@@ -263,12 +227,9 @@ gmRequest( 'https://baidu.com' ).then( document => {
 } );
 ```
 
-> 基础 GET 网络请求, 请求接口
-*
-*JSON
-** 内容.
->
->@See [Bilibili-API-获取当前时间戳](https://github.com/SocialSisterYi/bilibili-API-collect/blob/master/docs/misc/time_stamp.md)
+> 基础 GET 网络请求, 请求接口 **JSON** 内容.
+
+@See [Bilibili-API-获取当前时间戳](https://github.com/SocialSisterYi/bilibili-API-collect/blob/master/docs/misc/time_stamp.md)
 
 ```js
 /**
@@ -317,5 +278,60 @@ gmRequest( {
 		'Content-Type': 'application/json',
 	},
 } ).then( response => console.log( response ) );
-
 ```
+
+## hookXhr
+
+用于劫持 xhr 请求, 获取其返回内容, 并篡改返回内容
+
+### 类型
+
+```ts
+export declare const hookXhr: <T extends string | Record<string, any> | Document>(
+    hookUrl: (str: string) => boolean, 
+    callback: (response: T, requestUrl: string) => void | string
+) => void;
+```
+
+### 参数
+
+| 参数       | 类型                                                 | 内容                                                         | 必须 | 备注 |
+| ---------- | ---------------------------------------------------- | ------------------------------------------------------------ | ---- | ---- |
+| `hookUrl`  | `(url: string) => boolean`                           | 回调函数, 用于判断哪些请求是需要劫持的请求. <br />返回 `true` 时, 对应的接口将触发 `callback` 回调. | √    |      |
+| `callback` | `(response: T, requestUrl: string) => void | string` | 回调函数, 劫持到请求时触发.                                  | √    |      |
+
+#### callback
+
+##### 参数
+
+- `response`: 返回的响应数据. 
+  响应数据文本将自动解析, 如果是对象则返回对象, 如果是文档模型对象(即 html ), 也会自动解析为 Dom 结构. 否则才会返回文本. 
+- `requestUrl`: 该条请求对应的请求地址. 
+
+##### 返回值类型
+
+- `void`: 如果回调函数返回空值, 则无事发生, 该条请求仍然会返回原数据. 
+- `string`: 如果回调函数自定义了返回值, 那么该条请求的返回数据将被**篡改**, 变成回调函数返回的内容. 
+
+### 使用
+
+> 修改B站动态主页, 正在直播的关注列表 - 添加用户黑名单
+
+```js
+hookXhr(
+	( url ) => [ 'https://api.bilibili.com/x/polymer/web-dynamic/v1/portal', '//api.bilibili.com/x/polymer/web-dynamic/v1/portal' ].includes( url ),
+	( response, url ) => {
+		console.log( 'response', response, url );
+		// 黑名单 uid 列表
+		const bankUpUidList = [ 1, 2 ];
+		let liveList = response.data.live_users.items;
+		// 更改获取到的直播用户列表
+		response.data.live_users.items = liveList.filter( item => !bankUpUidList.includes( item.mid ) );
+		// 修改直播用户列表的长度
+		response.data.live_users.count = response.data.live_users.items.length;
+		console.log( 'HookResponse', response, url );
+		return JSON.stringify( response );
+	},
+);
+```
+

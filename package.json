@@ -1,7 +1,7 @@
 {
 	"name": "@yiero/gmlib",
 	"author": "Yiero",
-	"version": "0.1.8",
+	"version": "0.1.9",
 	"description": "GM Lib for Tampermonkey",
 	"license": "MIT",
 	"keywords": [
@@ -13,7 +13,7 @@
 	"type": "module",
 	"scripts": {
 		"build": "tsc && vite build",
-		"publish": "npm run build & nrm use npm & npm publish",
+		"publish": "nrm use npm & npm run build & npm publish",
 		"switch-taobao-npm": "nrm use taobao"
 	},
 	"publishConfig": {

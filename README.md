@@ -17,10 +17,11 @@
 > **网络请求** 相关
 
 
-| 函数                              | 作用                | 示例                                            | 需要授权函数               |
-| --------------------------------- | ------------------- | ----------------------------------------------- | -------------------------- |
+| 函数                              | 作用                | 示例                                            | 需要授权函数                     |
+| --------------------------------- | ------------------- | ----------------------------------------------- |----------------------------|
 | [`getCookie`](docx/API.md#getCookie) | 获取对应网站 Cookie | [getCookie.js](./docx/example/API/getCookie.js) | `GM_cookie`<br />`GM_info` |
-| [`gmRequest`](docx/API.md#gmRequest) | 通过 `GM_xmlhttpRequest` 发送网络请求 (Promise). | [gmRequest.js](./docx/example/API/gmRequest.js) | `GM_xmlhttpRequest` |
+| [`gmRequest`](docx/API.md#gmRequest) | 通过 `GM_xmlhttpRequest` 发送网络请求 (Promise). | [gmRequest.js](./docx/example/API/gmRequest.js) | `GM_xmlhttpRequest`        |
+| [`hookXhr`](docx/API.md#hookXhr) | 用于劫持 xhr 请求, 获取其返回内容, 并篡改返回内容 | [hookXhr.js](./docx/example/API/hookXhr.js) | -                          |
 
 ### Env
 
@@ -34,10 +35,7 @@
 
 ### UI
 
->
-*
-*UI
-** 相关
+> **UI** 相关
 
 | 函数                                  | 作用                                              | 示例                                             | 需要授权函数  |
 | ------------------------------------- | ------------------------------------------------- | ------------------------------------------------ | ------------- |
