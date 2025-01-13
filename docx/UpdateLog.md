@@ -1,5 +1,19 @@
 # 更新日志
 
+### 0.1.8 - update
+
+- 支持函数:
+    -
+    `uiImporter`: 可以通过 html 文本和 css 文本, 直接将其解析并加载到页面中.
+- 更新了
+  `elementWaiter` 的类型和默认值.
+  `config.parent` 的默认值现在是
+  `document`
+- 现在类型文件将自动编译
+- 修改类型文件地址:
+  `dist/index.d.ts` ->
+  `dist/types/index.d.ts`
+
 ### 0.1.7 - fix
 
 - 修复函数错误:

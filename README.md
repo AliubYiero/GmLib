@@ -31,3 +31,14 @@
 | --------------------------------------------- | ----------------------------------------------------- | ----------------------------------------------------------- | ------------ |
 | [`isIframe`](docx/Env.md#isIframe)               | 判断脚本载入页面是否为 Iframe 页面                    | [isIframe.js](./docx/example/Env/isIframe.js)               | -            |
 | [`environmentTest`](docx/Env.md#environmentTest) | 输出当前脚本的安装环境 (`ScriptCat` / `TamperMonkey`) | [environmentTest.js](./docx/example/Env/environmentTest.js) | `GM_info`    |
+
+### UI
+
+>
+*
+*UI
+** 相关
+
+| 函数                                  | 作用                                              | 示例                                             | 需要授权函数  |
+| ------------------------------------- | ------------------------------------------------- | ------------------------------------------------ | ------------- |
+| [`uiImporter`](docx/UI.md#uiImporter) | 传入 `html` 文本和 `css` 文本, 自动解析并载入页面 | [uiImporter.js](./docx/example/UI/uiImporter.js) | `GM_addStyle` |

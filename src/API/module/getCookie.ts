@@ -1,16 +1,47 @@
 import { environmentTest } from '../../Env';
 
 /**
- * 获取 cookie 内容
+ * Cookie 接口
+ */
+export declare interface ICookie {
+	domain: string;
+	name: string;
+	value: string;
+	expirationDate: number;
+	hostOnly: boolean;
+	httpOnly: boolean;
+	path: string;
+	sameSite: string;
+	secure: boolean;
+	session: boolean;
+	storeId: string;
+}
+
+
+/**
+ * 获取 输入域名 下的所有 cookie 列表
+ *
  * @param domain 域名
  * @returns cookieList Cookie列表
+ *
+ * @warn 需要授权函数 `GM_cookie` 和 `GM_info`
+ * @warn 只能在 ScriptCat 环境中使用
+ *
+ * @example getCookie( '.bilibili.com' ) - 获取 bilibili 下的所有 cookie
  */
 export function getCookie( domain: string ): Promise<ICookie[]>;
+
 /**
- * 获取 cookie 内容
+ * 获取 输入域名 下的某一项 cookie 内容
+ *
  * @param domain 域名
  * @param key cookie 键名
  * @returns cookie cookie 值
+ *
+ * @warn 需要授权函数 `GM_cookie` 和 `GM_info`
+ * @warn 只能在 ScriptCat 环境中使用
+ *
+ * @example getCookie( '.bilibili.com', 'DedeUserID' ) - 获取 bilibili uid
  */
 export function getCookie( domain: string, key: string ): Promise<string>;
 
@@ -19,13 +50,19 @@ export function getCookie( domain: string, key: string ): Promise<string>;
  *
  * @param documentCookieContent 网站 Cookie 文本, 通常为 document.cookie
  * @param key cookie 键名
+ *
+ * @warn 需要授权函数 `GM_cookie` 和 `GM_info`
+ * @warn 只能在 ScriptCat 环境中使用
+ *
+ * @example getCookie( document.cookie, 'DedeUserID' ) - 获取 bilibili uid
  */
 export function getCookie( documentCookieContent: string, key: string ): Promise<string>;
 
 export function getCookie( content: string, key?: string ): Promise<string | ICookie[]> {
 	// 判断: 传入的第一个参数是 domain 域名 还是 Cookie 文本内容
 	// 如果是 Cookie 文本内容, 解析 Cookie 内容, 返回对应的键值
-	if ( ( [ /^\w+=[^=;]+$/, /^\w+=[^=;]+;/ ] ).some( reg => reg.test( content ) ) ) {
+	const isTextCookie = ( [ /^\w+=[^=;]+$/, /^\w+=[^=;]+;/ ] ).some( reg => reg.test( content ) );
+	if ( isTextCookie ) {
 		if ( !key ) {
 			return Promise.reject( new Error( `请输入需要获取的具体 Cookie 的键名.` ) );
 		}
@@ -46,6 +83,7 @@ export function getCookie( content: string, key?: string ): Promise<string | ICo
 			reject( `当前脚本不支持 ${ env } 环境, 仅支持 ScriptCat .` );
 		}
 		
+		// 忽略与 ScriptCat 不兼容的 TamperMonkey 类型库
 		// @ts-ignore
 		GM_cookie( 'list', {
 			domain: content,

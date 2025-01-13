@@ -1,16 +1,47 @@
 /**
- * 等待元素载入
+ * 元素等待器选项
  */
-export function elementWaiter(
+export interface IElementWaiterOption {
+	/**
+	 * 监听器容器
+	 *
+	 * @default document
+	 */
+	parent: HTMLElement | DocumentFragment | Document;
+	
+	/**
+	 * 超时时间
+	 *
+	 * @default 20
+	 */
+	timeoutPerSecond: number;
+	
+	/**
+	 * 监听到元素触发后, 延时获取元素的时间
+	 *
+	 * @default .5
+	 */
+	delayPerSecond: number;
+}
+
+/**
+ * 等待元素载入
+ *
+ * @param selector CSS选择器
+ * @param options 选项
+ *
+ * @example await elementWaiter( '#app' ) - 等待 `#app` 元素载入
+ */
+export function elementWaiter<T extends HTMLElement>(
 	selector: string,
-	config: Partial<IElementWaiterOption> = {},
-): Promise<HTMLElement> {
+	options: Partial<IElementWaiterOption> = {},
+): Promise<T> {
 	// 默认值赋予
 	const {
-		parent = document.body,
+		parent = document,
 		timeoutPerSecond = 20,
 		delayPerSecond = 0.5,
-	} = config;
+	} = options;
 	
 	return new Promise( ( resolve, reject ) => {
 		/**
@@ -30,22 +61,27 @@ export function elementWaiter(
 				}
 				
 				// 触发事件 (element = e.detail);
-				window.dispatchEvent( new CustomEvent( 'ElementUpdate', { detail: element } ) );
+				// window.dispatchEvent( new CustomEvent( 'ElementUpdate', { detail: element } ) );
 				
 				// 返回元素
-				resolve( element );
+				resolve( element as T );
 			}, delayPerSecond * 1000 );
 		};
 		
 		// 分支1 - 元素已经载入, 直接获取到元素
-		const element = parent.querySelector<HTMLElement>( selector );
-		if ( element ) {
-			returnElement( selector );
-			return;
-		}
+		const getElement = ( selector: string ): boolean => {
+			const element = parent.querySelector<HTMLElement>( selector );
+			if ( element ) {
+				returnElement( selector );
+				return true;
+			}
+			return false;
+		};
+		const isContinue = getElement( selector );
+		if ( !isContinue ) return;
 		
 		// 分支2 - 元素未载入, 使用MutationObserver获取元素
-		if ( MutationObserver ) {
+		const mutationGetElement = ( selector: string ): boolean => {
 			// 声明定时器
 			const timer: number = timeoutPerSecond && window.setTimeout( () => {
 				// 关闭监听器
@@ -87,12 +123,15 @@ export function elementWaiter(
 				subtree: true,
 				childList: true,
 			} );
-			return;
+			return true;
+		};
+		if ( MutationObserver ) {
+			mutationGetElement( selector );
 		}
 		
 		// 分支3 - 元素未载入, 浏览器无MutationObserver类, 使用定时器获取元素
-		const intervalDelay = 100;
-		let intervalCounter = 0;
+		const intervalDelay = 100;  // 间隔时间
+		let intervalCounter = 0;    // 计数器
 		const maxIntervalCounter = Math.ceil( ( ( timeoutPerSecond ) * 1000 ) / intervalDelay );
 		
 		const timer = window.setInterval( () => {
