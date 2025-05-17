@@ -1,5 +1,17 @@
 # 更新日志
 
+### 0.1.13 - pref
+
+- `GmArrayStorage` 函数支持属性: 
+  - `length`: 查询数组长度
+  - `lastItem`: 获取数组最后一项
+
+### 0.1.12 - update
+
+- 支持函数: 
+  - `GmStorage`: 用于管理油猴存储. 
+  - `GmArrayStorage`: 用于管理数组类油猴存储. 
+
 ### 0.1.11 - fix
 
 - 修复 `elementWaiter` 无法正常使用的问题. 

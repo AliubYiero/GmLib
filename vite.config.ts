@@ -2,7 +2,9 @@ import { defineConfig } from 'vite';
 import banner from 'vite-plugin-banner';
 import pkg from './package.json';
 
-export default defineConfig( {
+const createConfig = (
+	// options: { minify: boolean },
+) => ( {
 	esbuild: {
 		drop: [
 			'debugger',
@@ -16,17 +18,19 @@ export default defineConfig( {
 		emptyOutDir: false,
 		lib: {
 			entry: 'src/index.ts',
-			fileName: 'index',
+			fileName: () => 'index.mjs',
 		},
 		rollupOptions: {
 			/*
 			* 项目 io 配置
 			* */
 			input: 'src/index.ts',
+			external: [], // 添加需要外部化的依赖
 			output: [
 				{
 					entryFileNames: 'index.mjs',
 					format: 'es',
+					globals: {}, // 为外部化依赖指定全局变量
 				},
 			],
 			plugins: [
@@ -44,4 +48,12 @@ export default defineConfig( {
 			],
 		},
 	},
+} );
+
+// @ts-ignore
+export default defineConfig( ( { mode } ) => {
+	// console.log( 'mode', mode );
+	// if ( mode === 'minify' ) return createConfig( { minify: true } );
+	// return createConfig( { minify: false } );
+	return createConfig();
 } );
