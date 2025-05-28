@@ -1,4 +1,4 @@
-# getCookie
+# `getCookie()`
 
 > 获取指定域名 `domain` 下的所有 `cookie` 列表
 

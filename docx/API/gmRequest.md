@@ -1,4 +1,4 @@
-# gmRequest
+# `gmRequest()`
 
 > 发送 GET 请求，支持 URL 参数
 

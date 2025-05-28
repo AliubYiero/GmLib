@@ -14,6 +14,7 @@
 	"scripts": {
 		"build": "vite build && npm run build:types",
 		"build:types": "tsc && dts-bundle-generator -o dist/index.d.ts src/index.ts && rmdir /s /q \"dist/types\"",
+		"update:readme-docx": "node build/updateReadme.cjs",
 		"publish": "nrm use npm & npm run build & npm publish",
 		"switch-taobao-npm": "nrm use taobao",
 		"test": "vitest",

@@ -1,4 +1,4 @@
-# [BETA] hookXhr
+# [BETA] `hookXhr()`
 
 > 劫持 XMLHttpRequest 的响应数据，对指定 URL 的响应进行拦截和修改
 >

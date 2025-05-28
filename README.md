@@ -1,52 +1,21 @@
 # 油猴辅助函数库
 
-> 一系列辅助油猴脚本开发的函数. 
+> 一系列辅助油猴脚本开发的函数.
 
 ## 函数库
 
-### API
-
-> **网络请求** 相关
-
-
-| 函数                                   | 作用                                       | 示例                                              | 需要授权函数                     |
-|--------------------------------------|------------------------------------------|-------------------------------------------------|----------------------------|
-| [`getCookie`](docx/API.md#getCookie) | 获取对应网站 Cookie                            | [getCookie.js](./docx/example/API/getCookie.js) | `GM_cookie`<br />`GM_info` |
-| [`gmRequest`](docx/API.md#gmRequest) | 通过 `GM_xmlhttpRequest` 发送网络请求 (Promise). | [gmRequest.js](./docx/example/API/gmRequest.js) | `GM_xmlhttpRequest`        |
-| [`hookXhr`](docx/API.md#hookXhr)     | 用于劫持 xhr 请求, 获取其返回内容, 并篡改返回内容            | [hookXhr.js](./docx/example/API/hookXhr.js)     | -                          |
-
-### Env
-
-> **脚本环境** 相关
-
-
-| 函数                                               | 作用                                         | 示例                                                          | 需要授权函数    |
-|--------------------------------------------------|--------------------------------------------|-------------------------------------------------------------|-----------|
-| [`isIframe`](docx/Env.md#isIframe)               | 判断脚本载入页面是否为 Iframe 页面                      | [isIframe.js](./docx/example/Env/isIframe.js)               | -         |
-| [`environmentTest`](docx/Env.md#environmentTest) | 输出当前脚本的安装环境 (`ScriptCat` / `TamperMonkey`) | [environmentTest.js](./docx/example/Env/environmentTest.js) | `GM_info` |
-
-### UI
-
-> **UI** 相关
-
-| 函数                                    | 作用                                | 示例                                               | 需要授权函数        |
-|---------------------------------------|-----------------------------------|--------------------------------------------------|---------------|
-| [`uiImporter`](docx/UI.md#uiImporter) | 传入 `html` 文本和 `css` 文本, 自动解析并载入页面 | [uiImporter.js](./docx/example/UI/uiImporter.js) | `GM_addStyle` |
-
-### Element
-
-> 页面 **元素** 相关
-
-| 函数                                            | 作用               | 示例                                                       | 需要授权函数 |
-|-----------------------------------------------|------------------|----------------------------------------------------------|--------|
-| [`scroll`](docx/Element.md#scroll)            | 滚动页面到指定元素位置/指定位置 | [scroll.js](./docx/example/Element/scroll.js)            | -      |
-| [`elementWaiter`](docx/Page.md#elementWaiter) | 等待元素载入           | [elementWaiter.js](./docx/example/Page/elementWaiter.js) | -      |
-
-### Storage
-
-> 页面 **存储** 相关
-
-| 函数                                                 | 作用                                    | 示例                                                            | 需要授权函数                                                                                                                           |
-|----------------------------------------------------|---------------------------------------|---------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------|
-| [`GmStorage`](docx/Storage.md#GmStorage)           | 管理 GmStorage 存储 类                     | [GmStorage.js](./docx/example/Storage/GmStorage.js)           | `GM_getValue` <br/> `GM_setValue` <br/>  `GM_deleteValue` <br/> `GM_addValueChangeListener` <br/> `GM_removeValueChangeListener` |
-| [`GmArrayStorage`](docx/Storage.md#GmArrayStorage) | 管理 GmStorage 数组存储类, 为 `GmStorage` 的子类 | [GmArrayStorage.js](./docx/example/Storage/GmArrayStorage.js) | `GM_getValue` <br/> `GM_setValue` <br/>  `GM_deleteValue` <br/> `GM_addValueChangeListener` <br/> `GM_removeValueChangeListener` |
+- **API**
+	- [`getCookie`](docx\API\getCookie.md): 获取对应网站 Cookie
+	- [`gmRequest`](docx\API\gmRequest.md): 通过 `GM_xmlhttpRequest` 发送网络请求 (Promise).
+	- [`hookXhr`](docx\API\hookXhr.md): 用于劫持 xhr 请求, 获取其返回内容, 并篡改返回内容
+- **Element**
+	- [`elementWaiter`](docx\Element\elementWaiter.md): 等待元素加载完成
+	- [`scroll`](docx\Element\scroll.md): 页面滚动到指定位置
+- **Env**
+	- [`environmentTest`](docx\Env\environmentTest.md): 输出当前脚本的安装环境 (`ScriptCat` / `TamperMonkey`)
+	- [`isIframe`](docx\Env\isIframe.md): 判断当前页面是否在 iframe 中
+- **Storage**
+	- [`GmArrayStorage`](docx\Storage\GmArrayStorage.md): 管理油猴数组存储, `GmStorage` 的子类
+	- [`GmStorage`](docx\Storage\GmStorage.md): 管理油猴存储
+- **UI**
+	- [`uiImporter`](docx\UI\uiImporter.md): 传入 `html` 文本和 `css` 文本, 自动解析并载入页面

@@ -1,4 +1,4 @@
-# elementWaiter
+# `elementWaiter()`
 
 > 等待页面中匹配指定选择器的元素出现
 >

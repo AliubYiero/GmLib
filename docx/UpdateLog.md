@@ -1,5 +1,15 @@
 # 更新日志
 
+### 0.1.18 - pref
+
+- 修改 Env / Storage / UI 文档
+- 修改 README 文档结构, 添加一个函数用于自动维护 README 文档
+
+运行指令, 更新 README 文档
+```bat
+npm run update:readme-docx
+```
+
 ### 0.1.17 - pref
 
 - 修改 Element 文档
