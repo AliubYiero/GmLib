@@ -1,4 +1,4 @@
-import { environmentTest } from '../../Env';
+import { environmentTest } from '../Env/environmentTest.ts';
 
 /**
  * Cookie 接口

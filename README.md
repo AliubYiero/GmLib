@@ -4,14 +4,6 @@
 
 ## 函数库
 
-### Page
-
-> 页面 **载入 / 刷新** 相关
-
-| 函数                                            | 作用     | 示例                                                       | 需要授权函数 |
-|-----------------------------------------------|--------|----------------------------------------------------------|--------|
-| [`elementWaiter`](docx/Page.md#elementWaiter) | 等待元素载入 | [elementWaiter.js](./docx/example/Page/elementWaiter.js) | -      |
-
 ### API
 
 > **网络请求** 相关
@@ -45,9 +37,10 @@
 
 > 页面 **元素** 相关
 
-| 函数                                 | 作用               | 示例                                            | 需要授权函数 |
-|------------------------------------|------------------|-----------------------------------------------|--------|
-| [`scroll`](docx/Element.md#scroll) | 滚动页面到指定元素位置/指定位置 | [scroll.js](./docx/example/Element/scroll.js) | -      |
+| 函数                                            | 作用               | 示例                                                       | 需要授权函数 |
+|-----------------------------------------------|------------------|----------------------------------------------------------|--------|
+| [`scroll`](docx/Element.md#scroll)            | 滚动页面到指定元素位置/指定位置 | [scroll.js](./docx/example/Element/scroll.js)            | -      |
+| [`elementWaiter`](docx/Page.md#elementWaiter) | 等待元素载入           | [elementWaiter.js](./docx/example/Page/elementWaiter.js) | -      |
 
 ### Storage
 
