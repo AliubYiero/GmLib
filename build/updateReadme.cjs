@@ -12,12 +12,13 @@ const descMapper = {
 	uiImporter: '传入 `html` 文本和 `css` 文本, 自动解析并载入页面',
 	GmStorage: '管理油猴存储',
 	GmArrayStorage: '管理油猴数组存储, `GmStorage` 的子类',
+	gmDownload: '下载文件到本地',
 };
 
 /**
  * 创建文档树结构
  */
-const updateReadme = () => {
+const createDocxTree = () => {
 	const dirList = readdirSync( join( __dirname, '../docx' ) ).filter( ( dirname ) => ![ 'UpdateLog.md', 'example' ].includes( dirname ) );
 	
 	const tree = dirList.map( dirname => {
@@ -44,7 +45,7 @@ ${ tree }`;
  * 更新 README.md 文件
  */
 const updateReadme = () => {
-	const readme = updateReadme();
+	const readme = createDocxTree();
 	
 	writeFileSync( join( __dirname, '../README.md' ), readme );
 };

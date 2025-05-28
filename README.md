@@ -6,6 +6,7 @@
 
 - **API**
 	- [`getCookie`](docx\API\getCookie.md): 获取对应网站 Cookie
+	- [`gmDownload`](docx\API\gmDownload.md): 下载文件到本地
 	- [`gmRequest`](docx\API\gmRequest.md): 通过 `GM_xmlhttpRequest` 发送网络请求 (Promise).
 	- [`hookXhr`](docx\API\hookXhr.md): 用于劫持 xhr 请求, 获取其返回内容, 并篡改返回内容
 - **Element**
