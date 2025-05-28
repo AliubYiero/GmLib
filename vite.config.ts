@@ -1,10 +1,22 @@
 import { defineConfig } from 'vite';
 import banner from 'vite-plugin-banner';
+// @ts-ignore
 import pkg from './package.json';
+
 
 const createConfig = (
 	// options: { minify: boolean },
 ) => ( {
+	test: {
+		environment: 'happy-dom', // 测试环境 (默认 'node')
+		globals: true,        // 启用全局 API (如 describe/test/expect)
+		coverage: {           // 覆盖率配置
+			provider: 'istanbul', // 或 'v8'
+			reporter: [ 'text', 'html' ],
+		},
+		include: [ '**/*.{test,spec}.{js,ts}' ],
+		exclude: [ 'node_modules' ],
+	},
 	esbuild: {
 		drop: [
 			'debugger',

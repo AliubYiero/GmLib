@@ -1,5 +1,14 @@
 # 更新日志
 
+### 0.1.15 - pref
+
+- 修改 API 文档
+- 添加函数测试 `gmRequest` / `getCookie`
+
+### 0.1.14 - chore
+
+- 重新搭建打包配置
+
 ### 0.1.13 - pref
 
 - `GmArrayStorage` 函数支持属性: 
