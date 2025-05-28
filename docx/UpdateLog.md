@@ -1,5 +1,14 @@
 # 更新日志
 
+### 0.1.20 - update
+
+- 新增函数: `Message`, 用于显示消息提示
+- 修复 `gmDownload` 没有导出的问题
+
+### 0.1.19 - update
+
+- 新增函数: `gmDownload`, 用于下载文件. 
+
 ### 0.1.18 - pref
 
 - 修改 Env / Storage / UI 文档

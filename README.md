@@ -11,6 +11,7 @@
 	- [`hookXhr`](docx\API\hookXhr.md): 用于劫持 xhr 请求, 获取其返回内容, 并篡改返回内容
 - **Element**
 	- [`elementWaiter`](docx\Element\elementWaiter.md): 等待元素加载完成
+	- [`Message`](docx\Element\Message.md): 消息通知
 	- [`scroll`](docx\Element\scroll.md): 页面滚动到指定位置
 - **Env**
 	- [`environmentTest`](docx\Env\environmentTest.md): 输出当前脚本的安装环境 (`ScriptCat` / `TamperMonkey`)

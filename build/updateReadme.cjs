@@ -13,6 +13,7 @@ const descMapper = {
 	GmStorage: '管理油猴存储',
 	GmArrayStorage: '管理油猴数组存储, `GmStorage` 的子类',
 	gmDownload: '下载文件到本地',
+	Message: '消息通知',
 };
 
 /**
@@ -48,6 +49,8 @@ const updateReadme = () => {
 	const readme = createDocxTree();
 	
 	writeFileSync( join( __dirname, '../README.md' ), readme );
+	
+	console.log( 'README.md 更新成功' );
 };
 
 updateReadme();
