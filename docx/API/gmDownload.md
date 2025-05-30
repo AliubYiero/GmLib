@@ -9,49 +9,45 @@
 ## 语法
 
 ```ts
-declare gmDownload(
+// 下载URL文件
+declare function gmDownload(
   url: string,
   filename: string,
   details?: DownloadRequest
-): Promise<boolean>
+): Promise<boolean>;
+
+// 下载Blob对象
+declare function gmDownload.blob(
+  blob: Blob | File,
+  filename: string,
+  details?: DownloadRequest
+): Promise<boolean>;
+
+// 下载文本内容
+declare function gmDownload.text(
+  content: string,
+  filename: string,
+  mimeType?: string,
+  details?: DownloadRequest
+): Promise<boolean>;
 ```
 
-## 参数
+## 函数说明
 
-### `url` (必需)
+### 核心下载方法 `gmDownload()`
 
-- **类型**: `string`
-- **描述**: 要下载的文件 URL
-- **示例**: `'https://example.com/file.zip'`
+#### 参数
 
-### `filename` (必需)
+| 参数       | 类型              | 内容         | 必须 | 默认值 | 备注                                                         |
+| :--------- | :---------------- | :----------- | :--- | :----- | :----------------------------------------------------------- |
+| `url`      | `string`          | 文件下载地址 | √    |        |                                                              |
+| `filename` | `string`          | 保存的文件名 | √    |        |                                                              |
+| `details`  | `DownloadRequest` | 下载配置项   |      | `{}`   | 支持所有[GM_download配置](https://www.tampermonkey.net/documentation.php#api:GM_download) |
 
-- **类型**: `string`
-- **描述**: 下载后保存的文件名
-- **示例**: `'report.pdf'`
-
-### `details` (可选)
-
-- **类型**: `DownloadRequest`
-- **描述**: 下载配置选项（扩展自 `Tampermonkey.DownloadRequest`）
-
-```ts
-type DownloadRequest = 
-  Omit<Tampermonkey.DownloadRequest, 'url' | 'name' | 'onerror' | 'onprogress'> & {
-    onerror?: (error: Tampermonkey.DownloadErrorResponse) => void;
-    onprogress?: (
-      response: Tampermonkey.DownloadProgressResponse,
-      abortHandle: Tampermonkey.AbortHandle<boolean>
-    ) => void;
-}
-```
-
-#### 配置选项说明
+**`DownloadRequest` 配置选项说明**
 
 | 属性             | 类型                                                         | 描述                                                         |
 | ---------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| `url`            | `String`                                                     | **必需**。下载目标资源（URL 或二进制对象）                   |
-| `name`           | `String`                                                     | **必需**。带扩展名的文件名（需在 Tampermonkey 白名单中）     |
 | `headers`        | `Object`                                                     | 包含 HTTP 请求头的对象（参考 `GM_xmlhttpRequest`）           |
 | `saveAs`         | `Boolean`                                                    | 是否显示"另存为"对话框（仅 browser API 模式有效）            |
 | `conflictAction` | `String`                                                     | 文件名冲突时的处理策略（仅 browser API 模式有效） 可选值：`uniquify`（自动重命名）、`overwrite`（覆盖）、`prompt`（询问用户） |
@@ -60,21 +56,93 @@ type DownloadRequest =
 | `onprogress`     | `Function`                                                   | 下载进度变化的回调函数                                       |
 | `ontimeout`      | `(response: Tampermonkey.DownloadProgressResponse, abortHandle: Tampermonkey.AbortHandle<boolean>) => void` | 下载超时时触发的回调函数                                     |
 
-## 返回值
 
-| 类型               | 解析值 | 拒绝值                  | 描述               |
-| :----------------- | :----- | :---------------------- | :----------------- |
-| `Promise<boolean>` | `true` | 错误信息或 `'time_out'` | 表示下载成功或失败 |
 
-### 错误处理
+#### 返回值
 
-函数可能返回的错误类型：
+- `Promise<boolean>` - 下载成功时解析为`true`
 
-| 错误来源    | 错误类型        | 描述             |
-| :---------- | :-------------- | :--------------- |
-| `onerror`   | `DownloadError` | 包含错误详情对象 |
-| `ontimeout` | `'time_out'`    | 自定义超时标识   |
-| 其他异常    | `Error`         | 未捕获的异常     |
+#### 事件回调
+
+- `onload` - 下载完成时触发
+- `onerror` - 下载失败时触发
+- `ontimeout` - 下载超时时触发
+- `onprogress` - 下载进度更新时触发
+
+#### 示例
+
+```ts
+// 下载图片文件
+gmDownload('https://example.com/image.png', 'my-image.png', {
+  onprogress: (progress, abort) => {
+    console.log(`下载进度: ${progress.percent}%`);
+    if (progress.percent > 50) abort(); // 下载超过50%时取消
+  }
+})
+.then(() => console.log('下载成功'))
+.catch(err => console.error('下载失败', err));
+```
+
+------
+
+### Blob下载方法 `gmDownload.blob()`
+
+#### 参数
+
+| 参数       | 类型              | 内容         | 必须               | 默认值 | 备注 |      |
+| :--------- | :---------------- | :----------- | :----------------- | :----- | :--- | ---- |
+| `blob`     | `Blob             | File`        | 要下载的二进制对象 | √      |      |      |
+| `filename` | `string`          | 保存的文件名 | √                  |        |      |      |
+| `details`  | `DownloadRequest` | 下载配置项   |                    | `{}`   |      |      |
+
+#### 返回值
+
+- `Promise<boolean>` - 下载成功时解析为`true`
+
+#### 示例
+
+```ts
+// 下载Canvas内容
+const canvas = document.querySelector('canvas');
+canvas.toBlob(blob => {
+  if (blob) {
+    gmDownload.blob(blob, 'canvas-image.png');
+  }
+});
+```
+
+------
+
+### 文本下载方法 `gmDownload.text()`
+
+#### 参数
+
+| 参数       | 类型              | 内容         | 必须 | 默认值         | 备注                 |
+| :--------- | :---------------- | :----------- | :--- | :------------- | :------------------- |
+| `content`  | `string`          | 文本内容     | √    |                |                      |
+| `filename` | `string`          | 保存的文件名 | √    |                |                      |
+| `mimeType` | `string`          | MIME类型     |      | `'text/plain'` | 如`application/json` |
+| `details`  | `DownloadRequest` | 下载配置项   |      | `{}`           |                      |
+
+#### 返回值
+
+- `Promise<boolean>` - 下载成功时解析为`true`
+
+#### 示例
+
+```ts
+// 下载JSON数据
+const data = { name: 'John', age: 30 };
+gmDownload.text(
+  JSON.stringify(data, null, 2),
+  'user-data.json',
+  'application/json'
+);
+
+// 下载CSV数据
+const csv = 'Name,Age\nJohn,30\nJane,25';
+gmDownload.text(csv, 'data.csv', 'application/csv');
+```
 
 ## 示例
 

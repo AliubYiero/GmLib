@@ -1,4 +1,9 @@
 # 更新日志
+
+### 0.1.22 - update
+
+- 拓展 `gmDownload()` 的使用方法, 新增 `gmDownload.blob()` / `gmDownload.text()` 函数
+
 ### 0.1.21 - fix
 
 - 修复类型导入错误的问题
