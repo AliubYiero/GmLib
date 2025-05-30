@@ -1,7 +1,7 @@
 {
 	"name": "@yiero/gmlib",
 	"author": "Yiero",
-	"version": "0.1.14",
+	"version": "0.1.20",
 	"description": "GM Lib for Tampermonkey",
 	"license": "MIT",
 	"keywords": [
@@ -35,11 +35,11 @@
 	},
 	"module": "./dist/index.mjs",
 	"main": "dist/index.mjs",
-	"types": "dist/types/index.d.ts",
+	"types": "dist/index.d.ts",
 	"exports": {
 		".": {
 			"import": "./dist/index.mjs",
-			"types": "./dist/types/index.d.ts"
+			"types": "./dist/index.d.ts"
 		}
 	},
 	"dependencies": {
