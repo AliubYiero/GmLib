@@ -8,6 +8,7 @@ export { gmDownload } from './API/gmDownload';
 export { scroll } from './Element/scroll';
 export { elementWaiter } from './Element/elementWaiter';
 export { Message } from './Element/Message';
+export { gmMenuCommand } from './Element/gmMenuCommand';
 
 // Env
 export { isIframe } from './Env/isIframe';
