@@ -1,54 +1,38 @@
 {
 	"name": "@yiero/gmlib",
 	"author": "Yiero",
-	"version": "0.1.23",
-	"description": "GM Lib for Tampermonkey",
+	"version": "0.2.0",
+	"description": "GM Lib for Tampermonkey/ScriptCat",
+	"type": "module",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.js"
+		}
+	},
+	"types": "./dist/index.d.ts",
+	"files": [
+		"dist",
+		"LICENSE"
+	],
+	"scripts": {
+		"dev": "rslib build --watch",
+		"build": "rslib build",
+		"test": "vitest run",
+		"pack": "npm pack"
+	},
+	"devDependencies": {
+		"@rslib/core": "^0.18.3",
+		"@types/node": "^24.10.1",
+		"typescript": "^5.9.3",
+		"vitest": "^4.0.14"
+	},
 	"license": "MIT",
 	"keywords": [
 		"tampermonkey",
 		"lib",
 		"scriptcat",
 		"utils"
-	],
-	"type": "module",
-	"scripts": {
-		"build": "vite build && npm run build:types",
-		"build:types": "tsc && dts-bundle-generator -o dist/index.d.ts src/index.ts && rmdir /s /q \"dist/types\"",
-		"update:readme-docx": "node build/updateReadme.cjs",
-		"publish": "nrm use npm & npm run build & npm publish",
-		"switch-taobao-npm": "nrm use taobao",
-		"test": "vitest",
-		"test:watch": "vitest --watch",
-		"test:coverage": "vitest --coverage"
-	},
-	"publishConfig": {
-		"access": "public"
-	},
-	"devDependencies": {
-		"@testing-library/jest-dom": "^6.6.3",
-		"dts-bundle-generator": "^9.5.1",
-		"happy-dom": "^17.4.7",
-		"typescript": "^5.2.2",
-		"vite": "^5.1.4",
-		"vite-plugin-banner": "^0.8.0",
-		"vitest": "^3.1.3"
-	},
-	"module": "./dist/index.mjs",
-	"main": "dist/index.mjs",
-	"types": "dist/index.d.ts",
-	"exports": {
-		".": {
-			"import": "./dist/index.mjs",
-			"types": "./dist/index.d.ts"
-		}
-	},
-	"dependencies": {
-		"@types/tampermonkey": "^5.0.4"
-	},
-	"private": false,
-	"files": [
-		"dist",
-		"LICENSE"
 	],
 	"repository": {
 		"url": "git+https://github.com/AliubYiero/GmLib.git"
