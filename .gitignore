@@ -14,3 +14,5 @@ storybook-static
 .idea
 
 *.tgz
+
+docs/plans

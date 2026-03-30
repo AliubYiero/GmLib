@@ -1,18 +1,11 @@
+import { rs } from '@rstest/core';
+
 // 存储模拟器
 const storage = new Map<string, unknown>();
 
 // 监听器计数器
 let listenerIdCounter = 0;
 const listeners = new Map<number, { key: string; callback: Function }>();
-
-// 创建 mock 函数的工具
-function createMockFn<T extends (...args: any[]) => any>(impl?: T): T & { mockClear: () => void; mockImplementation: (fn: T) => void } {
-    let currentImpl = impl;
-    let mockFn = ((...args: any[]) => currentImpl?.(...args)) as T & { mockClear: () => void; mockImplementation: (fn: T) => void };
-    mockFn.mockClear = () => {};
-    mockFn.mockImplementation = (fn: T) => { currentImpl = fn; };
-    return mockFn;
-}
 
 // GM API Mock 函数
 export const gmApiMock = {
@@ -29,32 +22,32 @@ export const gmApiMock = {
 		storage.delete(key);
 	},
 
-	GM_addValueChangeListener: createMockFn((key: string, callback: Function) => {
+	GM_addValueChangeListener: rs.fn((key: string, callback: Function) => {
 		const id = ++listenerIdCounter;
 		listeners.set(id, { key, callback });
 		return id;
 	}),
 
-	GM_removeValueChangeListener: createMockFn((id: number) => {
+	GM_removeValueChangeListener: rs.fn((id: number) => {
 		listeners.delete(id);
 	}),
 
 	// Request API
-	GM_xmlhttpRequest: createMockFn(),
+	GM_xmlhttpRequest: rs.fn(),
 
 	// Download API
-	GM_download: createMockFn(),
+	GM_download: rs.fn(),
 
 	// Menu API
-	GM_registerMenuCommand: createMockFn(() => ++listenerIdCounter),
+	GM_registerMenuCommand: rs.fn(() => ++listenerIdCounter),
 
-	GM_unregisterMenuCommand: createMockFn(),
+	GM_unregisterMenuCommand: rs.fn(),
 
 	// Cookie API
-	GM_cookie: createMockFn(),
+	GM_cookie: rs.fn(),
 
 	// Style API
-	GM_addStyle: createMockFn(() => document.createElement('style')),
+	GM_addStyle: rs.fn(() => document.createElement('style')),
 
 	// Info
 	GM_info: {

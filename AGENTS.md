@@ -6,6 +6,8 @@ GmLib (GM Lib) 是一个油猴脚本辅助函数库，为 Tampermonkey 和 Scrip
 
 - **包名**: `@yiero/gmlib`
 - **技术栈**: TypeScript + rslib 构建
+- **代码风格**: Biome 格式化 + Lint
+- **测试框架**: rstest
 - **目标环境**: Tampermonkey / ScriptCat
 
 ## 项目结构
@@ -17,7 +19,9 @@ src/
 │   ├── getCookie.ts      # Cookie 获取
 │   ├── gmRequest.ts      # GM_xmlhttpRequest 封装 (Promise)
 │   ├── gmDownload.ts     # 文件下载
-│   └── hookXhr.ts        # XHR 劫持
+│   ├── hookXhr.ts        # XHR 劫持
+│   └── util/
+│       └── parseResponseText.ts  # 响应解析
 ├── Element/              # DOM 操作相关
 │   ├── elementWaiter.ts  # 元素等待器
 │   ├── scroll.ts         # 页面滚动
@@ -36,7 +40,12 @@ types/
 └── scriptcat.d.ts        # ScriptCat 类型定义
 
 docx/                     # 文档目录
-└── example/              # 示例代码
+├── UpdateLog.md          # 更新日志
+├── API/                  # API 文档
+├── Element/              # Element 文档
+├── Env/                  # 环境文档
+├── Storage/              # 存储文档
+└── UI/                   # UI 文档
 ```
 
 ## 构建命令
@@ -48,8 +57,17 @@ pnpm dev
 # 构建
 pnpm build
 
+# 代码检查 (自动修复)
+pnpm check
+
+# 代码格式化
+pnpm format
+
 # 运行测试
 pnpm test
+
+# 测试监听模式
+pnpm test:watch
 
 # 打包
 pnpm pack
@@ -60,6 +78,11 @@ pnpm pack
 ### 代码风格
 
 - **语言**: TypeScript (ES2022 target)
+- **格式化工具**: Biome
+  - 缩进: 4 空格
+  - 引号: 单引号
+  - 自动组织导入
+- **Lint**: Biome (recommended rules)
 - **注释**: 使用中文 JSDoc 注释
 - **文档**: 每个公共函数需包含 JSDoc，含 `@param`、`@returns`、`@example`、`@see` 等标签
 - **模块系统**: ESM 格式
@@ -85,6 +108,20 @@ pnpm pack
 - `GM_setValue` / `GM_getValue` - 存储
 - `GM_download` - 文件下载
 - `GM_cookie` - Cookie 操作
+
+## 测试
+
+使用 rstest 测试框架，配置文件为 `rstest.config.ts`。
+
+> Rstest 遵循该规范: https://rstest.rs/llms.txt
+
+```bash
+# 运行所有测试
+pnpm test
+
+# 监听模式
+pnpm test:watch
+```
 
 ## 发布配置
 
