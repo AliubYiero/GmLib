@@ -18,10 +18,10 @@ import { parseResponseText } from './util/parseResponseText.ts';
  * @see https://www.tampermonkey.net/documentation.php?ext=dhdg#api:GM_xmlhttpRequest
  */
 export function gmRequest<T extends string | Record<string, any> | Document>(
-	url: string,
-	method?: 'GET',
-	param?: Record<string, string>,
-	GMXmlHttpRequestConfig?: Partial<Tampermonkey.Request>,
+    url: string,
+    method?: 'GET',
+    param?: Record<string, string>,
+    GMXmlHttpRequestConfig?: Partial<GMTypes.XHRDetails>,
 ): Promise<T>;
 
 /**
@@ -38,11 +38,14 @@ export function gmRequest<T extends string | Record<string, any> | Document>(
  *
  * @see https://www.tampermonkey.net/documentation.php?ext=dhdg#api:GM_xmlhttpRequest
  */
-export function gmRequest<T extends string | Record<string, any> | Document, K extends any>(
-	url: string,
-	method: 'POST',
-	data?: Record<string, K>,
-	GMXmlHttpRequestConfig?: Partial<Tampermonkey.Request>,
+export function gmRequest<
+    T extends string | Record<string, any> | Document,
+    K extends any,
+>(
+    url: string,
+    method: 'POST',
+    data?: Record<string, K>,
+    GMXmlHttpRequestConfig?: Partial<GMTypes.XHRDetails>,
 ): Promise<T>;
 
 /**
@@ -57,88 +60,98 @@ export function gmRequest<T extends string | Record<string, any> | Document, K e
  * @see https://www.tampermonkey.net/documentation.php?ext=dhdg#api:GM_xmlhttpRequest
  */
 export function gmRequest<T extends string | Record<string, any> | Document>(
-	GMXmlHttpRequestConfig: Tampermonkey.Request,
-): Promise<T>
+    GMXmlHttpRequestConfig: GMTypes.XHRDetails,
+): Promise<T>;
 
 /**
  * 通过 GM_xmlhttpRequest 进行网络请求
  */
-export function gmRequest<T extends string | Record<string, any> | Document, K extends any>(
-	param1: string | Tampermonkey.Request,
-	method?: 'POST' | 'GET',
-	body?: Record<string, K>,
-	GMXmlHttpRequestConfig?: Partial<Tampermonkey.Request>,
-): Promise<T> {
-	/**
-	 * 统一参数
-	 */
-	const unifiedParameters = () => {
-		// 重载3
-		if ( typeof param1 !== 'string' ) {
-			return {
-				url: param1.url,
-				method: param1.method || 'GET',
-				param: param1.method === 'POST' ? param1.data : void 0,
-				GMXmlHttpRequestConfig: param1,
-			};
-		}
-		
-		// 重载1 / 重载2
-		return {
-			url: param1,
-			method: method || 'GET',
-			param: body,
-			GMXmlHttpRequestConfig: GMXmlHttpRequestConfig || {},
-		};
-	};
-	
-	// 获取统一参数
-	const params = unifiedParameters();
-	
-	/**
-	 * 请求体携带参数处理
-	 * */
-	// 判断: 如果是 GET 请求, 写入网址中
-	if ( params.method === 'GET' && params.param && typeof params.param === 'object' ) {
-		params.url = `${ params.url }?${ new URLSearchParams( params.param as Record<string, string> ).toString() }`;
-	}
-	// 判断: 如果是 POST 请求, 写入请求体中
-	if ( params.method === 'POST' && params.param ) {
-		params.GMXmlHttpRequestConfig.data = JSON.stringify( params.param );
-	}
-	
-	// 发送网络请求 (通过 Promise)
-	return new Promise( ( resolve, reject ) => {
-		// 写入配置
-		const newGMXmlHttpRequestConfig: Tampermonkey.Request = {
-			// 默认20s的超时等待
-			timeout: 20_000,
-			
-			// 请求地址, 请求方法和请求返回
-			url: params.url,
-			method: params.method,
-			onload( response: Tampermonkey.ResponseBase ) {
-				// 解析文本内容,
-				// 如果是对象文本则解析为对象
-				// 如果是文档对象文本则解析为文档对象
-				// 否则返回字符串
-				resolve( parseResponseText( response.responseText ) );
-			},
-			onerror( error: any ) {
-				reject( error );
-			},
-			ontimeout() {
-				reject( new Error( 'Request timed out' ) );
-			},
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			
-			// 用户自定义的油猴配置项
-			...( params.GMXmlHttpRequestConfig ),
-		};
-		
-		// 发送请求
-		GM_xmlhttpRequest( newGMXmlHttpRequestConfig );
-	} );
+export function gmRequest<
+    T extends string | Record<string, any> | Document,
+    K extends any,
+>(
+    param1: string | GMTypes.XHRDetails,
+    method?: 'POST' | 'GET',
+    body?: Record<string, K>,
+    GMXmlHttpRequestConfig?: Partial<GMTypes.XHRDetails>,
+): Promise<T | undefined> {
+    /**
+     * 统一参数
+     */
+    const unifiedParameters = () => {
+        // 重载3
+        if (typeof param1 !== 'string') {
+            return {
+                url: param1.url,
+                method: param1.method || 'GET',
+                param: param1.method === 'POST' ? param1.data : void 0,
+                GMXmlHttpRequestConfig: param1,
+            };
+        }
+
+        // 重载1 / 重载2
+        return {
+            url: param1,
+            method: method || 'GET',
+            param: body,
+            GMXmlHttpRequestConfig: GMXmlHttpRequestConfig || {},
+        };
+    };
+
+    // 获取统一参数
+    const params = unifiedParameters();
+
+    /**
+     * 请求体携带参数处理
+     * */
+    // 判断: 如果是 GET 请求, 写入网址中
+    if (
+        params.method === 'GET' &&
+        params.param &&
+        typeof params.param === 'object'
+    ) {
+        params.url = `${params.url}?${new URLSearchParams(params.param as Record<string, string>).toString()}`;
+    }
+    // 判断: 如果是 POST 请求, 写入请求体中
+    if (params.method === 'POST' && params.param) {
+        params.GMXmlHttpRequestConfig.data = JSON.stringify(params.param);
+    }
+
+    // 发送网络请求 (通过 Promise)
+    return new Promise((resolve, reject) => {
+        // 写入配置
+        const newGMXmlHttpRequestConfig: GMTypes.XHRDetails = {
+            // 默认20s的超时等待
+            timeout: 20_000,
+
+            // 请求地址, 请求方法和请求返回
+            url: params.url,
+            method: params.method,
+            onload(response) {
+                // 解析文本内容,
+                // 如果是对象文本则解析为对象
+                // 如果是文档对象文本则解析为文档对象
+                // 否则返回字符串
+                if ( !response.responseText ) {
+                    return resolve(undefined)
+                }
+                resolve(parseResponseText(response.responseText) as T);
+            },
+            onerror(error: any) {
+                reject(error);
+            },
+            ontimeout() {
+                reject(new Error('Request timed out'));
+            },
+            headers: {
+                'Content-Type': 'application/json',
+            },
+
+            // 用户自定义的油猴配置项
+            ...params.GMXmlHttpRequestConfig,
+        };
+
+        // 发送请求
+        GM_xmlhttpRequest(newGMXmlHttpRequestConfig);
+    });
 }

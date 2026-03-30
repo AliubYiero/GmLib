@@ -1,9 +1,13 @@
-export type DownloadRequest =
-	Omit<Tampermonkey.DownloadRequest, 'url' | 'name' | 'onerror' | 'onprogress'>
-	& {
-	onerror?: ( error: Tampermonkey.DownloadErrorResponse ) => void;
-	onprogress?: ( response: Tampermonkey.DownloadProgressResponse, abortHandle: Tampermonkey.AbortHandle<boolean> ) => void;
-}
+export type DownloadRequest = Omit<
+    Tampermonkey.DownloadRequest,
+    'url' | 'name' | 'onerror' | 'onprogress'
+> & {
+    onerror?: (error: Tampermonkey.DownloadErrorResponse) => void;
+    onprogress?: (
+        response: Tampermonkey.DownloadProgressResponse,
+        abortHandle: Tampermonkey.AbortHandle<boolean>,
+    ) => void;
+};
 
 /**
  * 下载文件
@@ -15,32 +19,32 @@ export type DownloadRequest =
  * @returns Promise
  */
 const gmDownload = (
-	url: string,
-	filename: string,
-	details: DownloadRequest = {},
+    url: string,
+    filename: string,
+    details: DownloadRequest = {},
 ): Promise<boolean> => {
-	return new Promise( ( resolve, reject ) => {
-		const abortHandle = GM_download( {
-			url: url,
-			name: filename,
-			...details,
-			onload() {
-				details.onload && details.onload();
-				resolve( true );
-			},
-			onerror( err ) {
-				details.onerror && details.onerror( err );
-				reject( err.error );
-			},
-			ontimeout() {
-				details.ontimeout && details.ontimeout();
-				reject( 'time_out' );
-			},
-			onprogress( response ) {
-				details.onprogress && details.onprogress( response, abortHandle );
-			},
-		} );
-	} );
+    return new Promise((resolve, reject) => {
+        const abortHandle = GM_download({
+            url: url,
+            name: filename,
+            ...details,
+            onload() {
+                details.onload && details.onload();
+                resolve(true);
+            },
+            onerror(err) {
+                details.onerror && details.onerror(err);
+                reject(err.error);
+            },
+            ontimeout() {
+                details.ontimeout && details.ontimeout();
+                reject('time_out');
+            },
+            onprogress(response) {
+                details.onprogress && details.onprogress(response, abortHandle);
+            },
+        });
+    });
 };
 
 /**
@@ -53,15 +57,15 @@ const gmDownload = (
  * @returns Promise
  */
 gmDownload.blob = async (
-	blob: Blob | File,
-	filename: string,
-	details: DownloadRequest = {},
+    blob: Blob | File,
+    filename: string,
+    details: DownloadRequest = {},
 ): Promise<boolean> => {
-	const url = URL.createObjectURL( blob );
-	return gmDownload( url, filename, details ).then( res => {
-		URL.revokeObjectURL( url );
-		return res;
-	} );
+    const url = URL.createObjectURL(blob);
+    return gmDownload(url, filename, details).then((res) => {
+        URL.revokeObjectURL(url);
+        return res;
+    });
 };
 
 /**
@@ -75,15 +79,13 @@ gmDownload.blob = async (
  * @returns Promise
  */
 gmDownload.text = (
-	content: string,
-	filename: string,
-	mimeType: string = 'text/plain',
-	details: DownloadRequest = {},
+    content: string,
+    filename: string,
+    mimeType: string = 'text/plain',
+    details: DownloadRequest = {},
 ): Promise<boolean> => {
-	const blob = new Blob( [ content ], { type: mimeType } );
-	return gmDownload.blob( blob, filename, details );
+    const blob = new Blob([content], { type: mimeType });
+    return gmDownload.blob(blob, filename, details);
 };
 
-export {
-	gmDownload,
-};
+export { gmDownload };

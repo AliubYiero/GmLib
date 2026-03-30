@@ -9,5 +9,5 @@ export type IEnvironment = 'ScriptCat' | 'Tampermonkey';
  * @warn 需要授权函数 `GM_info`
  */
 export const environmentTest = (): IEnvironment => {
-	return GM_info.scriptHandler as IEnvironment;
+    return GM_info.scriptHandler as IEnvironment;
 };
