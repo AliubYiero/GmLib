@@ -14,55 +14,55 @@ describe('elementWaiter', () => {
     });
 
     it('should resolve immediately when element exists', async () => {
-        // 预先创建元素
-        const element = document.createElement('div');
-        element.id = 'existing';
-        container.appendChild(element);
+        // 元素已经在 DOM 中
+        container.innerHTML = '<div id="existing-element">Test</div>';
 
-        // 使用短延迟以加快测试
-        const result = await elementWaiter('#existing', { delayPerSecond: 0.01 });
+        const element = await elementWaiter('#existing-element');
 
-        expect(result.id).toBe('existing');
+        expect(element).toBeInstanceOf(HTMLElement);
+        expect(element.id).toBe('existing-element');
     });
 
     it('should wait for element to appear', async () => {
-        const promise = elementWaiter('#delayed', { timeoutPerSecond: 1, delayPerSecond: 0.01 });
+        // 元素还未存在
+        const promise = elementWaiter('#delayed-element');
 
         // 延迟添加元素
         setTimeout(() => {
-            const element = document.createElement('div');
-            element.id = 'delayed';
-            container.appendChild(element);
-        }, 100);
+            container.innerHTML = '<div id="delayed-element">Delayed</div>';
+        }, 50);
 
-        const result = await promise;
-        expect(result.id).toBe('delayed');
+        const element = await promise;
+
+        expect(element).toBeInstanceOf(HTMLElement);
+        expect(element.id).toBe('delayed-element');
     });
 
     it('should reject when element not found within timeout', async () => {
-        // 使用非常短的超时时间 (0.1 秒)
-        const promise = elementWaiter('#not-exist', { timeoutPerSecond: 0.1, delayPerSecond: 0.01 });
+        // 使用短超时时间和无延迟
+        const promise = elementWaiter('#non-existent', {
+            timeoutPerSecond: 0.1,
+            delayPerSecond: 0,
+        });
 
-        await expect(promise).rejects.toThrow('Element "#not-exist" not found within 0.1 seconds');
+        await expect(promise).rejects.toThrow(
+            'Element "#non-existent" not found within 0.1 seconds',
+        );
     });
 
     it('should search within custom parent', async () => {
         // 创建自定义父容器
         const customParent = document.createElement('div');
         customParent.id = 'custom-parent';
+        customParent.innerHTML = '<span class="child">Child</span>';
         container.appendChild(customParent);
 
-        // 在自定义父容器中创建元素
-        const element = document.createElement('span');
-        element.className = 'child-element';
-        customParent.appendChild(element);
-
-        // 使用自定义 parent 搜索
-        const result = await elementWaiter('.child-element', {
+        // 使用自定义父容器搜索
+        const element = await elementWaiter('.child', {
             parent: customParent,
-            delayPerSecond: 0.01,
         });
 
-        expect(result.className).toBe('child-element');
+        expect(element).toBeInstanceOf(HTMLElement);
+        expect(element.className).toBe('child');
     });
 });
