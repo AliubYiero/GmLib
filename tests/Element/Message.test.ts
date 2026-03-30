@@ -1,11 +1,13 @@
-import { describe, expect, it, beforeEach, afterEach, rs } from '@rstest/core';
+import { afterEach, beforeEach, describe, expect, it, rs } from '@rstest/core';
 import { Message } from '../../src/Element/Message';
 
 describe('Message', () => {
     beforeEach(() => {
         // 清空消息容器内的内容，而不是移除容器本身
         // 因为 messageContainer 是模块级变量，清空 body 后它仍指向游离元素
-        const container = document.querySelector('div[style*="position: fixed"][style*="pointer-events: none"]');
+        const container = document.querySelector(
+            'div[style*="position: fixed"][style*="pointer-events: none"]',
+        );
         if (container) {
             container.innerHTML = '';
         }
@@ -13,7 +15,9 @@ describe('Message', () => {
 
     afterEach(() => {
         // 清空消息容器内的内容
-        const container = document.querySelector('div[style*="position: fixed"][style*="pointer-events: none"]');
+        const container = document.querySelector(
+            'div[style*="position: fixed"][style*="pointer-events: none"]',
+        );
         if (container) {
             container.innerHTML = '';
         }
@@ -25,7 +29,9 @@ describe('Message', () => {
             Message('test message');
 
             // 检查消息容器是否存在
-            const container = document.querySelector('div[style*="position: fixed"]');
+            const container = document.querySelector(
+                'div[style*="position: fixed"]',
+            );
             expect(container).toBeTruthy();
 
             // 检查消息元素是否存在
@@ -39,7 +45,9 @@ describe('Message', () => {
         it('should create message with options', () => {
             Message({ message: 'success message', type: 'success' });
 
-            const container = document.querySelector('div[style*="position: fixed"]');
+            const container = document.querySelector(
+                'div[style*="position: fixed"]',
+            );
             const messageEl = container?.querySelector('div');
 
             expect(messageEl).toBeTruthy();
@@ -53,7 +61,9 @@ describe('Message', () => {
 
             Message({ message: 'auto close', type: 'info', duration: 1000 });
 
-            const container = document.querySelector('div[style*="position: fixed"]');
+            const container = document.querySelector(
+                'div[style*="position: fixed"]',
+            );
             let messageEl = container?.querySelector('div');
             expect(messageEl).toBeTruthy();
 
@@ -68,9 +78,15 @@ describe('Message', () => {
         it('should close on click', () => {
             rs.useFakeTimers();
 
-            Message({ message: 'click to close', type: 'info', duration: 10000 });
+            Message({
+                message: 'click to close',
+                type: 'info',
+                duration: 10000,
+            });
 
-            const container = document.querySelector('div[style*="position: fixed"]');
+            const container = document.querySelector(
+                'div[style*="position: fixed"]',
+            );
             const messageEl = container?.querySelector('div') as HTMLElement;
             expect(messageEl).toBeTruthy();
 
@@ -90,7 +106,9 @@ describe('Message', () => {
         it('should create success message', () => {
             Message.success('success message');
 
-            const container = document.querySelector('div[style*="position: fixed"]');
+            const container = document.querySelector(
+                'div[style*="position: fixed"]',
+            );
             const messageEl = container?.querySelector('div');
 
             expect(messageEl).toBeTruthy();
@@ -101,7 +119,9 @@ describe('Message', () => {
         it('should create warning message', () => {
             Message.warning('warning message');
 
-            const container = document.querySelector('div[style*="position: fixed"]');
+            const container = document.querySelector(
+                'div[style*="position: fixed"]',
+            );
             const messageEl = container?.querySelector('div');
 
             expect(messageEl).toBeTruthy();
@@ -112,7 +132,9 @@ describe('Message', () => {
         it('should create error message', () => {
             Message.error('error message');
 
-            const container = document.querySelector('div[style*="position: fixed"]');
+            const container = document.querySelector(
+                'div[style*="position: fixed"]',
+            );
             const messageEl = container?.querySelector('div');
 
             expect(messageEl).toBeTruthy();
@@ -123,7 +145,9 @@ describe('Message', () => {
         it('should create info message', () => {
             Message.info('info message');
 
-            const container = document.querySelector('div[style*="position: fixed"]');
+            const container = document.querySelector(
+                'div[style*="position: fixed"]',
+            );
             const messageEl = container?.querySelector('div');
 
             expect(messageEl).toBeTruthy();

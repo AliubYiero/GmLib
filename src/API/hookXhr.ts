@@ -27,7 +27,6 @@ export const hookXhr = <T extends string | Record<string, any> | Document>(
     isHooked = true;
 
     XMLHttpRequest.prototype.open = function () {
-        const xhr = this;
         const requestUrl = arguments[1] as string; // 提前保存 URL
 
         // 查找匹配的 hook
@@ -38,9 +37,9 @@ export const hookXhr = <T extends string | Record<string, any> | Document>(
                 'responseText',
             )!.get as Function;
 
-            Object.defineProperty(xhr, 'responseText', {
+            Object.defineProperty(this, 'responseText', {
                 get: () => {
-                    const responseText: string = getter.call(xhr);
+                    const responseText: string = getter.call(this);
                     // 使用闭包中的 requestUrl
                     return (
                         matchedHook.callback(
@@ -51,7 +50,7 @@ export const hookXhr = <T extends string | Record<string, any> | Document>(
                 },
             });
         }
-        // @ts-ignore
-        return originalXhrOpen.apply(xhr, arguments);
+        // @ts-expect-error
+        return originalXhrOpen.apply(this, arguments);
     };
 };

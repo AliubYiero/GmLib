@@ -1,4 +1,4 @@
-import { describe, expect, it, beforeEach, afterEach } from '@rstest/core';
+import { afterEach, beforeEach, describe, expect, it } from '@rstest/core';
 import { elementWaiter } from '../../src/Element/elementWaiter';
 
 describe('elementWaiter', () => {

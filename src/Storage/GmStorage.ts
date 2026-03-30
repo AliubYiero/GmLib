@@ -8,7 +8,7 @@ export interface IGMStorageChangeDetail<T> {
 /**
  * 油猴存储
  */
-export class GmStorage<T extends unknown> {
+export class GmStorage<T> {
     protected listenerId: number = 0;
 
     constructor(

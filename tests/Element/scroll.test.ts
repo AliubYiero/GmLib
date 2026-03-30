@@ -1,4 +1,4 @@
-import { describe, expect, it, beforeEach } from '@rstest/core';
+import { beforeEach, describe, expect, it } from '@rstest/core';
 import { scroll } from '../../src/Element/scroll';
 
 describe('scroll', () => {
@@ -21,7 +21,7 @@ describe('scroll', () => {
             window.scrollTo = (options: ScrollToOptions) => {
                 callArgs = options;
             };
-            
+
             Object.defineProperty(document.body, 'clientHeight', {
                 value: 1000,
                 writable: true,
@@ -42,7 +42,7 @@ describe('scroll', () => {
             window.scrollTo = (options: ScrollToOptions) => {
                 callArgs = options;
             };
-            
+
             Object.defineProperty(document.body, 'clientHeight', {
                 value: 1000,
                 writable: true,
@@ -62,7 +62,7 @@ describe('scroll', () => {
             window.scrollTo = (options: ScrollToOptions) => {
                 callArgs = options;
             };
-            
+
             Object.defineProperty(document.body, 'clientHeight', {
                 value: 1000,
                 writable: true,
@@ -85,7 +85,7 @@ describe('scroll', () => {
             window.scrollTo = (options: ScrollToOptions) => {
                 callArgs = options;
             };
-            
+
             Object.defineProperty(document.body, 'clientHeight', {
                 value: 1000,
                 writable: true,
@@ -105,7 +105,7 @@ describe('scroll', () => {
     describe('element scroll', () => {
         it('should scroll element within container', () => {
             let callArgs: any = null;
-            
+
             // 创建 mock container
             const container = {
                 getBoundingClientRect: () => ({ top: 100, height: 400 }),
@@ -135,7 +135,7 @@ describe('scroll', () => {
             window.scrollBy = (options: ScrollToOptions) => {
                 callArgs = options;
             };
-            
+
             Object.defineProperty(document.body, 'clientHeight', {
                 value: 1000,
                 writable: true,

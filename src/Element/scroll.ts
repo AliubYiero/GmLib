@@ -48,7 +48,7 @@ export function scroll(
     let containerTop: number = 0;
     let containerHeight: number = document.body.clientHeight;
 
-    // @ts-ignore
+    // @ts-expect-error
     if (container.getBoundingClientRect) {
         const rect = (<HTMLElement>container).getBoundingClientRect();
         containerTop = rect.top;

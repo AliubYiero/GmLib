@@ -1,106 +1,108 @@
-import { describe, it, expect, beforeEach } from '@rstest/core';
-import {
-	gmApiMock,
-	setupGlobalGmApi,
-	mockRequestSuccess,
-	mockRequestError,
-	mockRequestTimeout,
-} from '../__mocks__/gmApi.ts';
+import { beforeEach, describe, expect, it } from '@rstest/core';
 import { gmRequest } from '../../src/API/gmRequest.ts';
+import {
+    gmApiMock,
+    mockRequestError,
+    mockRequestSuccess,
+    mockRequestTimeout,
+    setupGlobalGmApi,
+} from '../__mocks__/gmApi.ts';
 
 describe('gmRequest', () => {
-	beforeEach(() => {
-		gmApiMock.reset();
-		setupGlobalGmApi();
-	});
+    beforeEach(() => {
+        gmApiMock.reset();
+        setupGlobalGmApi();
+    });
 
-	describe('GET request', () => {
-		it('should return parsed JSON on success', async () => {
-			const mockData = { id: 1, name: 'test' };
-			mockRequestSuccess(JSON.stringify(mockData));
+    describe('GET request', () => {
+        it('should return parsed JSON on success', async () => {
+            const mockData = { id: 1, name: 'test' };
+            mockRequestSuccess(JSON.stringify(mockData));
 
-			const result = await gmRequest('https://api.example.com/data');
+            const result = await gmRequest('https://api.example.com/data');
 
-			expect(result).toEqual(mockData);
-		});
+            expect(result).toEqual(mockData);
+        });
 
-		it('should return Document for non-JSON response', async () => {
-			const mockText = 'plain text response';
-			mockRequestSuccess(mockText);
+        it('should return Document for non-JSON response', async () => {
+            const mockText = 'plain text response';
+            mockRequestSuccess(mockText);
 
-			const result = await gmRequest<Document>('https://example.com/page');
+            const result = await gmRequest<Document>(
+                'https://example.com/page',
+            );
 
-			expect(result).toBeInstanceOf(Document);
-		});
+            expect(result).toBeInstanceOf(Document);
+        });
 
-		it('should append params to URL for GET request', async () => {
-			mockRequestSuccess('ok');
+        it('should append params to URL for GET request', async () => {
+            mockRequestSuccess('ok');
 
-			await gmRequest('https://api.example.com/search', 'GET', {
-				query: 'test',
-				page: '1',
-			});
+            await gmRequest('https://api.example.com/search', 'GET', {
+                query: 'test',
+                page: '1',
+            });
 
-			const callArgs = gmApiMock.GM_xmlhttpRequest.mock.calls[0][0];
-			expect(callArgs.url).toContain('query=test');
-			expect(callArgs.url).toContain('page=1');
-			expect(callArgs.method).toBe('GET');
-		});
+            const callArgs = gmApiMock.GM_xmlhttpRequest.mock.calls[0][0];
+            expect(callArgs.url).toContain('query=test');
+            expect(callArgs.url).toContain('page=1');
+            expect(callArgs.method).toBe('GET');
+        });
 
-		it('should return undefined for empty response', async () => {
-			mockRequestSuccess('');
+        it('should return undefined for empty response', async () => {
+            mockRequestSuccess('');
 
-			const result = await gmRequest('https://api.example.com/empty');
+            const result = await gmRequest('https://api.example.com/empty');
 
-			expect(result).toBeUndefined();
-		});
-	});
+            expect(result).toBeUndefined();
+        });
+    });
 
-	describe('POST request', () => {
-		it('should send POST with JSON body', async () => {
-			const postData = { name: 'test', value: 123 };
-			mockRequestSuccess('created');
+    describe('POST request', () => {
+        it('should send POST with JSON body', async () => {
+            const postData = { name: 'test', value: 123 };
+            mockRequestSuccess('created');
 
-			await gmRequest('https://api.example.com/create', 'POST', postData);
+            await gmRequest('https://api.example.com/create', 'POST', postData);
 
-			const callArgs = gmApiMock.GM_xmlhttpRequest.mock.calls[0][0];
-			expect(callArgs.method).toBe('POST');
-			expect(callArgs.data).toBe(JSON.stringify(postData));
-		});
-	});
+            const callArgs = gmApiMock.GM_xmlhttpRequest.mock.calls[0][0];
+            expect(callArgs.method).toBe('POST');
+            expect(callArgs.data).toBe(JSON.stringify(postData));
+        });
+    });
 
-	describe('Error handling', () => {
-		it('should reject on network error', async () => {
-			const mockError = new Error('Network error');
-			mockRequestError(mockError);
+    describe('Error handling', () => {
+        it('should reject on network error', async () => {
+            const mockError = new Error('Network error');
+            mockRequestError(mockError);
 
-			await expect(
-				gmRequest('https://api.example.com/error'),
-			).rejects.toThrow('Network error');
-		});
+            await expect(
+                gmRequest('https://api.example.com/error'),
+            ).rejects.toThrow('Network error');
+        });
 
-		it('should reject on timeout', async () => {
-			mockRequestTimeout();
+        it('should reject on timeout', async () => {
+            mockRequestTimeout();
 
-			await expect(
-				gmRequest('https://api.example.com/timeout'),
-			).rejects.toThrow('timed out');
-		});
-	});
+            await expect(
+                gmRequest('https://api.example.com/timeout'),
+            ).rejects.toThrow('timed out');
+        });
+    });
 
-	describe('Config object', () => {
-		it('should accept GMXmlHttpRequestConfig object', async () => {
-			const mockData = { success: true };
-			mockRequestSuccess(JSON.stringify(mockData));
+    describe('Config object', () => {
+        it('should accept GMXmlHttpRequestConfig object', async () => {
+            const mockData = { success: true };
+            mockRequestSuccess(JSON.stringify(mockData));
 
-			const result = await gmRequest({
-				url: 'https://api.example.com/config',
-				method: 'GET',
-			});
+            const result = await gmRequest({
+                url: 'https://api.example.com/config',
+                method: 'GET',
+            });
 
-			expect(result).toEqual(mockData);
-			const callArgs = gmApiMock.GM_xmlhttpRequest.mock.calls[0][0];
-			expect(callArgs.url).toBe('https://api.example.com/config');
-		});
-	});
+            expect(result).toEqual(mockData);
+            const callArgs = gmApiMock.GM_xmlhttpRequest.mock.calls[0][0];
+            expect(callArgs.url).toBe('https://api.example.com/config');
+        });
+    });
 });

@@ -9,7 +9,8 @@ describe('parseResponseText', () => {
     });
 
     it('should parse HTML string to Document', () => {
-        const input = '<!DOCTYPE html><html><body><div>test</div></body></html>';
+        const input =
+            '<!DOCTYPE html><html><body><div>test</div></body></html>';
         const result = parseResponseText(input) as Document;
         expect(result.body).toBeDefined();
         expect(result.body.innerHTML).toContain('<div>test</div>');

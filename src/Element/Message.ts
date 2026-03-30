@@ -175,7 +175,7 @@ function Message(options: string | MessageDetail) {
     }, 10);
 
     // 自动关闭
-    let timer = setTimeout(() => {
+    const timer = setTimeout(() => {
         closeMessage(messageEl);
     }, detail.duration);
 

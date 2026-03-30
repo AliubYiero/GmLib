@@ -38,10 +38,7 @@ export function gmRequest<T extends string | Record<string, any> | Document>(
  *
  * @see https://www.tampermonkey.net/documentation.php?ext=dhdg#api:GM_xmlhttpRequest
  */
-export function gmRequest<
-    T extends string | Record<string, any> | Document,
-    K extends any,
->(
+export function gmRequest<T extends string | Record<string, any> | Document, K>(
     url: string,
     method: 'POST',
     data?: Record<string, K>,
@@ -66,10 +63,7 @@ export function gmRequest<T extends string | Record<string, any> | Document>(
 /**
  * 通过 GM_xmlhttpRequest 进行网络请求
  */
-export function gmRequest<
-    T extends string | Record<string, any> | Document,
-    K extends any,
->(
+export function gmRequest<T extends string | Record<string, any> | Document, K>(
     param1: string | GMTypes.XHRDetails,
     method?: 'POST' | 'GET',
     body?: Record<string, K>,
@@ -132,8 +126,8 @@ export function gmRequest<
                 // 如果是对象文本则解析为对象
                 // 如果是文档对象文本则解析为文档对象
                 // 否则返回字符串
-                if ( !response.responseText ) {
-                    return resolve(undefined)
+                if (!response.responseText) {
+                    return resolve(undefined);
                 }
                 resolve(parseResponseText(response.responseText) as T);
             },

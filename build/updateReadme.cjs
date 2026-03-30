@@ -1,5 +1,5 @@
-const { readdirSync, writeFileSync } = require('fs');
-const { join } = require('path');
+const { readdirSync, writeFileSync } = require('node:fs');
+const { join } = require('node:path');
 
 const descMapper = {
     // API
