@@ -38,7 +38,7 @@ const returnElement = <T>(
 		const element = options.parent.querySelector<HTMLElement>( selector );
 		// 空元素, 抛出异常
 		if ( !element ) {
-			reject( new Error( 'Void Element' ) );
+			reject( new Error( `Element "${ selector }" not found` ) );
 			return;
 		}
 		
@@ -96,8 +96,8 @@ const getElementByMutationObserver = <T>(
 		// 关闭监听器
 		observer.disconnect();
 		
-		// 返回元素 reject
-		returnElement( selector, options, resolve, reject );
+		// 超时直接 reject
+		reject( new Error( `Element "${ selector }" not found within ${ options.timeoutPerSecond } seconds` ) );
 	}, ( options.timeoutPerSecond ) * 1000 );
 	
 	const observeElementCallback = ( mutations: MutationRecord[] ) => {

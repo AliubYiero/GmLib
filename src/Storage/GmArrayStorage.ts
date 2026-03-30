@@ -26,10 +26,10 @@ export class GmArrayStorage<T> extends GmStorage<Array<T>> {
 	 */
 	get lastItem(): T | undefined {
 		const list = this.value;
-		if ( !list.length ) {
-			list.push( ...this.defaultValue );
+		if ( list.length ) {
+			return list[ list.length - 1 ];
 		}
-		return list[ list.length - 1 ];
+		return this.defaultValue.length ? this.defaultValue[ this.defaultValue.length - 1 ] : undefined;
 	}
 	
 	/**

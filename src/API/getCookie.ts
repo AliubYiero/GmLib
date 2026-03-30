@@ -7,14 +7,13 @@ export declare interface ICookie {
 	domain: string;
 	name: string;
 	value: string;
-	expirationDate: number;
-	hostOnly: boolean;
-	httpOnly: boolean;
-	path: string;
-	sameSite: string;
-	secure: boolean;
 	session: boolean;
-	storeId: string;
+	hostOnly: boolean;
+	expirationDate?: number;
+	path: string;
+	httpOnly: boolean;
+	secure: boolean;
+	sameSite: 'unspecified' | 'no_restriction' | 'lax' | 'strict';
 }
 
 
@@ -80,11 +79,9 @@ export function getCookie( content: string, key?: string ): Promise<string | ICo
 	return new Promise( ( resolve, reject ) => {
 		const env = environmentTest();
 		if ( env !== 'ScriptCat' ) {
-			reject( `当前脚本不支持 ${ env } 环境, 仅支持 ScriptCat .` );
+			return reject( new Error( `当前脚本不支持 ${ env } 环境, 仅支持 ScriptCat .` ) );
 		}
 		
-		// 忽略与 ScriptCat 不兼容的 TamperMonkey 类型库
-		// @ts-ignore
 		GM_cookie( 'list', {
 			domain: content,
 		}, ( cookieList: ICookie[] ) => {
