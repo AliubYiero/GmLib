@@ -1,11 +1,18 @@
 export type DownloadRequest = Omit<
-    Tampermonkey.DownloadRequest,
+    GMTypes.DownloadDetails<string | Blob | File>,
     'url' | 'name' | 'onerror' | 'onprogress'
 > & {
-    onerror?: (error: Tampermonkey.DownloadErrorResponse) => void;
+    onerror?: (error: GMTypes.DownloadError) => void;
     onprogress?: (
-        response: Tampermonkey.DownloadProgressResponse,
-        abortHandle: Tampermonkey.AbortHandle<boolean>,
+        response: {
+            done: number;
+            lengthComputable: boolean;
+            loaded: number;
+            position?: number;
+            total: number;
+            totalSize: number;
+        },
+        abortHandle: GMTypes.AbortHandle<boolean>,
     ) => void;
 };
 
@@ -28,8 +35,8 @@ const gmDownload = (
             url: url,
             name: filename,
             ...details,
-            onload() {
-                details.onload && details.onload();
+            onload(event) {
+                details.onload && details.onload(event);
                 resolve(true);
             },
             onerror(err) {
