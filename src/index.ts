@@ -6,6 +6,7 @@ export { hookXhr } from './API/hookXhr';
 export { elementWaiter } from './Element/elementWaiter';
 export { gmMenuCommand } from './Element/gmMenuCommand';
 export { Message } from './Element/Message';
+export { onKeydown } from './Element/onKeydown';
 // Element
 export { scroll } from './Element/scroll';
 export { simulateClick } from './Element/simulateClick';
