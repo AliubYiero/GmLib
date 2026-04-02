@@ -8,6 +8,8 @@ export { gmMenuCommand } from './Element/gmMenuCommand';
 export { Message } from './Element/Message';
 // Element
 export { scroll } from './Element/scroll';
+export { simulateClick } from './Element/simulateClick';
+export { simulateKeyboard } from './Element/simulateKeyboard';
 export { environmentTest } from './Env/environmentTest';
 // Env
 export { isIframe } from './Env/isIframe';
