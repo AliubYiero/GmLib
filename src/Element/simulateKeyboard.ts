@@ -1,3 +1,7 @@
+import type { KeyboardKey } from './types/KeyboardKey';
+
+export type { KeyboardKey } from './types/KeyboardKey';
+
 /**
  * 模拟键盘选项接口
  */
@@ -6,7 +10,7 @@ export interface ISimulateKeyboardOptions {
      * 按键字符值
      * @example 'Enter', 'a', 'Escape'
      */
-    key?: string;
+    key?: KeyboardKey;
 
     /**
      * 物理按键码
