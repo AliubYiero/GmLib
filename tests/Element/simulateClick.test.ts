@@ -231,9 +231,13 @@ describe('simulateClick', () => {
         it('should dispatch events in correct order', () => {
             const eventOrder: string[] = [];
 
-            button.addEventListener('mousedown', () => eventOrder.push('mousedown'));
+            button.addEventListener('mousedown', () =>
+                eventOrder.push('mousedown'),
+            );
             button.addEventListener('click', () => eventOrder.push('click'));
-            button.addEventListener('mouseup', () => eventOrder.push('mouseup'));
+            button.addEventListener('mouseup', () =>
+                eventOrder.push('mouseup'),
+            );
 
             simulateClick(button);
 

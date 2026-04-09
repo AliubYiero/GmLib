@@ -193,7 +193,8 @@ describe('extractDOMInfo', () => {
         });
 
         it('TEXTAREA 元素应自动读取 value', () => {
-            container.innerHTML = '<textarea class="content">Hello World</textarea>';
+            container.innerHTML =
+                '<textarea class="content">Hello World</textarea>';
 
             const result = extractDOMInfo(container, {
                 key: 'content',
@@ -220,7 +221,8 @@ describe('extractDOMInfo', () => {
         });
 
         it('INPUT[type=number] 应正确转换为数字', () => {
-            container.innerHTML = '<input type="number" class="age" value="25" />';
+            container.innerHTML =
+                '<input type="number" class="age" value="25" />';
 
             const result = extractDOMInfo(container, {
                 key: 'age',
@@ -247,7 +249,8 @@ describe('extractDOMInfo', () => {
 
         it('应支持 Fallback 机制（数组）', () => {
             // 旧版本使用 data-user-id
-            container.innerHTML = '<div class="item" data-user-id="456">内容</div>';
+            container.innerHTML =
+                '<div class="item" data-user-id="456">内容</div>';
 
             const result = extractDOMInfo(container, {
                 key: 'id',
@@ -259,7 +262,8 @@ describe('extractDOMInfo', () => {
         });
 
         it('Fallback 应返回第一个存在的属性', () => {
-            container.innerHTML = '<div class="item" data-id="789" data-user-id="old">内容</div>';
+            container.innerHTML =
+                '<div class="item" data-id="789" data-user-id="old">内容</div>';
 
             const result = extractDOMInfo(container, {
                 key: 'id',
@@ -296,7 +300,8 @@ describe('extractDOMInfo', () => {
         });
 
         it('boolean 类型 attribute="false" 应返回 false', () => {
-            container.innerHTML = '<div class="item" data-active="false">内容</div>';
+            container.innerHTML =
+                '<div class="item" data-active="false">内容</div>';
 
             const result = extractDOMInfo(container, {
                 key: 'isActive',
@@ -321,7 +326,9 @@ describe('extractDOMInfo', () => {
             expect(result.name).toBe('张三');
             expect(result.nameElement).toBeInstanceOf(HTMLElement);
             // 两次提取的是同一个元素
-            expect((result.nameElement as HTMLElement).textContent).toBe('张三');
+            expect((result.nameElement as HTMLElement).textContent).toBe(
+                '张三',
+            );
         });
 
         it('不存在的 selector 也应缓存', () => {

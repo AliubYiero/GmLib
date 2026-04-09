@@ -1,4 +1,4 @@
-import type { ExtractRule, ExtractedResult } from './types/ExtractRule';
+import type { ExtractedResult, ExtractRule } from './types/ExtractRule';
 
 /**
  * 表单元素标签名集合
@@ -51,8 +51,7 @@ function parseValue(targetEl: HTMLElement | null, rule: ExtractRule): any {
         } else if (type === 'url') {
             // URL 类型优先读取 href
             rawValue =
-                (targetEl as HTMLAnchorElement).href ||
-                targetEl.textContent;
+                (targetEl as HTMLAnchorElement).href || targetEl.textContent;
         } else {
             // 默认读取 textContent
             rawValue = targetEl.textContent;
@@ -93,7 +92,9 @@ function parseValue(targetEl: HTMLElement | null, rule: ExtractRule): any {
         case 'url':
         case 'string':
         default:
-            return rawValue === null ? (rule.defaultValue ?? null) : rawValue.trim();
+            return rawValue === null
+                ? (rule.defaultValue ?? null)
+                : rawValue.trim();
     }
 }
 
@@ -160,7 +161,9 @@ export function extractDOMInfo(
     for (const rule of rules) {
         // 优先读缓存，未命中则查询并存入缓存（包含 null 结果也缓存）
         if (!(rule.selector in elementCache)) {
-            elementCache[rule.selector] = root.querySelector<HTMLElement>(rule.selector);
+            elementCache[rule.selector] = root.querySelector<HTMLElement>(
+                rule.selector,
+            );
         }
 
         const targetEl = elementCache[rule.selector];

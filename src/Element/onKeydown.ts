@@ -153,8 +153,7 @@ export function onKeydown(
     };
 
     // 判断是否使用了快捷监听条件
-    const hasShortcutFilter =
-        key !== undefined || ctrl || alt || shift || meta;
+    const hasShortcutFilter = key !== undefined || ctrl || alt || shift || meta;
 
     // 创建包装回调，处理快捷监听条件过滤和 once 逻辑
     let wrappedCallback: KeydownCallback;
@@ -170,9 +169,10 @@ export function onKeydown(
                     const expectedKey = key;
 
                     // 对于字母键，不区分大小写比较
-                    const isMatch
-                        = eventKey.length === 1 && expectedKey.length === 1
-                            ? eventKey.toLowerCase() === expectedKey.toLowerCase()
+                    const isMatch =
+                        eventKey.length === 1 && expectedKey.length === 1
+                            ? eventKey.toLowerCase() ===
+                              expectedKey.toLowerCase()
                             : eventKey === expectedKey;
 
                     if (!isMatch) {
@@ -216,9 +216,10 @@ export function onKeydown(
                     const expectedKey = key;
 
                     // 对于字母键，不区分大小写比较
-                    const isMatch
-                        = eventKey.length === 1 && expectedKey.length === 1
-                            ? eventKey.toLowerCase() === expectedKey.toLowerCase()
+                    const isMatch =
+                        eventKey.length === 1 && expectedKey.length === 1
+                            ? eventKey.toLowerCase() ===
+                              expectedKey.toLowerCase()
                             : eventKey === expectedKey;
 
                     if (!isMatch) {

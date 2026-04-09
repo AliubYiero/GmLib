@@ -76,7 +76,9 @@ describe('onKeydown', () => {
             // 触发不同按键
             input.dispatchEvent(new KeyboardEvent('keydown', { key: 'a' }));
             input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
-            input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+            input.dispatchEvent(
+                new KeyboardEvent('keydown', { key: 'Escape' }),
+            );
             input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
 
             // 只有 Enter 被记录
@@ -127,9 +129,15 @@ describe('onKeydown', () => {
 
             // 触发不同组合
             input.dispatchEvent(new KeyboardEvent('keydown', { key: 's' }));
-            input.dispatchEvent(new KeyboardEvent('keydown', { key: 's', ctrlKey: true }));
-            input.dispatchEvent(new KeyboardEvent('keydown', { key: 's', ctrlKey: false }));
-            input.dispatchEvent(new KeyboardEvent('keydown', { key: 'a', ctrlKey: true }));
+            input.dispatchEvent(
+                new KeyboardEvent('keydown', { key: 's', ctrlKey: true }),
+            );
+            input.dispatchEvent(
+                new KeyboardEvent('keydown', { key: 's', ctrlKey: false }),
+            );
+            input.dispatchEvent(
+                new KeyboardEvent('keydown', { key: 'a', ctrlKey: true }),
+            );
 
             // 只有 Ctrl+S 被记录
             expect(keys).toEqual(['s']);
@@ -143,8 +151,12 @@ describe('onKeydown', () => {
 
             onKeydown(callback, { target: input, key: 'Enter', shift: true });
 
-            input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', shiftKey: false }));
-            input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', shiftKey: true }));
+            input.dispatchEvent(
+                new KeyboardEvent('keydown', { key: 'Enter', shiftKey: false }),
+            );
+            input.dispatchEvent(
+                new KeyboardEvent('keydown', { key: 'Enter', shiftKey: true }),
+            );
 
             expect(keys).toEqual(['Enter']);
         });
@@ -157,8 +169,12 @@ describe('onKeydown', () => {
 
             onKeydown(callback, { target: input, key: 'Tab', alt: true });
 
-            input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab', altKey: false }));
-            input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab', altKey: true }));
+            input.dispatchEvent(
+                new KeyboardEvent('keydown', { key: 'Tab', altKey: false }),
+            );
+            input.dispatchEvent(
+                new KeyboardEvent('keydown', { key: 'Tab', altKey: true }),
+            );
 
             expect(keys).toEqual(['Tab']);
         });
@@ -171,8 +187,12 @@ describe('onKeydown', () => {
 
             onKeydown(callback, { target: input, key: 's', meta: true });
 
-            input.dispatchEvent(new KeyboardEvent('keydown', { key: 's', metaKey: false }));
-            input.dispatchEvent(new KeyboardEvent('keydown', { key: 's', metaKey: true }));
+            input.dispatchEvent(
+                new KeyboardEvent('keydown', { key: 's', metaKey: false }),
+            );
+            input.dispatchEvent(
+                new KeyboardEvent('keydown', { key: 's', metaKey: true }),
+            );
 
             expect(keys).toEqual(['s']);
         });
@@ -192,15 +212,27 @@ describe('onKeydown', () => {
 
             // Ctrl+N
             input.dispatchEvent(
-                new KeyboardEvent('keydown', { key: 'n', ctrlKey: true, shiftKey: false }),
+                new KeyboardEvent('keydown', {
+                    key: 'n',
+                    ctrlKey: true,
+                    shiftKey: false,
+                }),
             );
             // Shift+N
             input.dispatchEvent(
-                new KeyboardEvent('keydown', { key: 'n', ctrlKey: false, shiftKey: true }),
+                new KeyboardEvent('keydown', {
+                    key: 'n',
+                    ctrlKey: false,
+                    shiftKey: true,
+                }),
             );
             // Ctrl+Shift+N
             input.dispatchEvent(
-                new KeyboardEvent('keydown', { key: 'n', ctrlKey: true, shiftKey: true }),
+                new KeyboardEvent('keydown', {
+                    key: 'n',
+                    ctrlKey: true,
+                    shiftKey: true,
+                }),
             );
 
             // 只有 Ctrl+Shift+N 被记录
@@ -216,8 +248,12 @@ describe('onKeydown', () => {
             // 明确要求没有 Ctrl 键
             onKeydown(callback, { target: input, key: 's', ctrl: false });
 
-            input.dispatchEvent(new KeyboardEvent('keydown', { key: 's', ctrlKey: true }));
-            input.dispatchEvent(new KeyboardEvent('keydown', { key: 's', ctrlKey: false }));
+            input.dispatchEvent(
+                new KeyboardEvent('keydown', { key: 's', ctrlKey: true }),
+            );
+            input.dispatchEvent(
+                new KeyboardEvent('keydown', { key: 's', ctrlKey: false }),
+            );
 
             // 只有没有 Ctrl 的 s 被记录
             expect(keys).toEqual(['s']);
@@ -228,34 +264,39 @@ describe('onKeydown', () => {
         it('should handle Ctrl+S shortcut', () => {
             const triggered: boolean[] = [];
 
-            onKeydown(
-                () => triggered.push(true),
-                { target: input, key: 's', ctrl: true },
-            );
+            onKeydown(() => triggered.push(true), {
+                target: input,
+                key: 's',
+                ctrl: true,
+            });
 
-            input.dispatchEvent(new KeyboardEvent('keydown', { key: 's', ctrlKey: true }));
+            input.dispatchEvent(
+                new KeyboardEvent('keydown', { key: 's', ctrlKey: true }),
+            );
             expect(triggered.length).toBe(1);
         });
 
         it('should handle Escape key', () => {
             const triggered: boolean[] = [];
 
-            onKeydown(
-                () => triggered.push(true),
-                { target: input, key: 'Escape' },
-            );
+            onKeydown(() => triggered.push(true), {
+                target: input,
+                key: 'Escape',
+            });
 
-            input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+            input.dispatchEvent(
+                new KeyboardEvent('keydown', { key: 'Escape' }),
+            );
             expect(triggered.length).toBe(1);
         });
 
         it('should handle Enter key', () => {
             const triggered: boolean[] = [];
 
-            onKeydown(
-                () => triggered.push(true),
-                { target: input, key: 'Enter' },
-            );
+            onKeydown(() => triggered.push(true), {
+                target: input,
+                key: 'Enter',
+            });
 
             input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
             expect(triggered.length).toBe(1);
@@ -264,14 +305,20 @@ describe('onKeydown', () => {
         it('should handle arrow keys', () => {
             const keys: string[] = [];
 
-            onKeydown(
-                (e) => keys.push(e.key),
-                { target: input, key: 'ArrowDown' },
-            );
+            onKeydown((e) => keys.push(e.key), {
+                target: input,
+                key: 'ArrowDown',
+            });
 
-            input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowUp' }));
-            input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
-            input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowLeft' }));
+            input.dispatchEvent(
+                new KeyboardEvent('keydown', { key: 'ArrowUp' }),
+            );
+            input.dispatchEvent(
+                new KeyboardEvent('keydown', { key: 'ArrowDown' }),
+            );
+            input.dispatchEvent(
+                new KeyboardEvent('keydown', { key: 'ArrowLeft' }),
+            );
 
             expect(keys).toEqual(['ArrowDown']);
         });
@@ -325,10 +372,10 @@ describe('onKeydown', () => {
         it('should work with shortcut filters', () => {
             const keys: string[] = [];
 
-            const off = onKeydown(
-                (e) => keys.push(e.key),
-                { target: input, key: 'Enter' },
-            );
+            const off = onKeydown((e) => keys.push(e.key), {
+                target: input,
+                key: 'Enter',
+            });
 
             input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
             expect(keys).toEqual(['Enter']);
@@ -361,10 +408,11 @@ describe('onKeydown', () => {
         it('should work with shortcut filters', () => {
             const keys: string[] = [];
 
-            onKeydown(
-                (e) => keys.push(e.key),
-                { target: input, key: 'Enter', once: true },
-            );
+            onKeydown((e) => keys.push(e.key), {
+                target: input,
+                key: 'Enter',
+                once: true,
+            });
 
             // 触发非 Enter 键
             input.dispatchEvent(new KeyboardEvent('keydown', { key: 'a' }));
@@ -384,25 +432,27 @@ describe('onKeydown', () => {
             const eventOrder: string[] = [];
 
             // 容器上的捕获阶段监听
-            onKeydown(
-                () => eventOrder.push('container-capture'),
-                { target: container, capture: true },
-            );
+            onKeydown(() => eventOrder.push('container-capture'), {
+                target: container,
+                capture: true,
+            });
 
             // 容器上的冒泡阶段监听
-            onKeydown(
-                () => eventOrder.push('container-bubble'),
-                { target: container, capture: false },
-            );
+            onKeydown(() => eventOrder.push('container-bubble'), {
+                target: container,
+                capture: false,
+            });
 
             // input 上的冒泡阶段监听
-            onKeydown(
-                () => eventOrder.push('input-bubble'),
-                { target: input, capture: false },
-            );
+            onKeydown(() => eventOrder.push('input-bubble'), {
+                target: input,
+                capture: false,
+            });
 
             // 在 input 上触发事件
-            input.dispatchEvent(new KeyboardEvent('keydown', { key: 'a', bubbles: true }));
+            input.dispatchEvent(
+                new KeyboardEvent('keydown', { key: 'a', bubbles: true }),
+            );
 
             // 捕获阶段先于冒泡阶段
             expect(eventOrder).toEqual([

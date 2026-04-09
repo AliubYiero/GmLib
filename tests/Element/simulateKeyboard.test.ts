@@ -213,7 +213,11 @@ describe('simulateKeyboard', () => {
                 capturedEvent = e;
             });
 
-            simulateKeyboard(input, { key: 'Enter', code: 'Enter', keyCode: 13 });
+            simulateKeyboard(input, {
+                key: 'Enter',
+                code: 'Enter',
+                keyCode: 13,
+            });
 
             expect(capturedEvent).not.toBeNull();
             expect(capturedEvent!.key).toBe('Enter');
@@ -304,7 +308,9 @@ describe('simulateKeyboard', () => {
             const eventOrder: string[] = [];
 
             input.addEventListener('keydown', () => eventOrder.push('keydown'));
-            input.addEventListener('keypress', () => eventOrder.push('keypress'));
+            input.addEventListener('keypress', () =>
+                eventOrder.push('keypress'),
+            );
             input.addEventListener('keyup', () => eventOrder.push('keyup'));
 
             simulateKeyboard(input, { key: 'a' });
@@ -316,7 +322,9 @@ describe('simulateKeyboard', () => {
             const eventOrder: string[] = [];
 
             input.addEventListener('keydown', () => eventOrder.push('keydown'));
-            input.addEventListener('keypress', () => eventOrder.push('keypress'));
+            input.addEventListener('keypress', () =>
+                eventOrder.push('keypress'),
+            );
             input.addEventListener('keyup', () => eventOrder.push('keyup'));
 
             simulateKeyboard(input, { key: 'Enter' });

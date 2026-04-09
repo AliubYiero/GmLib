@@ -36,19 +36,19 @@ const gmDownload = (
             name: filename,
             ...details,
             onload(event) {
-                details.onload && details.onload(event);
+                details.onload?.(event);
                 resolve(true);
             },
             onerror(err) {
-                details.onerror && details.onerror(err);
+                details.onerror?.(err);
                 reject(err.error);
             },
             ontimeout() {
-                details.ontimeout && details.ontimeout();
+                details.ontimeout?.();
                 reject('time_out');
             },
             onprogress(response) {
-                details.onprogress && details.onprogress(response, abortHandle);
+                details.onprogress?.(response, abortHandle);
             },
         });
     });
