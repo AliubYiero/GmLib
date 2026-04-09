@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it } from '@rstest/core';
-import { onKeydown } from '../../src/Element/onKeydown';
+import { onKeydown, onKeydownMultiple } from '../../src/Element/onKeydown';
 
 describe('onKeydown', () => {
     let container: HTMLDivElement;
@@ -554,6 +554,282 @@ describe('onKeydown', () => {
             input.dispatchEvent(new KeyboardEvent('keydown', { key: 'b' }));
             expect(keys1).toEqual(['a']); // 不再更新
             expect(keys2).toEqual(['a', 'b']);
+        });
+    });
+});
+
+describe('onKeydownMultiple', () => {
+    let container: HTMLDivElement;
+    let input: HTMLInputElement;
+
+    beforeEach(() => {
+        container = document.createElement('div');
+        input = document.createElement('input');
+        input.type = 'text';
+        container.appendChild(input);
+        document.body.appendChild(container);
+    });
+
+    afterEach(() => {
+        document.body.removeChild(container);
+    });
+
+    describe('basic functionality', () => {
+        it('should bind multiple keydown handlers', () => {
+            const keys: string[] = [];
+
+            onKeydownMultiple([
+                { key: 'a', callback: () => keys.push('a') },
+                { key: 'b', callback: () => keys.push('b') },
+                { key: 'c', callback: () => keys.push('c') },
+            ]);
+
+            window.dispatchEvent(new KeyboardEvent('keydown', { key: 'a' }));
+            window.dispatchEvent(new KeyboardEvent('keydown', { key: 'b' }));
+            window.dispatchEvent(new KeyboardEvent('keydown', { key: 'c' }));
+            window.dispatchEvent(new KeyboardEvent('keydown', { key: 'd' }));
+
+            expect(keys).toEqual(['a', 'b', 'c']);
+        });
+
+        it('should share target configuration', () => {
+            const keys: string[] = [];
+
+            onKeydownMultiple(
+                [
+                    { key: 'Enter', callback: () => keys.push('Enter') },
+                    { key: 'Escape', callback: () => keys.push('Escape') },
+                ],
+                { target: input },
+            );
+
+            input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+            input.dispatchEvent(
+                new KeyboardEvent('keydown', { key: 'Escape' }),
+            );
+            window.dispatchEvent(
+                new KeyboardEvent('keydown', { key: 'Enter' }),
+            );
+
+            expect(keys).toEqual(['Enter', 'Escape']);
+        });
+
+        it('should trigger all matching callbacks for same event', () => {
+            const results: string[] = [];
+
+            onKeydownMultiple([
+                { key: 's', ctrl: true, callback: () => results.push('save') },
+                { key: 's', ctrl: true, callback: () => results.push('log') },
+            ]);
+
+            window.dispatchEvent(
+                new KeyboardEvent('keydown', { key: 's', ctrlKey: true }),
+            );
+
+            expect(results).toEqual(['save', 'log']);
+        });
+    });
+
+    describe('modifier keys', () => {
+        it('should handle Ctrl modifier', () => {
+            const actions: string[] = [];
+
+            onKeydownMultiple([
+                { key: 's', ctrl: true, callback: () => actions.push('save') },
+                { key: 'o', ctrl: true, callback: () => actions.push('open') },
+            ]);
+
+            window.dispatchEvent(
+                new KeyboardEvent('keydown', { key: 's', ctrlKey: true }),
+            );
+            window.dispatchEvent(
+                new KeyboardEvent('keydown', { key: 'o', ctrlKey: true }),
+            );
+            window.dispatchEvent(new KeyboardEvent('keydown', { key: 's' }));
+
+            expect(actions).toEqual(['save', 'open']);
+        });
+
+        it('should handle Shift modifier', () => {
+            const actions: string[] = [];
+
+            onKeydownMultiple([
+                {
+                    key: 'Enter',
+                    shift: true,
+                    callback: () => actions.push('new-line'),
+                },
+            ]);
+
+            window.dispatchEvent(
+                new KeyboardEvent('keydown', { key: 'Enter', shiftKey: true }),
+            );
+            window.dispatchEvent(
+                new KeyboardEvent('keydown', { key: 'Enter' }),
+            );
+
+            expect(actions).toEqual(['new-line']);
+        });
+
+        it('should handle multiple modifiers', () => {
+            const actions: string[] = [];
+
+            onKeydownMultiple([
+                {
+                    key: 's',
+                    ctrl: true,
+                    shift: true,
+                    callback: () => actions.push('save-as'),
+                },
+            ]);
+
+            window.dispatchEvent(
+                new KeyboardEvent('keydown', {
+                    key: 's',
+                    ctrlKey: true,
+                    shiftKey: true,
+                }),
+            );
+            window.dispatchEvent(
+                new KeyboardEvent('keydown', { key: 's', ctrlKey: true }),
+            );
+
+            expect(actions).toEqual(['save-as']);
+        });
+    });
+
+    describe('no key filter', () => {
+        it('should listen to all keys when key is not specified', () => {
+            const keys: string[] = [];
+
+            onKeydownMultiple([{ callback: (e) => keys.push(e.key) }]);
+
+            window.dispatchEvent(new KeyboardEvent('keydown', { key: 'a' }));
+            window.dispatchEvent(
+                new KeyboardEvent('keydown', { key: 'Enter' }),
+            );
+            window.dispatchEvent(
+                new KeyboardEvent('keydown', { key: 'Escape' }),
+            );
+
+            expect(keys).toEqual(['a', 'Enter', 'Escape']);
+        });
+
+        it('should still filter by modifiers when key is not specified', () => {
+            const keys: string[] = [];
+
+            onKeydownMultiple([
+                { ctrl: true, callback: (e) => keys.push(e.key) },
+            ]);
+
+            window.dispatchEvent(
+                new KeyboardEvent('keydown', { key: 'a', ctrlKey: true }),
+            );
+            window.dispatchEvent(
+                new KeyboardEvent('keydown', { key: 'b', ctrlKey: true }),
+            );
+            window.dispatchEvent(new KeyboardEvent('keydown', { key: 'a' }));
+
+            expect(keys).toEqual(['a', 'b']);
+        });
+    });
+
+    describe('unsubscribe', () => {
+        it('should return unsubscribe function', () => {
+            const off = onKeydownMultiple([{ key: 'a', callback: () => {} }]);
+
+            expect(typeof off).toBe('function');
+        });
+
+        it('should stop all listeners after unsubscribe', () => {
+            const keys: string[] = [];
+
+            const off = onKeydownMultiple([
+                { key: 'a', callback: () => keys.push('a') },
+                { key: 'b', callback: () => keys.push('b') },
+                { key: 'c', callback: () => keys.push('c') },
+            ]);
+
+            window.dispatchEvent(new KeyboardEvent('keydown', { key: 'a' }));
+            window.dispatchEvent(new KeyboardEvent('keydown', { key: 'b' }));
+
+            off();
+
+            window.dispatchEvent(new KeyboardEvent('keydown', { key: 'a' }));
+            window.dispatchEvent(new KeyboardEvent('keydown', { key: 'c' }));
+
+            expect(keys).toEqual(['a', 'b']);
+        });
+
+        it('should unsubscribe with target', () => {
+            const keys: string[] = [];
+
+            const off = onKeydownMultiple(
+                [{ key: 'Enter', callback: () => keys.push('Enter') }],
+                { target: input },
+            );
+
+            input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+            expect(keys).toEqual(['Enter']);
+
+            off();
+
+            input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+            expect(keys).toEqual(['Enter']);
+        });
+    });
+
+    describe('capture and passive options', () => {
+        it('should respect capture option', () => {
+            const eventOrder: string[] = [];
+
+            onKeydownMultiple(
+                [{ callback: () => eventOrder.push('multiple') }],
+                { target: container, capture: true },
+            );
+
+            onKeydown(() => eventOrder.push('single'), {
+                target: container,
+                capture: false,
+            });
+
+            input.dispatchEvent(
+                new KeyboardEvent('keydown', { key: 'a', bubbles: true }),
+            );
+
+            expect(eventOrder).toEqual(['multiple', 'single']);
+        });
+
+        it('should accept passive option', () => {
+            expect(() => {
+                onKeydownMultiple([{ callback: () => {} }], { passive: true });
+            }).not.toThrow();
+        });
+    });
+
+    describe('case insensitivity', () => {
+        it('should be case-insensitive for letter keys', () => {
+            const keys: string[] = [];
+
+            onKeydownMultiple([{ key: 'a', callback: () => keys.push('a') }]);
+
+            window.dispatchEvent(new KeyboardEvent('keydown', { key: 'a' }));
+            window.dispatchEvent(new KeyboardEvent('keydown', { key: 'A' }));
+
+            expect(keys).toEqual(['a', 'a']);
+        });
+    });
+
+    describe('empty bindings', () => {
+        it('should handle empty array', () => {
+            const off = onKeydownMultiple([]);
+
+            expect(typeof off).toBe('function');
+
+            // 不应该抛出错误
+            window.dispatchEvent(new KeyboardEvent('keydown', { key: 'a' }));
+
+            off();
         });
     });
 });

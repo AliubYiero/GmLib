@@ -1,4 +1,41 @@
 # 更新日志
+
+### 0.3.4 - feat
+
+- 新增函数: `onKeydownMultiple`, 用于批量监听多个键盘快捷键
+- 更新 `onKeydown` API 文档
+- 重构 README 结构
+
+### 0.3.4 - feat
+
+- 全面优化 `Message` 组件
+
+### 0.3.3 - feat
+
+- 新增函数: `extractDOMInfo`, 用于从 DOM 节点批量提取数据
+- 新增类型: `ExtractRule`, 用于定义数据提取规则
+
+### 0.3.2 - feat
+
+- 新增函数: `simulateClick`, 模拟鼠标点击
+- 新增函数: `simulateKeyboard`, 模拟键盘输入
+- 新增函数: `onKeydown`, 监听键盘按下事件
+- 新增类型: `KeyboardKey`, 常用键盘按键类型
+- `onKeydown` 支持快捷监听功能（指定按键、修饰键组合）
+- 添加 `publishConfig` 配置
+
+### 0.3.1 - fix
+
+- 修复 `gmDownload` 类型命名空间，替换 Tampermonkey 为 GMTypes
+- 代码优化与测试更新
+
+### 0.3.0 - chore
+
+- 工具链迁移：使用 rslib 构建项目
+- 类型声明改为使用 `scriptcat.d.ts`
+- 代码格式化：使用 Biome 替代 ESLint
+- 添加所有模块的单元测试
+
 ### 0.1.23 - update
 
 - 新增静态类: `gmMenuCommand`, 用于管理菜单按钮

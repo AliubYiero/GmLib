@@ -7,7 +7,14 @@ export { elementWaiter } from './Element/elementWaiter';
 export { extractDOMInfo } from './Element/extractDOMInfo';
 export { gmMenuCommand } from './Element/gmMenuCommand';
 export { Message } from './Element/Message';
-export { onKeydown } from './Element/onKeydown';
+export type {
+    IKeydownBinding,
+    IKeydownMultipleOptions,
+    IKeydownOptions,
+    KeydownCallback,
+    Unsubscribe,
+} from './Element/onKeydown';
+export { onKeydown, onKeydownMultiple } from './Element/onKeydown';
 // Element
 export { scroll } from './Element/scroll';
 export { simulateClick } from './Element/simulateClick';

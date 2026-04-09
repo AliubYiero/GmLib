@@ -263,3 +263,194 @@ export function onKeydown(
         );
     };
 }
+
+/**
+ * 单个快捷键绑定配置
+ */
+export interface IKeydownBinding {
+    /**
+     * 键盘按下时的回调函数
+     */
+    callback: KeydownCallback;
+
+    /**
+     * 指定监听的按键
+     *
+     * 设置后，只有当按下的键匹配时才会触发回调
+     *
+     * @example 'Enter' - 监听回车键
+     * @example 'a' - 监听 a 键
+     * @example 'Escape' - 监听 ESC 键
+     */
+    key?: KeyboardKey | string;
+
+    /**
+     * 是否要求按下 Ctrl 键
+     * @default false
+     */
+    ctrl?: boolean;
+
+    /**
+     * 是否要求按下 Alt 键
+     * @default false
+     */
+    alt?: boolean;
+
+    /**
+     * 是否要求按下 Shift 键
+     * @default false
+     */
+    shift?: boolean;
+
+    /**
+     * 是否要求按下 Meta 键（Mac 的 Command 键）
+     * @default false
+     */
+    meta?: boolean;
+}
+
+/**
+ * 多个键盘监听共享的全局配置
+ */
+export interface IKeydownMultipleOptions {
+    /**
+     * 监听目标容器
+     * @default window
+     */
+    target?: HTMLElement | Window | Document;
+
+    /**
+     * 是否在捕获阶段处理事件
+     * @default false
+     */
+    capture?: boolean;
+
+    /**
+     * 是否为被动监听器（不调用 preventDefault）
+     * @default false
+     */
+    passive?: boolean;
+}
+
+/**
+ * 批量监听多个键盘快捷键
+ *
+ * 适用于需要绑定多个快捷键的场景，共享相同的监听容器和事件配置。
+ * 只添加一个事件监听器，内部根据按键条件分发到对应的回调。
+ * 返回一个取消所有监听的函数。
+ *
+ * @param bindings 快捷键绑定数组，每项包含 callback 和可选的 key/修饰键条件
+ * @param options 全局配置（target、capture、passive）
+ * @returns 取消所有监听的函数
+ *
+ * @example
+ * // 基本用法 - 绑定多个快捷键
+ * onKeydownMultiple([
+ *   { key: 's', ctrl: true, callback: () => save() },
+ *   { key: 'o', ctrl: true, callback: () => open() },
+ *   { key: 'Escape', callback: () => close() },
+ * ]);
+ *
+ * @example
+ * // 指定容器监听
+ * onKeydownMultiple([
+ *   { key: 'Enter', callback: () => submit() },
+ *   { key: 'Escape', callback: () => cancel() },
+ * ], { target: inputElement });
+ *
+ * @example
+ * // 监听所有按键（不指定 key）
+ * onKeydownMultiple([
+ *   { callback: (e) => console.log('按下:', e.key) },
+ * ]);
+ *
+ * @example
+ * // 取消所有监听
+ * const off = onKeydownMultiple([
+ *   { key: 'a', callback: () => doA() },
+ *   { key: 'b', callback: () => doB() },
+ * ]);
+ * off();  // 取消所有监听
+ */
+export function onKeydownMultiple(
+    bindings: IKeydownBinding[],
+    options?: IKeydownMultipleOptions,
+): Unsubscribe {
+    const { target = window, capture = false, passive = false } = options || {};
+
+    const eventOptions: AddEventListenerOptions = {
+        capture,
+        passive,
+    };
+
+    // 创建统一的处理函数
+    const handleKeydown = (event: KeyboardEvent) => {
+        for (const binding of bindings) {
+            const {
+                callback,
+                key,
+                ctrl = false,
+                alt = false,
+                shift = false,
+                meta = false,
+            } = binding;
+
+            // 判断是否使用了快捷监听条件
+            const hasShortcutFilter =
+                key !== undefined || ctrl || alt || shift || meta;
+
+            // 如果有快捷监听条件，进行过滤判断
+            if (hasShortcutFilter) {
+                // 检查按键是否匹配（不区分大小写）
+                if (key !== undefined) {
+                    const eventKey = event.key;
+                    const expectedKey = key;
+
+                    // 对于字母键，不区分大小写比较
+                    const isMatch =
+                        eventKey.length === 1 && expectedKey.length === 1
+                            ? eventKey.toLowerCase() ===
+                              expectedKey.toLowerCase()
+                            : eventKey === expectedKey;
+
+                    if (!isMatch) {
+                        continue;
+                    }
+                }
+
+                // 检查修饰键状态
+                if (event.ctrlKey !== ctrl) {
+                    continue;
+                }
+                if (event.altKey !== alt) {
+                    continue;
+                }
+                if (event.shiftKey !== shift) {
+                    continue;
+                }
+                if (event.metaKey !== meta) {
+                    continue;
+                }
+            }
+
+            // 所有条件匹配，执行回调
+            callback(event);
+        }
+    };
+
+    // 添加事件监听
+    target.addEventListener(
+        'keydown',
+        handleKeydown as EventListener,
+        eventOptions,
+    );
+
+    // 返回取消监听函数
+    return () => {
+        target.removeEventListener(
+            'keydown',
+            handleKeydown as EventListener,
+            eventOptions,
+        );
+    };
+}

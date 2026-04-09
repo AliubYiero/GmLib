@@ -23,6 +23,21 @@ export interface IKeydownOptions {
     meta?: boolean;
 }
 
+export interface IKeydownBinding {
+    callback: KeydownCallback;
+    key?: KeyboardKey | string;
+    ctrl?: boolean;
+    alt?: boolean;
+    shift?: boolean;
+    meta?: boolean;
+}
+
+export interface IKeydownMultipleOptions {
+    target?: HTMLElement | Window | Document;
+    capture?: boolean;
+    passive?: boolean;
+}
+
 export type Unsubscribe = () => void;
 
 export type KeydownCallback = (event: KeyboardEvent) => void;
@@ -30,6 +45,11 @@ export type KeydownCallback = (event: KeyboardEvent) => void;
 declare function onKeydown(
     callback: KeydownCallback,
     options?: IKeydownOptions
+): Unsubscribe;
+
+declare function onKeydownMultiple(
+    bindings: IKeydownBinding[],
+    options?: IKeydownMultipleOptions
 ): Unsubscribe;
 ```
 
@@ -250,6 +270,145 @@ onKeydown((e) => {
         showShortcutList();
     }
 }, { target: document });
+```
+
+---
+
+# `onKeydownMultiple()`
+
+> 批量监听多个键盘快捷键
+
+> 适用于需要绑定多个快捷键的场景，共享相同的监听容器和事件配置。只添加一个事件监听器，内部根据按键条件分发到对应的回调。
+
+## 参数
+
+| 参数       | 类型                      | 说明                     | 必须 | 默认值 | 备注                         |
+| :--------- | :------------------------ | :----------------------- | :--- | :----- | :--------------------------- |
+| `bindings` | `IKeydownBinding[]`       | 快捷键绑定数组           | √    | -      | 每项包含 callback 和按键条件 |
+| `options`  | `IKeydownMultipleOptions` | 全局配置                 |      | -      | 所有绑定共享此配置           |
+
+### IKeydownBinding 绑定项
+
+| 属性       | 类型                    | 说明             | 必须 | 默认值  | 备注                                   |
+| :--------- | :---------------------- | :--------------- | :--- | :------ | :------------------------------------- |
+| `callback` | `KeydownCallback`       | 按键按下时的回调 | √    | -       | 接收 KeyboardEvent 参数                |
+| `key`      | `KeyboardKey \| string` | 指定监听的按键   |      | -       | 设置后只有匹配按键才触发               |
+| `ctrl`     | `boolean`               | 是否要求 Ctrl 键 |      | `false` | 为 true 时要求按下 Ctrl 键             |
+| `alt`      | `boolean`               | 是否要求 Alt 键  |      | `false` | 为 true 时要求按下 Alt 键              |
+| `shift`    | `boolean`               | 是否要求 Shift 键|      | `false` | 为 true 时要求按下 Shift 键            |
+| `meta`     | `boolean`               | 是否要求 Meta 键 |      | `false` | 为 true 时要求按下 Meta 键（Command）  |
+
+### IKeydownMultipleOptions 全局配置
+
+| 属性      | 类型                                | 说明               | 必须 | 默认值   | 备注                              |
+| :-------- | :---------------------------------- | :----------------- | :--- | :------- | :-------------------------------- |
+| `target`  | `HTMLElement \| Window \| Document` | 监听目标容器       |      | `window` | 所有绑定共享此容器                |
+| `capture` | `boolean`                           | 是否在捕获阶段处理 |      | `false`  | 为 true 时在捕获阶段处理事件      |
+| `passive` | `boolean`                           | 是否为被动监听器   |      | `false`  | 为 true 时不会调用 preventDefault |
+
+### 返回值
+
+返回 `Unsubscribe` 函数，调用该函数可移除所有事件监听。
+
+## 使用示例
+
+### 示例1：批量绑定快捷键
+
+```ts
+import { onKeydownMultiple } from '@yiero/gmlib';
+
+// 绑定多个快捷键，只需一次调用
+onKeydownMultiple([
+    { key: 's', ctrl: true, callback: () => save() },
+    { key: 'o', ctrl: true, callback: () => open() },
+    { key: 'Escape', callback: () => close() },
+    { key: 'Enter', callback: () => submit() },
+]);
+```
+
+### 示例2：指定容器监听
+
+```ts
+// 在特定输入框上绑定快捷键
+const input = document.querySelector('#search-input');
+
+onKeydownMultiple([
+    { key: 'Enter', callback: () => submitForm() },
+    { key: 'Escape', callback: () => clearInput() },
+    { key: 'ArrowDown', callback: () => selectNext() },
+    { key: 'ArrowUp', callback: () => selectPrev() },
+], { target: input });
+```
+
+### 示例3：编辑器快捷键
+
+```ts
+// 富文本编辑器快捷键
+const editor = document.querySelector('#editor');
+
+onKeydownMultiple([
+    { key: 'b', ctrl: true, callback: () => toggleBold() },
+    { key: 'i', ctrl: true, callback: () => toggleItalic() },
+    { key: 'u', ctrl: true, callback: () => toggleUnderline() },
+    { key: 'z', ctrl: true, callback: () => undo() },
+    { key: 'z', ctrl: true, shift: true, callback: () => redo() },
+    { key: 's', ctrl: true, callback: () => save() },
+], { target: editor });
+```
+
+### 示例4：游戏技能快捷键
+
+```ts
+// RPG 游戏技能栏
+onKeydownMultiple([
+    { key: '1', callback: () => useSkill(1) },
+    { key: '2', callback: () => useSkill(2) },
+    { key: '3', callback: () => useSkill(3) },
+    { key: '4', callback: () => useSkill(4) },
+    { key: 'q', callback: () => usePotion('hp') },
+    { key: 'e', callback: () => usePotion('mp') },
+    { key: 'r', callback: () => useUltimate() },
+]);
+```
+
+### 示例5：监听所有按键
+
+```ts
+// 不指定 key 时监听所有按键（可配合修饰键过滤）
+onKeydownMultiple([
+    { callback: (e) => console.log('按下:', e.key) },
+    { ctrl: true, callback: (e) => console.log('Ctrl +', e.key) },
+]);
+```
+
+### 示例6：取消监听
+
+```ts
+// 添加监听
+const off = onKeydownMultiple([
+    { key: 'a', callback: () => doA() },
+    { key: 'b', callback: () => doB() },
+    { key: 'c', callback: () => doC() },
+]);
+
+// 取消所有监听
+off();
+```
+
+### 示例7：与 onKeydown 对比
+
+```ts
+// 使用 onKeydown - 需要多次调用，创建多个监听器
+onKeydown(() => save(), { key: 's', ctrl: true });
+onKeydown(() => open(), { key: 'o', ctrl: true });
+onKeydown(() => close(), { key: 'Escape' });
+
+// 使用 onKeydownMultiple - 一次调用，只创建一个监听器
+onKeydownMultiple([
+    { key: 's', ctrl: true, callback: () => save() },
+    { key: 'o', ctrl: true, callback: () => open() },
+    { key: 'Escape', callback: () => close() },
+]);
 ```
 
 ## 注意事项
