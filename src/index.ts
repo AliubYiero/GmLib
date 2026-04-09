@@ -4,6 +4,7 @@ export { gmDownload } from './API/gmDownload';
 export { gmRequest } from './API/gmRequest';
 export { hookXhr } from './API/hookXhr';
 export { elementWaiter } from './Element/elementWaiter';
+export { extractDOMInfo } from './Element/extractDOMInfo';
 export { gmMenuCommand } from './Element/gmMenuCommand';
 export { Message } from './Element/Message';
 export { onKeydown } from './Element/onKeydown';
