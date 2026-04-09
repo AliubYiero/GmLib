@@ -67,7 +67,7 @@ describe('Message', () => {
             let messageEl = container?.querySelector('div');
             expect(messageEl).toBeTruthy();
 
-            // 推进时间: 10ms (初始动画) + 1000ms (duration) + 400ms (关闭动画)
+            // 推进时间: 1000ms (duration) + 400ms (关闭动画)
             rs.advanceTimersByTime(1500);
 
             // 消息元素应该被移除
@@ -153,6 +153,158 @@ describe('Message', () => {
             expect(messageEl).toBeTruthy();
             expect(messageEl?.textContent).toContain('info message');
             expect(messageEl?.textContent).toContain('i');
+        });
+    });
+
+    describe('MessageInstance API', () => {
+        it('should return MessageInstance with close method', () => {
+            const instance = Message('test message');
+            expect(instance).toHaveProperty('close');
+            expect(typeof instance.close).toBe('function');
+            expect(instance).toHaveProperty('element');
+        });
+
+        it('should manually close message via instance.close()', () => {
+            rs.useFakeTimers();
+
+            const instance = Message({
+                message: 'manual close',
+                duration: 10000,
+            });
+
+            const container = document.querySelector(
+                'div[style*="position: fixed"]',
+            );
+            let messageEl = container?.querySelector('div');
+            expect(messageEl).toBeTruthy();
+
+            // 手动关闭
+            instance.close();
+
+            // 等待关闭动画
+            rs.advanceTimersByTime(400);
+
+            messageEl = container?.querySelector('div');
+            expect(messageEl).toBeFalsy();
+        });
+
+        it('should access message element via instance.element', () => {
+            const instance = Message('element access test');
+            expect(instance.element).toBeTruthy();
+            expect(instance.element.textContent).toContain(
+                'element access test',
+            );
+        });
+    });
+
+    describe('animation direction', () => {
+        it('should animate top position downward (negative offset)', () => {
+            const instance = Message({
+                message: 'top message',
+                position: 'top',
+            });
+            const transform = instance.element.style.transform;
+            expect(transform).toMatch(/translateY\(-\d+px\)/);
+        });
+
+        it('should animate bottom position upward (positive offset)', () => {
+            const instance = Message({
+                message: 'bottom message',
+                position: 'bottom',
+            });
+            const transform = instance.element.style.transform;
+            expect(transform).toMatch(/translateY\(\d+px\)/);
+        });
+
+        it('should animate top-left position downward', () => {
+            const instance = Message({
+                message: 'top-left message',
+                position: 'top-left',
+            });
+            const transform = instance.element.style.transform;
+            expect(transform).toMatch(/translateY\(-\d+px\)/);
+        });
+
+        it('should animate bottom-right position upward', () => {
+            const instance = Message({
+                message: 'bottom-right message',
+                position: 'bottom-right',
+            });
+            const transform = instance.element.style.transform;
+            expect(transform).toMatch(/translateY\(\d+px\)/);
+        });
+    });
+
+    describe('error handling', () => {
+        it('should throw error for empty message', () => {
+            expect(() => Message('')).toThrow('message 参数');
+        });
+
+        it('should throw error for invalid duration (< 100)', () => {
+            expect(() => Message({ message: 'test', duration: 50 })).toThrow(
+                'duration',
+            );
+        });
+
+        it('should throw error for invalid type', () => {
+            expect(() =>
+                Message({ message: 'test', type: 'invalid' as any }),
+            ).toThrow('type');
+        });
+
+        it('should throw error for invalid position', () => {
+            expect(() =>
+                Message({ message: 'test', position: 'invalid' as any }),
+            ).toThrow('position');
+        });
+
+        it('should accept valid duration (>= 100)', () => {
+            expect(() =>
+                Message({ message: 'test', duration: 100 }),
+            ).not.toThrow();
+        });
+    });
+
+    describe('accessibility', () => {
+        it('should have role="alert"', () => {
+            const instance = Message('test message');
+            expect(instance.element.getAttribute('role')).toBe('alert');
+        });
+
+        it('should have aria-live="polite"', () => {
+            const instance = Message('test message');
+            expect(instance.element.getAttribute('aria-live')).toBe('polite');
+        });
+
+        it('should have aria-atomic="true"', () => {
+            const instance = Message('test message');
+            expect(instance.element.getAttribute('aria-atomic')).toBe('true');
+        });
+
+        it('should have tabindex="0" for focus', () => {
+            const instance = Message('test message');
+            expect(instance.element.getAttribute('tabindex')).toBe('0');
+        });
+
+        it('should close on Escape key', () => {
+            rs.useFakeTimers();
+
+            const instance = Message({
+                message: 'escape test',
+                duration: 10000,
+            });
+
+            // 模拟 Escape 键
+            const event = new KeyboardEvent('keydown', { key: 'Escape' });
+            instance.element.dispatchEvent(event);
+
+            rs.advanceTimersByTime(400);
+
+            const container = document.querySelector(
+                'div[style*="position: fixed"]',
+            );
+            const messageEl = container?.querySelector('div');
+            expect(messageEl).toBeFalsy();
         });
     });
 });

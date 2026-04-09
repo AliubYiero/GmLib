@@ -8,14 +8,25 @@
 
 ```ts
 // 主函数
-function Message(options: string | MessageDetail): void;
+function Message(options: string | MessageDetail): MessageInstance;
 
 // 快捷方法
-Message.success(message: string, options?: Omit<MessageDetail, 'type' | 'message'>): void;
-Message.warning(message: string, options?: Omit<MessageDetail, 'type' | 'message'>): void;
-Message.error(message: string, options?: Omit<MessageDetail, 'type' | 'message'>): void;
-Message.info(message: string, options?: Omit<MessageDetail, 'type' | 'message'>): void;
+Message.success(message: string, options?: Omit<MessageDetail, 'type' | 'message'>): MessageInstance;
+Message.warning(message: string, options?: Omit<MessageDetail, 'type' | 'message'>): MessageInstance;
+Message.error(message: string, options?: Omit<MessageDetail, 'type' | 'message'>): MessageInstance;
+Message.info(message: string, options?: Omit<MessageDetail, 'type' | 'message'>): MessageInstance;
 ```
+
+## 返回值
+
+`Message` 函数返回一个 `MessageInstance` 对象，包含以下属性和方法：
+
+| 属性/方法 | 类型 | 描述 |
+| :-------- | :--- | :--- |
+| `close` | `() => void` | 手动关闭消息的方法 |
+| `element` | `HTMLElement` | 消息 DOM 元素的引用 |
+
+通过返回的 `MessageInstance`，可以手动控制消息的关闭，或访问消息元素进行进一步操作。
 
 ## 参数
 
@@ -35,7 +46,7 @@ Message.info(message: string, options?: Omit<MessageDetail, 'type' | 'message'>)
 | :--------- | :----------------------------------------------------------- | :------- | :--------------------------------------- |
 | `message`  | `string`                                                     | (必需)   | 要显示的消息内容                         |
 | `type`     | `'success'` | `'info'` | `'warning'` | `'error'`             | `'info'` | 消息类型，决定消息的样式和图标           |
-| `duration` | `number`                                                     | `3000`   | 消息显示的持续时间（毫秒），之后自动关闭 |
+| `duration` | `number`                                                     | `3000`   | 消息显示的持续时间（毫秒），之后自动关闭。最小值：100ms |
 | `position` | `'top-left'` | `'top'` | `'top-right'`<br />``'left'`` | `right`<br />`bottom-left` | `bottom` | `bottom-right` | `'top'`  | 消息在页面上的显示位置                   |
 
 ### 快捷方法参数
@@ -71,4 +82,34 @@ Message({
   duration: 4000,
   position: 'bottom-right'
 });
+```
+
+### 手动关闭消息
+
+```ts
+import { Message } from '@yiero/gmlib';
+
+// 获取消息实例
+const instance = Message.success('正在处理...');
+
+// 在某个条件满足后手动关闭
+setTimeout(() => {
+  instance.close();
+}, 2000);
+
+// 或访问消息元素
+console.log(instance.element.textContent);
+```
+
+### 可访问性
+
+消息组件支持键盘交互和屏幕阅读器：
+
+- 按 `Escape` 键可以关闭当前消息
+- 消息具有 `role="alert"` 和 `aria-live="polite"` 属性，支持屏幕阅读器
+- 消息元素可以通过 Tab 键聚焦
+
+```ts
+// 用户可以通过 Escape 键关闭消息
+Message.info('按 Escape 键关闭此消息');
 ```

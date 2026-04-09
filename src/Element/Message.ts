@@ -42,11 +42,9 @@ const messagePositions = {
 };
 
 // 创建消息容器
-function createMessageContainer() {
+function createMessageContainer(): HTMLElement {
     if (!messageContainer) {
-        messageContainer = document.createElement(
-            'div',
-        ) as unknown as HTMLElement;
+        messageContainer = document.createElement('div');
         messageContainer.setAttribute(
             'style',
             `
@@ -68,11 +66,100 @@ function createMessageContainer() {
     return messageContainer;
 }
 
+/**
+ * 根据消息位置计算动画偏移量
+ * @param position - 消息位置
+ * @param isEnter - 是否为入场动画
+ * @returns translateY 偏移量 (px)
+ */
+function getAnimationOffset(position: string, isEnter: boolean): number {
+    const isBottom = position.includes('bottom');
+    if (isEnter) {
+        return 0;
+    }
+    // 底部位置: 消息向上移动消失 (正值)
+    // 顶部位置: 消息向下移动消失 (负值)
+    return isBottom ? 20 : -20;
+}
+
+/**
+ * 校验消息参数
+ * @param detail - 消息配置对象
+ * @throws {Error} 参数无效时抛出错误
+ */
+function validateMessageOptions(
+    detail: Partial<MessageDetail>,
+): asserts detail is MessageDetail {
+    // 校验 message
+    if (!detail.message || typeof detail.message !== 'string') {
+        throw new Error('Message: message 参数必须是有效的非空字符串');
+    }
+
+    // 校验 duration
+    const MIN_DURATION = 100;
+    if (detail.duration !== undefined) {
+        if (
+            typeof detail.duration !== 'number' ||
+            detail.duration < MIN_DURATION
+        ) {
+            throw new Error(
+                `Message: duration 必须是 >= ${MIN_DURATION} 的数字`,
+            );
+        }
+    }
+
+    // 校验 type
+
+    const validTypes = ['success', 'warning', 'error', 'info'] as const;
+
+    if (
+        detail.type !== undefined &&
+        !validTypes.includes(detail.type as (typeof validTypes)[number])
+    ) {
+        throw new Error(`Message: type 必须是 ${validTypes.join(' | ')} 之一`);
+    }
+
+    // 校验 position
+
+    const validPositions = [
+        'top',
+
+        'top-left',
+
+        'top-right',
+
+        'left',
+
+        'right',
+
+        'bottom',
+
+        'bottom-left',
+
+        'bottom-right',
+    ] as const;
+
+    if (
+        detail.position !== undefined &&
+        !validPositions.includes(
+            detail.position as (typeof validPositions)[number],
+        )
+    ) {
+        throw new Error(
+            `Message: position 必须是 ${validPositions.join(' | ')} 之一`,
+        );
+    }
+}
+
 interface MessageDetail {
+    /** 消息内容 (必需) */
     message: string;
-    type: 'success' | 'warning' | 'error' | 'info';
-    duration: number;
-    position:
+    /** 消息类型,默认 'info' */
+    type?: 'success' | 'warning' | 'error' | 'info';
+    /** 显示持续时间 (毫秒),默认 3000,最小值 100 */
+    duration?: number;
+    /** 显示位置,默认 'top' */
+    position?:
         | 'top'
         | 'top-left'
         | 'top-right'
@@ -83,15 +170,52 @@ interface MessageDetail {
         | 'bottom-right';
 }
 
+/**
+ * 消息实例接口
+ * 用于手动控制消息
+ */
+interface MessageInstance {
+    /** 手动关闭消息 */
+    close: () => void;
+    /** 消息元素引用 */
+    element: HTMLElement;
+}
+
+/**
+ * Message 函数类型定义
+ */
+interface MessageFunction {
+    success: (
+        message: string,
+        options?: Omit<MessageDetail, 'type' | 'message'>,
+    ) => MessageInstance;
+    warning: (
+        message: string,
+        options?: Omit<MessageDetail, 'type' | 'message'>,
+    ) => MessageInstance;
+    error: (
+        message: string,
+        options?: Omit<MessageDetail, 'type' | 'message'>,
+    ) => MessageInstance;
+    info: (
+        message: string,
+        options?: Omit<MessageDetail, 'type' | 'message'>,
+    ) => MessageInstance;
+
+    (options: string | MessageDetail): MessageInstance;
+}
+
 // 主消息函数
-function Message(options: string | MessageDetail) {
+const Message: MessageFunction = ((
+    options: string | MessageDetail,
+): MessageInstance => {
     // 参数归一
-    const detail: MessageDetail = {
+    const detail: Partial<MessageDetail> = {
         type: 'info',
         duration: 3000,
         position: 'top',
-        message: '',
     };
+
     // 处理不同调用方式
     if (typeof options === 'string') {
         detail.message = options;
@@ -99,14 +223,25 @@ function Message(options: string | MessageDetail) {
         Object.assign(detail, options);
     }
 
+    // 校验参数
+    validateMessageOptions(detail);
+
     // 确保容器存在
-    messageContainer = createMessageContainer() as HTMLElement;
+    messageContainer = createMessageContainer();
 
     // 创建消息元素
     const messageEl: HTMLElement = document.createElement('div');
 
+    // 获取实际使用的参数值 (应用默认值)
+    const messageType = detail.type || 'info';
+    const messagePosition = detail.position || 'top';
+    const messageDuration = detail.duration || 3000;
+
     // 获取消息类型配置
-    const typeConfig = messageTypes[detail.type] || messageTypes.info;
+    const typeConfig = messageTypes[messageType];
+
+    // 计算动画初始偏移量
+    const initialOffset = getAnimationOffset(messagePosition, false);
 
     // 设置消息元素样式
     messageEl.setAttribute(
@@ -117,7 +252,7 @@ function Message(options: string | MessageDetail) {
                 max-width: 500px;
                 padding: 15px 20px;
                 border-radius: 8px;
-                transform: translateY(-20px);
+                transform: translateY(${initialOffset}px);
                 box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
                 background-color: ${typeConfig.backgroundColor};
                 border: 1px solid ${typeConfig.borderColor};
@@ -128,11 +263,17 @@ function Message(options: string | MessageDetail) {
                 opacity: 0;
                 pointer-events: auto;
                 cursor: pointer;
-                ${Object.entries(messagePositions[detail.position || 'top'])
+                ${Object.entries(messagePositions[messagePosition])
                     .map(([k, v]) => `${k}: ${v};`)
                     .join(' ')}
             `,
     );
+
+    // 添加可访问性属性
+    messageEl.setAttribute('role', 'alert');
+    messageEl.setAttribute('aria-live', 'polite');
+    messageEl.setAttribute('aria-atomic', 'true');
+    messageEl.setAttribute('tabindex', '0');
 
     // 添加图标
     const iconEl: HTMLElement = document.createElement('span');
@@ -168,28 +309,47 @@ function Message(options: string | MessageDetail) {
     // 添加到容器
     messageContainer.appendChild(messageEl);
 
-    // 触发动画
-    setTimeout(() => {
+    // 触发入场动画
+    requestAnimationFrame(() => {
         messageEl.style.opacity = '1';
         messageEl.style.transform = 'translateY(0)';
-    }, 10);
+    });
 
     // 自动关闭
     const timer = setTimeout(() => {
-        closeMessage(messageEl);
-    }, detail.duration);
+        closeMessage(messageEl, messagePosition);
+    }, messageDuration);
 
     // 点击关闭
     messageEl.addEventListener('click', () => {
         clearTimeout(timer);
-        closeMessage(messageEl);
+        closeMessage(messageEl, messagePosition);
     });
-}
 
-// 关闭消息函数
-function closeMessage(element: HTMLElement) {
+    // 键盘支持: Escape 键关闭
+    messageEl.addEventListener('keydown', (e: KeyboardEvent) => {
+        if (e.key === 'Escape') {
+            clearTimeout(timer);
+            closeMessage(messageEl, messagePosition);
+        }
+    });
+
+    // 定义手动关闭方法
+    const close = () => {
+        clearTimeout(timer);
+        closeMessage(messageEl, messagePosition);
+    };
+
+    // 返回消息实例
+    return {
+        close,
+        element: messageEl,
+    };
+}) as MessageFunction; // 关闭消息函数
+function closeMessage(element: HTMLElement, position: string = 'top') {
+    const exitOffset = getAnimationOffset(position, false);
     element.style.opacity = '0';
-    element.style.transform = 'translateY(-20px)';
+    element.style.transform = `translateY(${exitOffset}px)`;
 
     setTimeout(() => {
         if (element.parentNode) {
@@ -199,41 +359,17 @@ function closeMessage(element: HTMLElement) {
 }
 
 // 添加快捷方法
-Message.success = (
-    message: string,
-    options: Omit<MessageDetail, 'type' | 'message'>,
-) =>
-    Message({
-        ...options,
-        message,
-        type: 'success',
-    });
-Message.warning = (
-    message: string,
-    options: Omit<MessageDetail, 'type' | 'message'>,
-) =>
-    Message({
-        ...options,
-        message,
-        type: 'warning',
-    });
-Message.error = (
-    message: string,
-    options: Omit<MessageDetail, 'type' | 'message'>,
-) =>
-    Message({
-        ...options,
-        message,
-        type: 'error',
-    });
-Message.info = (
-    message: string,
-    options: Omit<MessageDetail, 'type' | 'message'>,
-) =>
-    Message({
-        ...options,
-        message,
-        type: 'info',
-    });
+const messageTypes_shortcuts = ['success', 'warning', 'error', 'info'] as const;
+messageTypes_shortcuts.forEach((type) => {
+    Message[type] = (
+        message: string,
+        options?: Omit<MessageDetail, 'type' | 'message'>,
+    ) =>
+        Message({
+            ...options,
+            message,
+            type,
+        });
+});
 
 export { Message };
