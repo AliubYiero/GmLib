@@ -47,33 +47,31 @@ declare function getCookie( documentCookieContent: string, key: string ): Promis
 
 **`ICookie`**
 
-| 属性             | 类型      | 说明                                                        |
-| ---------------- | --------- | ----------------------------------------------------------- |
-| `domain`         | `string`  | Cookie 所属的域名                                           |
-| `name`           | `string`  | Cookie 的名称                                               |
-| `value`          | `string`  | Cookie 的值                                                 |
-| `expirationDate` | `number`  | 过期时间（Unix 时间戳，单位：秒；会话 Cookie 此值可能无效） |
-| `hostOnly`       | `boolean` | 是否仅限主机（`true` 表示仅限当前域名，不包含子域名）       |
-| `httpOnly`       | `boolean` | 是否仅允许 HTTP 协议访问（禁止 JavaScript 操作）            |
-| `path`           | `string`  | Cookie 的路径作用域                                         |
-| `sameSite`       | `string`  | 同站策略                                                    |
-| `secure`         | `boolean` | 是否仅通过 HTTPS 传输                                       |
-| `session`        | `boolean` | 是否为会话 Cookie（`true` 表示关闭浏览器后失效）            |
-| `storeId`        | `string`  | 所属存储空间的标识符（浏览器中不同存储区域可能分配不同 ID） |
+| 属性             | 类型       | 说明                                                        |
+| ---------------- | ---------- | ----------------------------------------------------------- |
+| `domain`         | `string`   | Cookie 所属的域名                                           |
+| `name`           | `string`   | Cookie 的名称                                               |
+| `value`          | `string`   | Cookie 的值                                                 |
+| `session`        | `boolean`  | 是否为会话 Cookie（`true` 表示关闭浏览器后失效）            |
+| `hostOnly`       | `boolean`  | 是否仅限主机（`true` 表示仅限当前域名，不包含子域名）       |
+| `expirationDate` | `number?`  | 过期时间（Unix 时间戳，单位：秒；会话 Cookie 此值可能无效） |
+| `path`           | `string`   | Cookie 的路径作用域                                         |
+| `httpOnly`       | `boolean`  | 是否仅允许 HTTP 协议访问（禁止 JavaScript 操作）            |
+| `secure`         | `boolean`  | 是否仅通过 HTTPS 传输                                       |
+| `sameSite`       | `string`   | 同站策略，可选值：`'unspecified'`、`'no_restriction'`、`'lax'`、`'strict'` |
 
 ```ts
 declare interface ICookie {
 	domain: string;
 	name: string;
 	value: string;
-	expirationDate: number;
-	hostOnly: boolean;
-	httpOnly: boolean;
-	path: string;
-	sameSite: string;
-	secure: boolean;
 	session: boolean;
-	storeId: string;
+	hostOnly: boolean;
+	expirationDate?: number;
+	path: string;
+	httpOnly: boolean;
+	secure: boolean;
+	sameSite: 'unspecified' | 'no_restriction' | 'lax' | 'strict';
 }
 ```
 

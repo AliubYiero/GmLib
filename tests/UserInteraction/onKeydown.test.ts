@@ -1,5 +1,8 @@
 import { afterEach, beforeEach, describe, expect, it } from '@rstest/core';
-import { onKeydown, onKeydownMultiple } from '../../src/Element/onKeydown';
+import {
+    onKeydown,
+    onKeydownMultiple,
+} from '../../src/UserInteraction/onKeydown';
 
 describe('onKeydown', () => {
     let container: HTMLDivElement;

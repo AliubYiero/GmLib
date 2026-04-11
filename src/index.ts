@@ -3,35 +3,46 @@ export { getCookie } from './API/getCookie';
 export { gmDownload } from './API/gmDownload';
 export { gmRequest } from './API/gmRequest';
 export { hookXhr } from './API/hookXhr';
-export { elementWaiter } from './Element/elementWaiter';
-export { extractDOMInfo } from './Element/extractDOMInfo';
-export { gmMenuCommand } from './Element/gmMenuCommand';
-export { Message } from './Element/Message';
+
+// DOM
+export { elementWaiter } from './DOM/elementWaiter';
+export { extractDOMInfo } from './DOM/extractDOMInfo';
+export { scroll } from './DOM/scroll';
+export { simulateClick } from './DOM/simulateClick';
+export { simulateKeyboard } from './DOM/simulateKeyboard';
+export type {
+    ExtractRule,
+    ExtractType,
+    ExtractedResult,
+} from './DOM/types/ExtractRule';
+
+// UserInteraction
+export { gmMenuCommand } from './UserInteraction/gmMenuCommand';
+export { Message } from './UserInteraction/Message';
 export type {
     IKeydownBinding,
     IKeydownMultipleOptions,
     IKeydownOptions,
     KeydownCallback,
     Unsubscribe,
-} from './Element/onKeydown';
-export { onKeydown, onKeydownMultiple } from './Element/onKeydown';
+} from './UserInteraction/onKeydown';
+export { onKeydown, onKeydownMultiple } from './UserInteraction/onKeydown';
 export type {
     IKeyupBinding,
     IKeyupMultipleOptions,
     IKeyupOptions,
     KeyupCallback,
-} from './Element/onKeyup';
-export { onKeyup, onKeyupMultiple } from './Element/onKeyup';
-// Element
-export { scroll } from './Element/scroll';
-export { simulateClick } from './Element/simulateClick';
-export { simulateKeyboard } from './Element/simulateKeyboard';
-export { environmentTest } from './Env/environmentTest';
+} from './UserInteraction/onKeyup';
+export { onKeyup, onKeyupMultiple } from './UserInteraction/onKeyup';
+export type { KeyboardKey } from './UserInteraction/types/KeyboardKey';
+
 // Env
+export { environmentTest } from './Env/environmentTest';
 export { isIframe } from './Env/isIframe';
-export { GmArrayStorage } from './Storage/GmArrayStorage';
 
 // Storage
+export { GmArrayStorage } from './Storage/GmArrayStorage';
 export { GmStorage } from './Storage/GmStorage';
+
 // UI
 export { uiImporter } from './UI/uiImporter';

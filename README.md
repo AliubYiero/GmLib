@@ -41,51 +41,51 @@ Message.success('操作成功');
 
 | 函数 | 说明 |
 | :--- | :--- |
-| [`getCookie`](docx/API/getCookie.md) | 获取网站 Cookie |
-| [`gmDownload`](docx/API/gmDownload.md) | 下载文件到本地 |
-| [`gmRequest`](docx/API/gmRequest.md) | 通过 `GM_xmlhttpRequest` 发送网络请求 (Promise) |
-| [`hookXhr`](docx/API/hookXhr.md) | 劫持 XHR 请求，获取并篡改返回内容 |
+| [`getCookie`](docs/API/getCookie.md) | 获取网站 Cookie |
+| [`gmDownload`](docs/API/gmDownload.md) | 下载文件到本地 |
+| [`gmRequest`](docs/API/gmRequest.md) | 通过 `GM_xmlhttpRequest` 发送网络请求 (Promise) |
+| [`hookXhr`](docs/API/hookXhr.md) | 劫持 XHR 请求，获取并篡改返回内容 |
 
 ### DOM - 元素操作
 
 | 函数 | 说明 |
 | :--- | :--- |
-| [`elementWaiter`](docx/Element/elementWaiter.md) | 等待元素加载完成 |
-| [`extractDOMInfo`](docx/Element/extractDOMInfo.md) | 从 DOM 节点批量提取数据 |
-| [`scroll`](docx/Element/scroll.md) | 页面滚动到指定位置 |
-| [`simulateClick`](docx/Element/simulateClick.md) | 模拟鼠标点击 |
-| [`simulateKeyboard`](docx/Element/simulateKeyboard.md) | 模拟键盘输入 |
+| [`elementWaiter`](docs/DOM/elementWaiter.md) | 等待元素加载完成 |
+| [`extractDOMInfo`](docs/DOM/extractDOMInfo.md) | 从 DOM 节点批量提取数据 |
+| [`scroll`](docs/DOM/scroll.md) | 页面滚动到指定位置 |
+| [`simulateClick`](docs/DOM/simulateClick.md) | 模拟鼠标点击 |
+| [`simulateKeyboard`](docs/DOM/simulateKeyboard.md) | 模拟键盘输入 |
 
 ### UserInteraction - 用户交互
 
 | 函数 | 说明 |
 | :--- | :--- |
-| [`Message`](docx/Element/Message.md) | 消息通知组件 |
-| [`gmMenuCommand`](docx/Element/gmMenuCommand.md) | 油猴菜单命令管理 |
-| [`onKeydown`](docx/Element/onKeydown.md) | 监听键盘按下事件 |
-| [`onKeydownMultiple`](docx/Element/onKeydown.md) | 批量监听多个键盘快捷键 |
-| [`onKeyup`](docx/Element/onKeyup.md) | 监听键盘释放事件 |
-| [`onKeyupMultiple`](docx/Element/onKeyup.md) | 批量监听多个键盘释放事件 |
+| [`Message`](docs/UserInteraction/Message.md) | 消息通知组件 |
+| [`gmMenuCommand`](docs/UserInteraction/gmMenuCommand.md) | 油猴菜单命令管理 |
+| [`onKeydown`](docs/UserInteraction/onKeydown.md) | 监听键盘按下事件 |
+| [`onKeydownMultiple`](docs/UserInteraction/onKeydown.md) | 批量监听多个键盘快捷键 |
+| [`onKeyup`](docs/UserInteraction/onKeyup.md) | 监听键盘释放事件 |
+| [`onKeyupMultiple`](docs/UserInteraction/onKeyup.md) | 批量监听多个键盘释放事件 |
 
 ### Env - 环境检测
 
 | 函数 | 说明 |
 | :--- | :--- |
-| [`environmentTest`](docx/Env/environmentTest.md) | 检测脚本运行环境 (ScriptCat / Tampermonkey) |
-| [`isIframe`](docx/Env/isIframe.md) | 判断当前页面是否在 iframe 中 |
+| [`environmentTest`](docs/Env/environmentTest.md) | 检测脚本运行环境 (ScriptCat / Tampermonkey) |
+| [`isIframe`](docs/Env/isIframe.md) | 判断当前页面是否在 iframe 中 |
 
 ### Storage - 存储管理
 
 | 类 | 说明 |
 | :--- | :--- |
-| [`GmStorage`](docx/Storage/GmStorage.md) | 油猴存储管理基类 |
-| [`GmArrayStorage`](docx/Storage/GmArrayStorage.md) | 数组存储管理，`GmStorage` 子类 |
+| [`GmStorage`](docs/Storage/GmStorage.md) | 油猴存储管理基类 |
+| [`GmArrayStorage`](docs/Storage/GmArrayStorage.md) | 数组存储管理，`GmStorage` 子类 |
 
 ### UI - 界面工具
 
 | 函数 | 说明 |
 | :--- | :--- |
-| [`uiImporter`](docx/UI/uiImporter.md) | 解析并载入 HTML/CSS 文本 |
+| [`uiImporter`](docs/UI/uiImporter.md) | 解析并载入 HTML/CSS 文本 |
 
 ## 开发
 
@@ -113,4 +113,4 @@ pnpm test
 ## 链接
 
 - [GitHub 仓库](https://github.com/AliubYiero/GmLib)
-- [更新日志](docx/UpdateLog.md)
+- [更新日志](docs/UpdateLog.md)

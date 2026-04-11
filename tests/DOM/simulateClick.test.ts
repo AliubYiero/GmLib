@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, rs } from '@rstest/core';
-import { simulateClick } from '../../src/Element/simulateClick';
+import { simulateClick } from '../../src/DOM/simulateClick';
 
 describe('simulateClick', () => {
     let container: HTMLDivElement;

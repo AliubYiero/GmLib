@@ -1,9 +1,28 @@
 import { GmStorage } from './GmStorage.ts';
 
 /**
- * 储存数组的油猴存储, 方便处理数组
+ * 数组类型油猴存储管理类
  *
- * @class
+ * 继承自 GmStorage，专门用于处理数组类型的数据存储。
+ * 提供数组操作方法（push、pop、map、filter 等），确保存储的值始终是数组类型。
+ *
+ * @warn 需要授权函数 `GM_getValue`、`GM_setValue`、`GM_deleteValue`、
+ *       `GM_addValueChangeListener`、`GM_removeValueChangeListener`
+ *
+ * @example
+ * ```ts
+ * // 创建待办事项存储
+ * const todoStorage = new GmArrayStorage<{ task: string; done: boolean }>(
+ *   'todo_list',
+ *   [{ task: '示例任务', done: false }]
+ * );
+ *
+ * // 添加任务
+ * todoStorage.push({ task: '新任务', done: false });
+ *
+ * // 获取数组长度
+ * console.log(todoStorage.length);
+ * ```
  */
 export class GmArrayStorage<T> extends GmStorage<Array<T>> {
     constructor(

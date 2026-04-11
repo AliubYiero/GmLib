@@ -204,11 +204,11 @@ console.log(exportCommand.isActive ? '菜单可见' : '菜单隐藏');
 gmMenuCommand.createToggle({
   active: {
     title: '🔴 停止监控',
-    callback: stopMonitoring
+    onClick: stopMonitoring
   },
   inactive: {
     title: '🟢 开始监控',
-    callback: startMonitoring
+    onClick: startMonitoring
   }
 }).render();
 
@@ -260,8 +260,8 @@ function showMainMenu() {
   
   // 恢复主菜单
   gmMenuCommand
-    .modify('数据操作', { callback: showDataSubmenu })
-    .modify('系统设置', { callback: openSettings })
+    .modify('数据操作', { onClick: showDataSubmenu })
+    .modify('系统设置', { onClick: openSettings })
     .render();
 }
 ```

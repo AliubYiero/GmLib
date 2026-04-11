@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it } from '@rstest/core';
-import { onKeyup, onKeyupMultiple } from '../../src/Element/onKeyup';
+import { onKeyup, onKeyupMultiple } from '../../src/UserInteraction/onKeyup';
 
 describe('onKeyup', () => {
     let container: HTMLDivElement;

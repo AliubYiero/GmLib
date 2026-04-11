@@ -1,12 +1,37 @@
+/**
+ * 存储变更详情接口
+ */
 export interface IGMStorageChangeDetail<T> {
+    /** 变更的键名 */
     key: string;
+    /** 变更前的值 */
     oldValue: T;
+    /** 变更后的值 */
     newValue: T;
+    /** 是否来自其他标签页的变更 */
     remote: boolean;
 }
 
 /**
- * 油猴存储
+ * 油猴存储管理类
+ *
+ * 封装 GM_getValue / GM_setValue API，提供类型安全的值存取、
+ * 变更监听和默认值支持。
+ *
+ * @warn 需要授权函数 `GM_getValue`、`GM_setValue`、`GM_deleteValue`、
+ *       `GM_addValueChangeListener`、`GM_removeValueChangeListener`
+ *
+ * @example
+ * ```ts
+ * // 创建计数器存储
+ * const counterStorage = new GmStorage('page_counter', 0);
+ *
+ * // 获取值
+ * console.log(counterStorage.value);
+ *
+ * // 设置值
+ * counterStorage.set(1);
+ * ```
  */
 export class GmStorage<T> {
     protected listenerId: number = 0;

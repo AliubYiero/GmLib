@@ -6,6 +6,12 @@
 
 `gmDownload()` 函数封装了 Tampermonkey/ScriptCat 的 `GM_download` API，提供 Promise 化的文件下载能力，并增强了进度监控和错误处理功能。该函数适用于需要可靠文件下载的用户脚本场景。
 
+## 用户脚本声明
+
+```ts
+// @grant        GM_download
+```
+
 ## 语法
 
 ```ts

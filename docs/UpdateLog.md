@@ -1,6 +1,20 @@
 # 更新日志
 
-### 0.3.4 - feat
+### 0.3.7 - refactor
+
+- 重构目录结构，将 `docx/` 重命名为 `docs/`
+- 拆分 `src/Element/` 目录为 `src/DOM/` 和 `src/UserInteraction/`，与函数职责对齐
+- 同步更新测试目录结构 `tests/Element/` → `tests/DOM/` + `tests/UserInteraction/`
+- 同步更新文档目录结构 `docs/Element/` → `docs/DOM/` + `docs/UserInteraction/`
+- 更新 README 文档链接路径
+- 更新文档和函数描述
+
+### 0.3.6 - feat
+
+- 新增函数: `onKeyup`, 用于监听键盘弹起事件
+- 新增函数: `onKeyupMultiple`, 用于批量监听多个键盘弹起事件
+
+### 0.3.5 - feat
 
 - 新增函数: `onKeydownMultiple`, 用于批量监听多个键盘快捷键
 - 更新 `onKeydown` API 文档

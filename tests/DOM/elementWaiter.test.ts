@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it } from '@rstest/core';
-import { elementWaiter } from '../../src/Element/elementWaiter';
+import { elementWaiter } from '../../src/DOM/elementWaiter';
 
 describe('elementWaiter', () => {
     let container: HTMLDivElement;

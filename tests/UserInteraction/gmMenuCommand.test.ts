@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from '@rstest/core';
-import { gmMenuCommand } from '../../src/Element/gmMenuCommand';
+import { gmMenuCommand } from '../../src/UserInteraction/gmMenuCommand';
 import { gmApiMock, setupGlobalGmApi } from '../__mocks__/gmApi';
 
 describe('gmMenuCommand', () => {

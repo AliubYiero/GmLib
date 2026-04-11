@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from '@rstest/core';
-import { scroll } from '../../src/Element/scroll';
+import { scroll } from '../../src/DOM/scroll';
 
 describe('scroll', () => {
     let originalScrollTo: typeof window.scrollTo;

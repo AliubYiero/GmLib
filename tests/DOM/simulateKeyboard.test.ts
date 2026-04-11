@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, rs } from '@rstest/core';
-import { simulateKeyboard } from '../../src/Element/simulateKeyboard';
+import { simulateKeyboard } from '../../src/DOM/simulateKeyboard';
 
 describe('simulateKeyboard', () => {
     let container: HTMLDivElement;

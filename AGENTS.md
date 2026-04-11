@@ -22,11 +22,21 @@ src/
 │   ├── hookXhr.ts        # XHR 劫持
 │   └── util/
 │       └── parseResponseText.ts  # 响应解析
-├── Element/              # DOM 操作相关
+├── DOM/                  # DOM 操作相关
 │   ├── elementWaiter.ts  # 元素等待器
+│   ├── extractDOMInfo.ts # DOM 信息提取
 │   ├── scroll.ts         # 页面滚动
+│   ├── simulateClick.ts  # 模拟鼠标点击
+│   ├── simulateKeyboard.ts # 模拟键盘输入
+│   └── types/
+│       └── ExtractRule.ts    # DOM 提取规则类型
+├── UserInteraction/      # 用户交互相关
+│   ├── gmMenuCommand.ts  # 菜单命令管理
 │   ├── Message.ts        # 消息通知
-│   └── gmMenuCommand.ts  # 菜单命令管理
+│   ├── onKeydown.ts      # 键盘按下事件监听
+│   ├── onKeyup.ts        # 键盘释放事件监听
+│   └── types/
+│       └── KeyboardKey.ts    # 键盘按键类型
 ├── Env/                  # 环境检测
 │   ├── environmentTest.ts # 脚本环境检测
 │   └── isIframe.ts       # iframe 检测
@@ -39,13 +49,23 @@ src/
 types/
 └── scriptcat.d.ts        # ScriptCat 类型定义
 
-docx/                     # 文档目录
+docs/                     # 文档目录
 ├── UpdateLog.md          # 更新日志
 ├── API/                  # API 文档
-├── Element/              # Element 文档
+├── DOM/                  # DOM 文档
+├── UserInteraction/      # UserInteraction 文档
 ├── Env/                  # 环境文档
 ├── Storage/              # 存储文档
 └── UI/                   # UI 文档
+
+tests/                    # 测试目录
+├── __mocks__/            # Mock 文件
+├── API/                  # API 测试
+├── DOM/                  # DOM 测试
+├── UserInteraction/      # UserInteraction 测试
+├── Env/                  # Env 测试
+├── Storage/              # Storage 测试
+└── UI/                   # UI 测试
 ```
 
 ## 构建命令

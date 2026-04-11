@@ -25,7 +25,9 @@ export interface IElementWaiterOption {
 }
 
 /**
- * 兑现
+ * 延时获取并返回元素
+ *
+ * 在指定延迟后尝试获取元素，成功则 resolve，失败则 reject
  */
 const returnElement = <T>(
     selector: string,
@@ -47,7 +49,9 @@ const returnElement = <T>(
 };
 
 /**
- * 通过计时器获取元素
+ * 通过定时器轮询获取元素
+ *
+ * 当浏览器不支持 MutationObserver 时使用的降级方案
  */
 const getElementByTimer = <T>(
     selector: string,
@@ -83,7 +87,9 @@ const getElementByTimer = <T>(
 };
 
 /**
- * 通过元素监听器获取元素
+ * 通过 MutationObserver 监听获取元素
+ *
+ * 监听 DOM 变化，当目标元素出现时立即获取并返回
  */
 const getElementByMutationObserver = <T>(
     selector: string,
@@ -142,12 +148,27 @@ const getElementByMutationObserver = <T>(
 };
 
 /**
- * 等待元素载入
+ * 等待页面中匹配指定选择器的元素出现
  *
- * @param selector CSS选择器
- * @param options 选项
+ * 当网站使用 Vue、React 等框架时，页面完全载入时（load 事件触发）
+ * 并非所有元素都已加载到页面，此时需要使用此函数等待元素载入。
  *
- * @example await elementWaiter( '#app' ) - 等待 `#app` 元素载入
+ * @param selector CSS 选择器
+ * @param options 配置选项（可选）
+ * @returns Promise<T> 匹配的 HTMLElement 元素
+ *
+ * @example
+ * ```ts
+ * // 等待 id 为 'app' 的元素出现
+ * const appElement = await elementWaiter('#app');
+ * console.log(appElement);
+ *
+ * // 指定父容器和超时时间
+ * const element = await elementWaiter('.item', {
+ *   parent: document.querySelector('.container'),
+ *   timeoutPerSecond: 10
+ * });
+ * ```
  */
 export function elementWaiter<T extends HTMLElement>(
     selector: string,

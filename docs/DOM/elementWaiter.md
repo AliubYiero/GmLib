@@ -60,10 +60,14 @@ try {
 
 ## 错误处理
 
-当元素在超时时间内未出现时，Promise会被拒绝，并抛出错误`Error('Void Element')`。
+当元素在超时时间内未出现时，Promise 会被拒绝，并抛出以下错误：
+
+- 超时错误：`Element "${selector}" not found within ${timeoutPerSecond} seconds`
+- 元素不存在错误：`Element "${selector}" not found`
 
 ```ts
 elementWaiter('.not-exist', { timeoutPerSecond: 5 })
   .then(element => { /* 成功处理 */ })
-  .catch(error => console.error(error.message)); // 输出: 'Void Element'
+  .catch(error => console.error(error.message));
+  // 输出: 'Element ".not-exist" not found within 5 seconds'
 ```

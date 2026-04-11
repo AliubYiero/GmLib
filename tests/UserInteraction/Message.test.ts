@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, rs } from '@rstest/core';
-import { Message } from '../../src/Element/Message';
+import { Message } from '../../src/UserInteraction/Message';
 
 describe('Message', () => {
     beforeEach(() => {

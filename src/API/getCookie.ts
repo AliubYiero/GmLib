@@ -1,58 +1,88 @@
 import { environmentTest } from '../Env/environmentTest.ts';
 
 /**
- * Cookie 接口
+ * Cookie 对象接口
+ *
+ * 表示从 GM_cookie API 获取的单个 Cookie 信息
  */
 export declare interface ICookie {
+    /** Cookie 所属的域名 */
     domain: string;
+    /** Cookie 的名称 */
     name: string;
+    /** Cookie 的值 */
     value: string;
+    /** 是否为会话 Cookie（true 表示关闭浏览器后失效） */
     session: boolean;
+    /** 是否仅限主机（true 表示仅限当前域名，不包含子域名） */
     hostOnly: boolean;
+    /** 过期时间（Unix 时间戳，单位：秒；会话 Cookie 此属性可能不存在） */
     expirationDate?: number;
+    /** Cookie 的路径作用域 */
     path: string;
+    /** 是否仅允许 HTTP 协议访问（禁止 JavaScript 操作） */
     httpOnly: boolean;
+    /** 是否仅通过 HTTPS 传输 */
     secure: boolean;
+    /** 同站策略 */
     sameSite: 'unspecified' | 'no_restriction' | 'lax' | 'strict';
 }
 
 /**
- * 获取 输入域名 下的所有 cookie 列表
+ * 获取指定域名下的所有 Cookie 列表
  *
- * @param domain 域名
- * @returns cookieList Cookie列表
+ * @param domain 需要获取 Cookie 的域名
+ * @returns Promise<ICookie[]> Cookie 列表
  *
  * @warn 需要授权函数 `GM_cookie` 和 `GM_info`
  * @warn 只能在 ScriptCat 环境中使用
  *
- * @example getCookie( '.bilibili.com' ) - 获取 bilibili 下的所有 cookie
+ * @example
+ * ```ts
+ * // 获取 bilibili 下的所有 cookie
+ * const cookieList = await getCookie('.bilibili.com');
+ *
+ * // 查找特定 Cookie
+ * const userId = cookieList.find(item => item.name === 'DedeUserID')?.value;
+ * console.log(userId); // "1747564175"
+ * ```
  */
 export function getCookie(domain: string): Promise<ICookie[]>;
 
 /**
- * 获取 输入域名 下的某一项 cookie 内容
+ * 获取指定域名下某个键名对应的 Cookie 值
  *
- * @param domain 域名
- * @param key cookie 键名
- * @returns cookie cookie 值
+ * @param domain 需要获取 Cookie 的域名
+ * @param key Cookie 的键名
+ * @returns Promise<string> Cookie 的值
  *
  * @warn 需要授权函数 `GM_cookie` 和 `GM_info`
  * @warn 只能在 ScriptCat 环境中使用
  *
- * @example getCookie( '.bilibili.com', 'DedeUserID' ) - 获取 bilibili uid
+ * @example
+ * ```ts
+ * // 获取 bilibili 的用户 ID
+ * const userId = await getCookie('.bilibili.com', 'DedeUserID');
+ * console.log(userId); // "1747564175"
+ * ```
  */
 export function getCookie(domain: string, key: string): Promise<string>;
 
 /**
- * 传入网站 Cookie 文本内容, 解析出对应的 key 的值
+ * 解析网页 Cookie 文本内容，获取指定键名对应的 Cookie 值
  *
- * @param documentCookieContent 网站 Cookie 文本, 通常为 document.cookie
- * @param key cookie 键名
+ * @param documentCookieContent 网站 Cookie 文本内容，通常通过 `document.cookie` 获取
+ * @param key Cookie 的键名
+ * @returns Promise<string> Cookie 的值
  *
- * @warn 需要授权函数 `GM_cookie` 和 `GM_info`
- * @warn 只能在 ScriptCat 环境中使用
+ * @warn 只能获取普通 Cookie，无法获取 http-only 等特殊 Cookie
  *
- * @example getCookie( document.cookie, 'DedeUserID' ) - 获取 bilibili uid
+ * @example
+ * ```ts
+ * // 从当前页面 Cookie 中获取用户 ID
+ * const userId = await getCookie(document.cookie, 'DedeUserID');
+ * console.log(userId); // "1747564175"
+ * ```
  */
 export function getCookie(
     documentCookieContent: string,

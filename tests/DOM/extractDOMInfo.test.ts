@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it } from '@rstest/core';
-import { extractDOMInfo } from '../../src/Element/extractDOMInfo';
+import { extractDOMInfo } from '../../src/DOM/extractDOMInfo';
 
 describe('extractDOMInfo', () => {
     let container: HTMLDivElement;

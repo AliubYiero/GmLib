@@ -1,6 +1,6 @@
-import type { KeyboardKey } from './types/KeyboardKey';
+import type { KeyboardKey } from '../UserInteraction/types/KeyboardKey';
 
-export type { KeyboardKey } from './types/KeyboardKey';
+export type { KeyboardKey } from '../UserInteraction/types/KeyboardKey';
 
 /**
  * 模拟键盘选项接口
