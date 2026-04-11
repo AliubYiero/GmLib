@@ -16,6 +16,16 @@
 - 修复: `IGMStorageChangeDetail` 中 `oldValue`/`newValue` 改为 `T | undefined`
 - 新增: 导出 `IGMStorageChangeDetail` 类型
 
+**GmObjectStorage 新增:**
+- 新增类: `GmObjectStorage`, 专门用于管理对象类型存储
+- 新增属性: `size`, `keys`, `values`, `entries` - 对象信息获取
+- 新增方法: `getItem`, `setItem`, `removeItem`, `hasItem` - 属性操作
+- 新增方法: `assign`, `pick`, `omit` - 批量属性操作
+- 新增方法: `forEach`, `map`, `filter` - 遍历方法（不修改存储）
+- 新增方法: `mapInPlace`, `filterInPlace` - 遍历方法（修改存储）
+- 新增方法: `find`, `findKey`, `some`, `every` - 查找方法
+- 新增方法: `clear`, `isEmpty` - 清空和判空
+
 **GmArrayStorage 重构:**
 - **破坏性变更**: `map`/`filter` 改为返回新数组（不修改存储），使用 `mapInPlace`/`filterInPlace` 替代原行为
 - **破坏性变更**: `delete` 方法重命名为 `removeAt`，保留 `delete` 作为 `@deprecated` 别名
