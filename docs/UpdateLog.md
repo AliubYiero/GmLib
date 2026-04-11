@@ -1,5 +1,11 @@
 # 更新日志
 
+### 0.3.9 - feat
+
+- 新增函数: `setValue`, 用于设置输入框的值
+- 绕过 React/Vue 等框架对 value setter 的拦截
+- 支持自动触发 input/change 事件，可选 focus/blur 事件
+
 ### 0.3.8 - feat
 
 - 新增函数: `onRouteChange`, 用于监听页面路由变化

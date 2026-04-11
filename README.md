@@ -53,6 +53,7 @@ Message.success('操作成功');
 | [`elementWaiter`](docs/DOM/elementWaiter.md) | 等待元素加载完成 |
 | [`extractDOMInfo`](docs/DOM/extractDOMInfo.md) | 从 DOM 节点批量提取数据 |
 | [`scroll`](docs/DOM/scroll.md) | 页面滚动到指定位置 |
+| [`setValue`](docs/DOM/setValue.md) | 设置输入框的值（绕过框架拦截） |
 | [`simulateClick`](docs/DOM/simulateClick.md) | 模拟鼠标点击 |
 | [`simulateKeyboard`](docs/DOM/simulateKeyboard.md) | 模拟键盘输入 |
 

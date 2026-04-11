@@ -8,6 +8,7 @@ export { hookXhr } from './API/hookXhr';
 export { elementWaiter } from './DOM/elementWaiter';
 export { extractDOMInfo } from './DOM/extractDOMInfo';
 export { scroll } from './DOM/scroll';
+export { setValue } from './DOM/setValue';
 export { simulateClick } from './DOM/simulateClick';
 export { simulateKeyboard } from './DOM/simulateKeyboard';
 export type {
