@@ -1,5 +1,12 @@
 # 更新日志
 
+### 0.3.8 - feat
+
+- 新增函数: `onRouteChange`, 用于监听页面路由变化
+- 支持 Navigation API (Chrome 102+) 和降级方案 (pushState, replaceState, popstate, hashchange)
+- 新增类型声明: `types/navigation.d.ts` (Navigation API 类型)
+- 采用单例模式，支持 Unsubscribe 恢复原始 history 方法
+
 ### 0.3.7 - refactor
 
 - 重构目录结构，将 `docx/` 重命名为 `docs/`

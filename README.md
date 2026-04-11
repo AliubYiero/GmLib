@@ -66,6 +66,7 @@ Message.success('操作成功');
 | [`onKeydownMultiple`](docs/UserInteraction/onKeydown.md) | 批量监听多个键盘快捷键 |
 | [`onKeyup`](docs/UserInteraction/onKeyup.md) | 监听键盘释放事件 |
 | [`onKeyupMultiple`](docs/UserInteraction/onKeyup.md) | 批量监听多个键盘释放事件 |
+| [`onRouteChange`](docs/UserInteraction/onRouteChange.md) | 监听页面路由变化 |
 
 ### Env - 环境检测
 
