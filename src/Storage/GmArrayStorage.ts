@@ -73,7 +73,7 @@ export class GmArrayStorage<T> extends GmStorage<Array<T>> {
      * @returns 数组的浅拷贝
      */
     override get(): Array<T> {
-        const value = super.get();
+        const value = super.get() ?? [];
         // 返回浅拷贝，防止修改原数组影响 defaultValue
         return [...value];
     }

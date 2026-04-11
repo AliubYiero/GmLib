@@ -79,7 +79,7 @@ export class GmObjectStorage<
      * @note 返回浅拷贝以防止外部修改影响存储
      */
     override get(): T {
-        const value = super.get();
+        const value = super.get() ?? ({} as T);
         return { ...value } as T;
     }
 
