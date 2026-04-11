@@ -1,5 +1,38 @@
 import { GmStorage } from './GmStorage';
-import type { ScriptCatUserConfig } from './types/ScriptCatUserConfig';
+import type { ScriptCatUserConfig, UserConfigItem } from './types/ScriptCatUserConfig';
+
+/**
+ * 根据配置项类型推断默认值
+ *
+ * @param item - 用户配置项
+ * @returns 推断的默认值
+ * @throws 当 select 类型没有提供默认值时抛出错误
+ */
+function inferDefaultValue(item: UserConfigItem): unknown {
+    if (item.default !== undefined) {
+        return item.default;
+    }
+
+    switch (item.type) {
+        case 'number':
+            return 0;
+        case 'checkbox':
+            return false;
+        case 'text':
+        case 'textarea':
+            return '';
+        case 'mult-select':
+            return [];
+        case 'select':
+            throw new Error(
+                `配置项 "${item.title}" 类型为 select，必须提供默认值`,
+            );
+        default:
+            throw new Error(
+                `配置项 "${item.title}" 类型未知: ${(item as { type: string }).type}`,
+            );
+    }
+}
 
 /**
  * 将 ScriptCat 用户配置转换为 GmStorage 存储对象集合
@@ -55,7 +88,8 @@ export function createUserConfigStorage<T extends object>(
         for (const [configKey, item] of Object.entries(group)) {
             const storageKey = `${groupName}.${configKey}`;
             const storageName = `${configKey}Store`;
-            result[storageName] = new GmStorage(storageKey, item.default);
+            const defaultValue = inferDefaultValue(item);
+            result[storageName] = new GmStorage(storageKey, defaultValue);
         }
     }
 

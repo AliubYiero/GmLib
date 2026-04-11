@@ -20,8 +20,8 @@
 
 ```ts
 class GmStorage<T> {
-  constructor(key: string, defaultValue?: T);
-  
+  constructor(key: string, defaultValue: T);
+
   // 属性
   get value(): T;
   
@@ -52,7 +52,7 @@ interface IGMStorageChangeDetail<T> {
 | 参数           | 类型     | 必须 | 描述                     |
 | :------------- | :------- | :--- | :----------------------- |
 | `key`          | `string` | √    | 存储项的键名             |
-| `defaultValue` | `T`      |      | 当键不存在时返回的默认值 |
+| `defaultValue` | `T`      | √    | 当键不存在时返回的默认值 |
 
 #### 示例
 

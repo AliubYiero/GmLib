@@ -96,7 +96,8 @@ describe('createUserConfigStorage', () => {
         const storage = createUserConfigStorage(config);
 
         expect(storage.noDefaultStore).toBeDefined();
-        expect(storage.noDefaultStore.get()).toBeUndefined();
+        // text 类型无默认值时推断为空字符串
+        expect(storage.noDefaultStore.get()).toBe('');
     });
 
     it('should generate correct storage key format', () => {

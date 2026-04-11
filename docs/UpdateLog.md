@@ -1,5 +1,19 @@
 # 更新日志
 
+### 0.4.1 - feat
+
+**GmStorage 破坏性变更:**
+- **破坏性变更**: `defaultValue` 参数从可选改为必传
+- 修复: `get()` 返回类型从 `T | undefined` 改为 `T`（因为有必传默认值）
+
+**createUserConfigStorage 增强:**
+- 新增: 根据配置类型自动推断默认值（当未提供 `default` 时）:
+  - `number` → `0`
+  - `checkbox` → `false`
+  - `text` / `textarea` → `''`
+  - `mult-select` → `[]`
+  - `select` 无默认值时抛出错误（必须显式提供）
+
 ### 0.4.0 - feat
 
 **createUserConfigStorage 新增**

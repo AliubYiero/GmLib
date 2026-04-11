@@ -38,7 +38,7 @@ export class GmStorage<T> {
 
     constructor(
         protected readonly key: string,
-        protected readonly defaultValue?: T,
+        protected readonly defaultValue: T,
     ) {}
 
     /**
@@ -46,14 +46,14 @@ export class GmStorage<T> {
      *
      * @alias get()
      */
-    get value(): T | undefined {
+    get value(): T {
         return this.get();
     }
 
     /**
      * 获取当前存储的值
      */
-    get(): T | undefined {
+    get(): T {
         return GM_getValue(this.key, this.defaultValue);
     }
 
