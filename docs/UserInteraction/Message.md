@@ -113,3 +113,59 @@ console.log(instance.element.textContent);
 // 用户可以通过 Escape 键关闭消息
 Message.info('按 Escape 键关闭此消息');
 ```
+
+## 消息堆叠
+
+当同一位置存在多条消息时，消息会自动堆叠显示：
+
+- **顶部位置**（`top`, `top-left`, `top-right`）：新消息显示在现有消息**下方**
+- **底部位置**（`bottom`, `bottom-left`, `bottom-right`）：新消息显示在现有消息**上方**
+- **中间位置**（`left`, `right`）：新消息显示在现有消息**下方**
+
+消息之间的默认间距为 **10px**。
+
+```ts
+// 多条消息自动堆叠
+Message.success('第一条消息'); // top: 20px
+Message.success('第二条消息'); // top: 90px (假设第一条消息高度 60px)
+Message.success('第三条消息'); // top: 160px
+```
+
+不同位置的消息**独立堆叠**，互不影响：
+
+```ts
+Message.success('顶部消息', { position: 'top' });
+Message.success('底部消息', { position: 'bottom' });
+// 两条消息各自在自己的基础位置显示
+```
+
+## 消息数量限制
+
+系统最多同时显示 **3 条消息**。当超出限制时，最早的消息会被自动关闭。
+
+```ts
+// 连续创建 4 条消息
+Message.success('消息 1');
+Message.success('消息 2');
+Message.success('消息 3');
+Message.success('消息 4'); // 触发限制，消息 1 被自动关闭
+
+// 最终只显示消息 2、3、4
+```
+
+## 消息移除与位置重算
+
+当消息被关闭（自动关闭或手动关闭）时，剩余消息的位置会**自动重新计算**，平滑移动填补空隙。
+
+```ts
+const msg1 = Message.success('消息 1'); // top: 20px
+const msg2 = Message.success('消息 2'); // top: 90px
+const msg3 = Message.success('消息 3'); // top: 160px
+
+// 关闭第一条消息
+msg1.close();
+
+// 剩余消息位置自动调整：
+// msg2: top: 20px (从 90px 移动上来)
+// msg3: top: 90px (从 160px 移动上来)
+```

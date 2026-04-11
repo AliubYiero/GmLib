@@ -1,6 +1,12 @@
 // 全局消息容器
 let messageContainer: HTMLElement | null = null;
 
+// 活动消息列表
+const activeMessages: MessageInstance[] = [];
+
+// 最大同时显示消息数量
+const MAX_MESSAGES = 3;
+
 // 消息类型配置
 const messageTypes = {
     success: {
@@ -41,6 +47,61 @@ const messagePositions = {
     'bottom-right': { bottom: '20px', right: '20px' },
 };
 
+/**
+ * 消息堆叠配置
+ */
+const MESSAGE_STACK_CONFIG = {
+    /** 消息之间的间距 (px) */
+    GAP: 10,
+    /** 基础边距 (px) */
+    BASE_OFFSET: 20,
+};
+
+/**
+ * 计算消息的堆叠偏移量
+ * 根据同一位置的活动消息数量，计算新消息应显示的偏移位置
+ *
+ * @param position - 消息位置
+ * @returns 偏移量对象 { top?, bottom? }
+ *
+ * @example
+ * // 顶部位置，已有2条消息
+ * calculateStackOffset('top'); // { top: '110px' } (假设每条消息高度40px)
+ *
+ * // 底部位置，已有1条消息
+ * calculateStackOffset('bottom'); // { bottom: '70px' }
+ */
+function calculateStackOffset(position: string): {
+    top?: string;
+    bottom?: string;
+} {
+    // 获取同一位置的活动消息
+    const samePositionMessages = activeMessages.filter(
+        (msg) => msg.element.dataset.position === position,
+    );
+
+    if (samePositionMessages.length === 0) {
+        return {};
+    }
+
+    // 计算累计偏移量 (消息高度 + 间距)
+    const totalOffset = samePositionMessages.reduce((acc, msg) => {
+        return acc + msg.element.offsetHeight + MESSAGE_STACK_CONFIG.GAP;
+    }, 0);
+
+    const isBottom = position.includes('bottom');
+
+    if (isBottom) {
+        // 底部位置: 向上堆叠
+        return {
+            bottom: `${MESSAGE_STACK_CONFIG.BASE_OFFSET + totalOffset}px`,
+        };
+    } else {
+        // 顶部/中间位置: 向下堆叠
+        return { top: `${MESSAGE_STACK_CONFIG.BASE_OFFSET + totalOffset}px` };
+    }
+}
+
 // 创建消息容器
 function createMessageContainer(): HTMLElement {
     if (!messageContainer) {
@@ -64,6 +125,17 @@ function createMessageContainer(): HTMLElement {
         document.body.appendChild(messageContainer);
     }
     return messageContainer;
+}
+
+/**
+ * 执行消息数量限制
+ * 当活动消息达到上限时，关闭最早的消息
+ */
+function enforceMessageLimit(): void {
+    while (activeMessages.length >= MAX_MESSAGES) {
+        const oldestMessage = activeMessages[0];
+        oldestMessage.close();
+    }
 }
 
 /**
@@ -269,6 +341,12 @@ const Message: MessageFunction = ((
             `,
     );
 
+    // 添加位置标识 (用于消息堆叠计算)
+    messageEl.dataset.position = messagePosition;
+
+    // 执行消息数量限制检查
+    enforceMessageLimit();
+
     // 添加可访问性属性
     messageEl.setAttribute('role', 'alert');
     messageEl.setAttribute('aria-live', 'polite');
@@ -309,6 +387,15 @@ const Message: MessageFunction = ((
     // 添加到容器
     messageContainer.appendChild(messageEl);
 
+    // 计算并应用堆叠偏移量
+    const stackOffset = calculateStackOffset(messagePosition);
+    if (stackOffset.top) {
+        messageEl.style.top = stackOffset.top;
+    }
+    if (stackOffset.bottom) {
+        messageEl.style.bottom = stackOffset.bottom;
+    }
+
     // 触发入场动画
     requestAnimationFrame(() => {
         messageEl.style.opacity = '1';
@@ -340,13 +427,63 @@ const Message: MessageFunction = ((
         closeMessage(messageEl, messagePosition);
     };
 
-    // 返回消息实例
-    return {
+    // 创建消息实例
+    const messageInstance: MessageInstance = {
         close,
         element: messageEl,
     };
-}) as MessageFunction; // 关闭消息函数
+
+    // 添加到活动消息列表
+    activeMessages.push(messageInstance);
+
+    // 返回消息实例
+    return messageInstance;
+}) as MessageFunction;
+
+/**
+ * 重新计算所有活动消息的堆叠位置
+ * 当消息被移除时调用，让剩余消息平滑填补空隙
+ */
+function recalculateMessagePositions(): void {
+    // 按位置分组
+    const positionGroups = new Map<string, MessageInstance[]>();
+
+    for (const msg of activeMessages) {
+        const pos = msg.element.dataset.position || 'top';
+        if (!positionGroups.has(pos)) {
+            positionGroups.set(pos, []);
+        }
+        positionGroups.get(pos)!.push(msg);
+    }
+
+    // 对每组消息重新计算位置
+    for (const [position, messages] of positionGroups) {
+        const isBottom = position.includes('bottom');
+        let currentOffset = MESSAGE_STACK_CONFIG.BASE_OFFSET;
+
+        for (const msg of messages) {
+            if (isBottom) {
+                msg.element.style.bottom = `${currentOffset}px`;
+            } else {
+                msg.element.style.top = `${currentOffset}px`;
+            }
+            currentOffset +=
+                msg.element.offsetHeight + MESSAGE_STACK_CONFIG.GAP;
+        }
+    }
+}
+
+// 关闭消息函数
 function closeMessage(element: HTMLElement, position: string = 'top') {
+    // 从活动消息列表中移除
+    const index = activeMessages.findIndex((msg) => msg.element === element);
+    if (index !== -1) {
+        activeMessages.splice(index, 1);
+    }
+
+    // 重新计算剩余消息的堆叠位置
+    recalculateMessagePositions();
+
     const exitOffset = getAnimationOffset(position, false);
     element.style.opacity = '0';
     element.style.transform = `translateY(${exitOffset}px)`;

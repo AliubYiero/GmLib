@@ -1,5 +1,8 @@
 import { GmStorage } from './GmStorage';
-import type { ScriptCatUserConfig, UserConfigItem } from './types/ScriptCatUserConfig';
+import type {
+    ScriptCatUserConfig,
+    UserConfigItem,
+} from './types/ScriptCatUserConfig';
 
 /**
  * 根据配置项类型推断默认值
