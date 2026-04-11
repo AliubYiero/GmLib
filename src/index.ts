@@ -20,8 +20,13 @@ export type {
 export { environmentTest } from './Env/environmentTest';
 export { isIframe } from './Env/isIframe';
 // Storage
+export { createUserConfigStorage } from './Storage/createUserConfigStorage';
 export { GmArrayStorage } from './Storage/GmArrayStorage';
 export { GmStorage } from './Storage/GmStorage';
+export type {
+    ScriptCatUserConfig,
+    UserConfigItem,
+} from './Storage/types/ScriptCatUserConfig';
 // UI
 export { uiImporter } from './UI/uiImporter';
 // UserInteraction

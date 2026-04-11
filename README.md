@@ -78,8 +78,9 @@ Message.success('操作成功');
 
 ### Storage - 存储管理
 
-| 类 | 说明 |
+| 函数/类 | 说明 |
 | :--- | :--- |
+| [`createUserConfigStorage`](docs/Storage/createUserConfigStorage.md) | 将 ScriptCat 用户配置转换为 GmStorage 存储对象集合 |
 | [`GmStorage`](docs/Storage/GmStorage.md) | 油猴存储管理基类 |
 | [`GmArrayStorage`](docs/Storage/GmArrayStorage.md) | 数组存储管理，`GmStorage` 子类 |
 

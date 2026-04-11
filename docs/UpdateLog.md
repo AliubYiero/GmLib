@@ -1,5 +1,11 @@
 # 更新日志
 
+### 0.4.0 - feat
+
+- 新增函数: `createUserConfigStorage`, 将 ScriptCat 用户配置自动转换为 GmStorage 存储对象集合
+- 新增类型: `ScriptCatUserConfig`, `UserConfigItem`, 用于定义 ScriptCat 用户配置结构
+- 支持泛型参数指定返回类型，提供完整的类型推断支持
+
 ### 0.3.9 - feat
 
 - 新增函数: `setValue`, 用于设置输入框的值
