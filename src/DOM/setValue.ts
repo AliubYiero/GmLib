@@ -68,8 +68,10 @@ export function setValue(
             ? window.HTMLInputElement.prototype
             : window.HTMLTextAreaElement.prototype;
 
-    const nativeSetter = Object.getOwnPropertyDescriptor(prototype, 'value')
-        ?.set;
+    const nativeSetter = Object.getOwnPropertyDescriptor(
+        prototype,
+        'value',
+    )?.set;
 
     if (nativeSetter) {
         nativeSetter.call(element, value);
