@@ -15,6 +15,13 @@ export type {
     Unsubscribe,
 } from './Element/onKeydown';
 export { onKeydown, onKeydownMultiple } from './Element/onKeydown';
+export type {
+    IKeyupBinding,
+    IKeyupMultipleOptions,
+    IKeyupOptions,
+    KeyupCallback,
+} from './Element/onKeyup';
+export { onKeyup, onKeyupMultiple } from './Element/onKeyup';
 // Element
 export { scroll } from './Element/scroll';
 export { simulateClick } from './Element/simulateClick';

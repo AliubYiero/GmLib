@@ -64,6 +64,8 @@ Message.success('操作成功');
 | [`gmMenuCommand`](docx/Element/gmMenuCommand.md) | 油猴菜单命令管理 |
 | [`onKeydown`](docx/Element/onKeydown.md) | 监听键盘按下事件 |
 | [`onKeydownMultiple`](docx/Element/onKeydown.md) | 批量监听多个键盘快捷键 |
+| [`onKeyup`](docx/Element/onKeyup.md) | 监听键盘释放事件 |
+| [`onKeyupMultiple`](docx/Element/onKeyup.md) | 批量监听多个键盘释放事件 |
 
 ### Env - 环境检测
 
