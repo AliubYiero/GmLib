@@ -23,6 +23,7 @@ export { isIframe } from './Env/isIframe';
 export { createUserConfigStorage } from './Storage/createUserConfigStorage';
 export { GmArrayStorage } from './Storage/GmArrayStorage';
 export { GmStorage } from './Storage/GmStorage';
+export type { IGMStorageChangeDetail } from './Storage/GmStorage';
 export type {
     ScriptCatUserConfig,
     UserConfigItem,

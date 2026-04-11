@@ -5,9 +5,9 @@ export interface IGMStorageChangeDetail<T> {
     /** 变更的键名 */
     key: string;
     /** 变更前的值 */
-    oldValue: T;
+    oldValue: T | undefined;
     /** 变更后的值 */
-    newValue: T;
+    newValue: T | undefined;
     /** 是否来自其他标签页的变更 */
     remote: boolean;
 }
@@ -34,43 +34,40 @@ export interface IGMStorageChangeDetail<T> {
  * ```
  */
 export class GmStorage<T> {
-    protected listenerId: number = 0;
+    protected listenerId: number | null = null;
 
     constructor(
         protected readonly key: string,
         protected readonly defaultValue?: T,
-    ) {
-        this.key = key;
-        this.defaultValue = defaultValue;
-    }
+    ) {}
 
     /**
      * 获取当前存储的值
      *
      * @alias get()
      */
-    get value(): T {
+    get value(): T | undefined {
         return this.get();
     }
 
     /**
      * 获取当前存储的值
      */
-    get(): T {
+    get(): T | undefined {
         return GM_getValue(this.key, this.defaultValue);
     }
 
     /**
      * 给当前存储设置一个新值
      */
-    set(value: T) {
-        return GM_setValue(this.key, value);
+    set(value: T): void {
+        GM_setValue(this.key, value);
     }
 
     /**
      * 移除当前键
      */
-    remove() {
+    remove(): void {
         GM_deleteValue(this.key);
     }
 
@@ -79,15 +76,15 @@ export class GmStorage<T> {
      */
     updateListener(
         callback: (changeDetail: IGMStorageChangeDetail<T>) => void,
-    ) {
+    ): void {
         this.removeListener();
         this.listenerId = GM_addValueChangeListener(
             this.key,
             (key, oldValue, newValue, remote) => {
                 callback({
                     key,
-                    oldValue: oldValue as T,
-                    newValue: newValue as T,
+                    oldValue: oldValue as T | undefined,
+                    newValue: newValue as T | undefined,
                     remote,
                 });
             },
@@ -97,7 +94,10 @@ export class GmStorage<T> {
     /**
      * 移除元素更新回调
      */
-    removeListener() {
-        GM_removeValueChangeListener(this.listenerId);
+    removeListener(): void {
+        if (this.listenerId !== null) {
+            GM_removeValueChangeListener(this.listenerId);
+            this.listenerId = null;
+        }
     }
 }

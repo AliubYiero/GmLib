@@ -2,9 +2,33 @@
 
 ### 0.4.0 - feat
 
+**createUserConfigStorage 新增**
 - 新增函数: `createUserConfigStorage`, 将 ScriptCat 用户配置自动转换为 GmStorage 存储对象集合
 - 新增类型: `ScriptCatUserConfig`, `UserConfigItem`, 用于定义 ScriptCat 用户配置结构
 - 支持泛型参数指定返回类型，提供完整的类型推断支持
+
+**GmStorage 修复:**
+- 修复: 移除构造函数中的冗余属性赋值
+- 修复: `listenerId` 改为 `number | null` 类型，初始值为 `null`
+- 修复: `removeListener()` 添加 `null` 检查，避免无效 API 调用
+- 修复: `get()` 返回类型改为 `T | undefined`，准确反映实际返回值
+- 修复: `set()` 添加 `void` 返回类型声明
+- 修复: `IGMStorageChangeDetail` 中 `oldValue`/`newValue` 改为 `T | undefined`
+- 新增: 导出 `IGMStorageChangeDetail` 类型
+
+**GmArrayStorage 重构:**
+- **破坏性变更**: `map`/`filter` 改为返回新数组（不修改存储），使用 `mapInPlace`/`filterInPlace` 替代原行为
+- **破坏性变更**: `delete` 方法重命名为 `removeAt`，保留 `delete` 作为 `@deprecated` 别名
+- 新增方法: `mapInPlace`, `filterInPlace` - 映射/过滤并更新存储
+- 新增方法: `pushMany`, `unshiftMany` - 批量添加元素
+- 新增方法: `find`, `findIndex`, `includes`, `indexOf` - 查找元素
+- 新增方法: `slice`, `concat`, `at` - 数组切片/拼接/索引访问
+- 新增方法: `clear`, `isEmpty` - 清空和判空
+- 新增属性: `firstItem` - 获取数组第一项
+- 改进: `pop`/`shift` 现在返回被删除的元素
+- 改进: 添加索引边界检查，越界时抛出 `RangeError`
+- 改进: 重写 `get()` 返回浅拷贝，保护 `defaultValue` 不被意外修改
+- 改进: 补全所有方法的 JSDoc 文档
 
 ### 0.3.9 - feat
 
