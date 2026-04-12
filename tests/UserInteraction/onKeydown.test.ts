@@ -496,10 +496,10 @@ describe('onKeydown', () => {
             );
 
             expect(receivedEvent).not.toBeNull();
-            expect(receivedEvent!.key).toBe('Enter');
-            expect(receivedEvent!.code).toBe('Enter');
-            expect(receivedEvent!.ctrlKey).toBe(true);
-            expect(receivedEvent!.shiftKey).toBe(false);
+            expect(receivedEvent?.key).toBe('Enter');
+            expect(receivedEvent?.code).toBe('Enter');
+            expect(receivedEvent?.ctrlKey).toBe(true);
+            expect(receivedEvent?.shiftKey).toBe(false);
         });
     });
 

@@ -63,7 +63,7 @@ describe('simulateClick', () => {
             simulateClick(button);
 
             expect(capturedEvent).not.toBeNull();
-            expect(capturedEvent!.button).toBe(0);
+            expect(capturedEvent?.button).toBe(0);
         });
 
         it('should simulate right button click', () => {
@@ -76,7 +76,7 @@ describe('simulateClick', () => {
             simulateClick(button, { button: 'right' });
 
             expect(capturedEvent).not.toBeNull();
-            expect(capturedEvent!.button).toBe(2);
+            expect(capturedEvent?.button).toBe(2);
         });
 
         it('should simulate middle button click', () => {
@@ -89,7 +89,7 @@ describe('simulateClick', () => {
             simulateClick(button, { button: 'middle' });
 
             expect(capturedEvent).not.toBeNull();
-            expect(capturedEvent!.button).toBe(1);
+            expect(capturedEvent?.button).toBe(1);
         });
     });
 
@@ -104,8 +104,8 @@ describe('simulateClick', () => {
             simulateClick(button, { clientX: 100, clientY: 200 });
 
             expect(capturedEvent).not.toBeNull();
-            expect(capturedEvent!.clientX).toBe(100);
-            expect(capturedEvent!.clientY).toBe(200);
+            expect(capturedEvent?.clientX).toBe(100);
+            expect(capturedEvent?.clientY).toBe(200);
         });
 
         it('should set bubbles and cancelable to true by default', () => {
@@ -118,8 +118,8 @@ describe('simulateClick', () => {
             simulateClick(button);
 
             expect(capturedEvent).not.toBeNull();
-            expect(capturedEvent!.bubbles).toBe(true);
-            expect(capturedEvent!.cancelable).toBe(true);
+            expect(capturedEvent?.bubbles).toBe(true);
+            expect(capturedEvent?.cancelable).toBe(true);
         });
 
         it('should allow disabling bubbles', () => {
@@ -150,7 +150,7 @@ describe('simulateClick', () => {
             simulateClick(button, { detail: 2 });
 
             expect(capturedEvent).not.toBeNull();
-            expect(capturedEvent!.detail).toBe(2);
+            expect(capturedEvent?.detail).toBe(2);
         });
     });
 
@@ -165,7 +165,7 @@ describe('simulateClick', () => {
             simulateClick(button, { shiftKey: true });
 
             expect(capturedEvent).not.toBeNull();
-            expect(capturedEvent!.shiftKey).toBe(true);
+            expect(capturedEvent?.shiftKey).toBe(true);
         });
 
         it('should set ctrlKey correctly', () => {
@@ -178,7 +178,7 @@ describe('simulateClick', () => {
             simulateClick(button, { ctrlKey: true });
 
             expect(capturedEvent).not.toBeNull();
-            expect(capturedEvent!.ctrlKey).toBe(true);
+            expect(capturedEvent?.ctrlKey).toBe(true);
         });
 
         it('should set altKey correctly', () => {
@@ -191,7 +191,7 @@ describe('simulateClick', () => {
             simulateClick(button, { altKey: true });
 
             expect(capturedEvent).not.toBeNull();
-            expect(capturedEvent!.altKey).toBe(true);
+            expect(capturedEvent?.altKey).toBe(true);
         });
 
         it('should set metaKey correctly', () => {
@@ -204,7 +204,7 @@ describe('simulateClick', () => {
             simulateClick(button, { metaKey: true });
 
             expect(capturedEvent).not.toBeNull();
-            expect(capturedEvent!.metaKey).toBe(true);
+            expect(capturedEvent?.metaKey).toBe(true);
         });
 
         it('should handle multiple modifier keys', () => {
@@ -221,9 +221,9 @@ describe('simulateClick', () => {
             });
 
             expect(capturedEvent).not.toBeNull();
-            expect(capturedEvent!.ctrlKey).toBe(true);
-            expect(capturedEvent!.shiftKey).toBe(true);
-            expect(capturedEvent!.altKey).toBe(false);
+            expect(capturedEvent?.ctrlKey).toBe(true);
+            expect(capturedEvent?.shiftKey).toBe(true);
+            expect(capturedEvent?.altKey).toBe(false);
         });
     });
 

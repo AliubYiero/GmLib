@@ -54,6 +54,7 @@ type ObjectFilterCallback<T> = (
  * ```
  */
 export class GmObjectStorage<
+    // biome-ignore lint/suspicious/noExplicitAny: 泛型约束需要支持任意对象类型
     T extends Record<string, any>,
 > extends GmStorage<T> {
     constructor(key: string, defaultValue: T = {} as T) {

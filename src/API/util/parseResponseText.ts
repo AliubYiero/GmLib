@@ -2,14 +2,14 @@
  * 将 responseText 解析为 对象 或者 Document 对象, 如果无法解析则返回原始文本
  */
 export const parseResponseText = <
-    T extends string | Record<string, any> | Document,
+    T extends string | Record<string, unknown> | Document,
 >(
     responseText: string,
 ): T => {
     try {
         // 响应体是 Object
         return JSON.parse(responseText) as T;
-    } catch (e) {
+    } catch {
         try {
             // 响应体是文档对象
             const domParser = new DOMParser();
@@ -17,7 +17,7 @@ export const parseResponseText = <
                 responseText as string,
                 'text/html',
             ) as T;
-        } catch (e) {
+        } catch {
             return responseText as T;
         }
     }

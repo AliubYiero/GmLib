@@ -33,6 +33,7 @@ const returnElement = <T>(
     selector: string,
     options: IElementWaiterOption,
     resolve: (value: T | PromiseLike<T>) => void,
+    // biome-ignore lint/suspicious/noExplicitAny: Promise reject 标准签名
     reject: (reason?: any) => void,
 ) => {
     // 延时触发
@@ -57,6 +58,7 @@ const getElementByTimer = <T>(
     selector: string,
     options: IElementWaiterOption,
     resolve: (value: T | PromiseLike<T>) => void,
+    // biome-ignore lint/suspicious/noExplicitAny: Promise reject 标准签名
     reject: (reason?: any) => void,
 ) => {
     const intervalDelay = 100; // 间隔时间
@@ -95,6 +97,7 @@ const getElementByMutationObserver = <T>(
     selector: string,
     options: IElementWaiterOption,
     resolve: (value: T | PromiseLike<T>) => void,
+    // biome-ignore lint/suspicious/noExplicitAny: Promise reject 标准签名
     reject: (reason?: any) => void,
 ) => {
     // 声明定时器

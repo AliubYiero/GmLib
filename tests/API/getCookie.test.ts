@@ -69,7 +69,8 @@ describe('getCookie', () => {
 
         it('should return cookie list via GM_cookie', async () => {
             gmApiMock.GM_cookie.mockImplementation(
-                (action: string, params: any, callback: any) => {
+                // biome-ignore lint/suspicious/noExplicitAny: mock 实现需要灵活类型
+                (_action: string, _params: any, callback: any) => {
                     callback(mockCookies);
                 },
             );
@@ -86,7 +87,8 @@ describe('getCookie', () => {
 
         it('should return cookie value by key via GM_cookie', async () => {
             gmApiMock.GM_cookie.mockImplementation(
-                (action: string, params: any, callback: any) => {
+                // biome-ignore lint/suspicious/noExplicitAny: mock 实现需要灵活类型
+                (_action: string, _params: any, callback: any) => {
                     callback(mockCookies);
                 },
             );
@@ -98,7 +100,8 @@ describe('getCookie', () => {
 
         it('should reject when cookie not found via GM_cookie', async () => {
             gmApiMock.GM_cookie.mockImplementation(
-                (action: string, params: any, callback: any) => {
+                // biome-ignore lint/suspicious/noExplicitAny: mock 实现需要灵活类型
+                (_action: string, _params: any, callback: any) => {
                     callback(mockCookies);
                 },
             );
@@ -110,7 +113,8 @@ describe('getCookie', () => {
 
         it('should reject when domain has no cookies', async () => {
             gmApiMock.GM_cookie.mockImplementation(
-                (action: string, params: any, callback: any) => {
+                // biome-ignore lint/suspicious/noExplicitAny: mock 实现需要灵活类型
+                (_action: string, _params: any, callback: any) => {
                     callback(null);
                 },
             );

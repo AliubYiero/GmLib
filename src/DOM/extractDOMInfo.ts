@@ -12,7 +12,10 @@ const FORM_TAGS = new Set(['INPUT', 'TEXTAREA', 'SELECT']);
  * @param rule - 提取规则
  * @returns 解析后的值
  */
-function parseValue(targetEl: HTMLElement | null, rule: ExtractRule): any {
+function parseValue(
+    targetEl: HTMLElement | null,
+    rule: ExtractRule,
+): string | number | boolean | HTMLElement | null {
     // 防御：元素不存在直接返回默认值
     if (!targetEl) {
         return rule.defaultValue ?? null;
@@ -69,7 +72,7 @@ function parseValue(targetEl: HTMLElement | null, rule: ExtractRule): any {
                 return rule.defaultValue ?? null;
             }
             const num = Number(trimmed);
-            return isNaN(num) ? (rule.defaultValue ?? null) : num;
+            return Number.isNaN(num) ? (rule.defaultValue ?? null) : num;
         }
 
         case 'boolean': {
@@ -89,8 +92,6 @@ function parseValue(targetEl: HTMLElement | null, rule: ExtractRule): any {
             }
         }
 
-        case 'url':
-        case 'string':
         default:
             return rawValue === null
                 ? (rule.defaultValue ?? null)
@@ -114,6 +115,7 @@ function parseValue(targetEl: HTMLElement | null, rule: ExtractRule): any {
 export function extractDOMInfo<T extends Omit<ExtractRule, 'selector'>>(
     selector: string,
     rule: T,
+    // biome-ignore lint/suspicious/noExplicitAny: 泛型结果类型需与 ExtractedResult 一致
 ): { [K in T['key']]: any };
 /**
  * 从根节点中批量提取 DOM 数据（根元素模式）
@@ -139,7 +141,9 @@ export function extractDOMInfo<T extends ExtractRule>(
  */
 export function extractDOMInfo(
     selectorOrRoot: string | HTMLElement,
+    // biome-ignore lint/suspicious/noExplicitAny: TypeScript 实现签名惯例
     ruleOrRules: any,
+    // biome-ignore lint/suspicious/noExplicitAny: TypeScript 实现签名惯例
 ): any {
     // 选择器字符串模式：从 document 查询单个元素
     if (typeof selectorOrRoot === 'string') {
@@ -153,6 +157,7 @@ export function extractDOMInfo(
     // 根元素模式：从 root 批量查询
     const root = selectorOrRoot;
     const rules = Array.isArray(ruleOrRules) ? ruleOrRules : [ruleOrRules];
+    // biome-ignore lint/suspicious/noExplicitAny: 内部实现需要灵活类型
     const result: Record<string, any> = {};
 
     // 性能优化：选择器结果缓存池

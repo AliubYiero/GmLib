@@ -5,7 +5,10 @@ const storage = new Map<string, unknown>();
 
 // 监听器计数器
 let listenerIdCounter = 0;
-const listeners = new Map<number, { key: string; callback: Function }>();
+const listeners = new Map<
+    number,
+    { key: string; callback: (...args: unknown[]) => unknown }
+>();
 
 // GM API Mock 函数
 export const gmApiMock = {
@@ -22,11 +25,13 @@ export const gmApiMock = {
         storage.delete(key);
     },
 
-    GM_addValueChangeListener: rs.fn((key: string, callback: Function) => {
-        const id = ++listenerIdCounter;
-        listeners.set(id, { key, callback });
-        return id;
-    }),
+    GM_addValueChangeListener: rs.fn(
+        (key: string, callback: (...args: unknown[]) => unknown) => {
+            const id = ++listenerIdCounter;
+            listeners.set(id, { key, callback });
+            return id;
+        },
+    ),
 
     GM_removeValueChangeListener: rs.fn((id: number) => {
         listeners.delete(id);
@@ -72,7 +77,10 @@ export const gmApiMock = {
         return storage;
     },
 
-    getListeners(): Map<number, { key: string; callback: Function }> {
+    getListeners(): Map<
+        number,
+        { key: string; callback: (...args: unknown[]) => unknown }
+    > {
         return listeners;
     },
 };
@@ -81,21 +89,33 @@ export const gmApiMock = {
  * 将 mock 注入到全局对象
  */
 export const setupGlobalGmApi = (): void => {
+    // biome-ignore lint/suspicious/noExplicitAny: 全局对象需要 any 类型
     (globalThis as any).GM_getValue = gmApiMock.GM_getValue;
+    // biome-ignore lint/suspicious/noExplicitAny: 全局对象需要 any 类型
     (globalThis as any).GM_setValue = gmApiMock.GM_setValue;
+    // biome-ignore lint/suspicious/noExplicitAny: 全局对象需要 any 类型
     (globalThis as any).GM_deleteValue = gmApiMock.GM_deleteValue;
+    // biome-ignore lint/suspicious/noExplicitAny: 全局对象需要 any 类型
     (globalThis as any).GM_addValueChangeListener =
         gmApiMock.GM_addValueChangeListener;
+    // biome-ignore lint/suspicious/noExplicitAny: 全局对象需要 any 类型
     (globalThis as any).GM_removeValueChangeListener =
         gmApiMock.GM_removeValueChangeListener;
+    // biome-ignore lint/suspicious/noExplicitAny: 全局对象需要 any 类型
     (globalThis as any).GM_xmlhttpRequest = gmApiMock.GM_xmlhttpRequest;
+    // biome-ignore lint/suspicious/noExplicitAny: 全局对象需要 any 类型
     (globalThis as any).GM_download = gmApiMock.GM_download;
+    // biome-ignore lint/suspicious/noExplicitAny: 全局对象需要 any 类型
     (globalThis as any).GM_registerMenuCommand =
         gmApiMock.GM_registerMenuCommand;
+    // biome-ignore lint/suspicious/noExplicitAny: 全局对象需要 any 类型
     (globalThis as any).GM_unregisterMenuCommand =
         gmApiMock.GM_unregisterMenuCommand;
+    // biome-ignore lint/suspicious/noExplicitAny: 全局对象需要 any 类型
     (globalThis as any).GM_cookie = gmApiMock.GM_cookie;
+    // biome-ignore lint/suspicious/noExplicitAny: 全局对象需要 any 类型
     (globalThis as any).GM_addStyle = gmApiMock.GM_addStyle;
+    // biome-ignore lint/suspicious/noExplicitAny: 全局对象需要 any 类型
     (globalThis as any).GM_info = gmApiMock.GM_info;
 };
 
@@ -103,31 +123,40 @@ export const setupGlobalGmApi = (): void => {
  * 模拟 GM_xmlhttpRequest 成功响应
  */
 export const mockRequestSuccess = (responseText: string): void => {
-    gmApiMock.GM_xmlhttpRequest.mockImplementation((config: any) => {
-        setTimeout(() => {
-            config.onload?.({ responseText });
-        }, 0);
-    });
+    gmApiMock.GM_xmlhttpRequest.mockImplementation(
+        // biome-ignore lint/suspicious/noExplicitAny: mock 实现需要灵活类型
+        (config: any) => {
+            setTimeout(() => {
+                config.onload?.({ responseText });
+            }, 0);
+        },
+    );
 };
 
 /**
  * 模拟 GM_xmlhttpRequest 错误响应
  */
-export const mockRequestError = (error: any): void => {
-    gmApiMock.GM_xmlhttpRequest.mockImplementation((config: any) => {
-        setTimeout(() => {
-            config.onerror?.(error);
-        }, 0);
-    });
+export const mockRequestError = (error: unknown): void => {
+    gmApiMock.GM_xmlhttpRequest.mockImplementation(
+        // biome-ignore lint/suspicious/noExplicitAny: mock 实现需要灵活类型
+        (config: any) => {
+            setTimeout(() => {
+                config.onerror?.(error);
+            }, 0);
+        },
+    );
 };
 
 /**
  * 模拟 GM_xmlhttpRequest 超时
  */
 export const mockRequestTimeout = (): void => {
-    gmApiMock.GM_xmlhttpRequest.mockImplementation((config: any) => {
-        setTimeout(() => {
-            config.ontimeout?.();
-        }, 0);
-    });
+    gmApiMock.GM_xmlhttpRequest.mockImplementation(
+        // biome-ignore lint/suspicious/noExplicitAny: mock 实现需要灵活类型
+        (config: any) => {
+            setTimeout(() => {
+                config.ontimeout?.();
+            }, 0);
+        },
+    );
 };

@@ -42,15 +42,8 @@ interface ScriptCatUserConfig {
 
 interface UserConfigItem {
     title: string;           // 配置标题
-    description: string;     // 配置描述
     type: 'text' | 'checkbox' | 'number' | 'select' | 'mult-select' | 'textarea';
     default?: string | number | boolean | unknown[];  // 配置默认值
-    values?: unknown[];      // 列表选择器的候选
-    bind?: unknown[];        // 动态显示绑定
-    min?: number;            // 最小输入值
-    max?: number;            // 最大输入值
-    unit?: string;           // 单位
-    password?: boolean;      // 是否显示为密码框
 }
 ```
 
@@ -73,31 +66,24 @@ const UserConfig: ScriptCatUserConfig = {
     '滚动配置': {
         scrollLength: {
             title: '滚动距离 (px/s)',
-            description: '滚动距离',
             type: 'number',
-            min: 0,
             default: 100,
         },
         focusMode: {
             title: '专注模式',
-            description: '专注模式',
             type: 'checkbox',
             default: false,
         },
         scrollMode: {
             title: '滚动模式',
-            description: '页面滚动模式',
             type: 'select',
-            values: ['无限滚动', '自动翻页'],
             default: '无限滚动',
         },
     },
     '自动翻页配置': {
         turnPageDelay: {
             title: '翻页延时',
-            description: '翻页延时',
             type: 'select',
-            values: ['自适应', '固定值'],
             default: '自适应',
         },
     },
@@ -138,7 +124,6 @@ const UserConfig: ScriptCatUserConfig = {
     '测试配置': {
         noDefault: {
             title: '无默认值',
-            description: '无默认值',
             type: 'text',
             // 不设置 default
         },

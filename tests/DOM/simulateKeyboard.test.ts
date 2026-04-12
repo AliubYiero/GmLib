@@ -70,7 +70,7 @@ describe('simulateKeyboard', () => {
             simulateKeyboard(input, { key: 'Enter' });
 
             expect(capturedEvent).not.toBeNull();
-            expect(capturedEvent!.key).toBe('Enter');
+            expect(capturedEvent?.key).toBe('Enter');
         });
 
         it('should set code property correctly', () => {
@@ -83,7 +83,7 @@ describe('simulateKeyboard', () => {
             simulateKeyboard(input, { key: 'a', code: 'KeyA' });
 
             expect(capturedEvent).not.toBeNull();
-            expect(capturedEvent!.code).toBe('KeyA');
+            expect(capturedEvent?.code).toBe('KeyA');
         });
 
         it('should set bubbles and cancelable to true by default', () => {
@@ -96,8 +96,8 @@ describe('simulateKeyboard', () => {
             simulateKeyboard(input, { key: 'a' });
 
             expect(capturedEvent).not.toBeNull();
-            expect(capturedEvent!.bubbles).toBe(true);
-            expect(capturedEvent!.cancelable).toBe(true);
+            expect(capturedEvent?.bubbles).toBe(true);
+            expect(capturedEvent?.cancelable).toBe(true);
         });
 
         it('should allow disabling bubbles', () => {
@@ -128,7 +128,7 @@ describe('simulateKeyboard', () => {
             simulateKeyboard(input, { key: 'a', repeat: true });
 
             expect(capturedEvent).not.toBeNull();
-            expect(capturedEvent!.repeat).toBe(true);
+            expect(capturedEvent?.repeat).toBe(true);
         });
     });
 
@@ -143,7 +143,7 @@ describe('simulateKeyboard', () => {
             simulateKeyboard(input, { key: 'a', shiftKey: true });
 
             expect(capturedEvent).not.toBeNull();
-            expect(capturedEvent!.shiftKey).toBe(true);
+            expect(capturedEvent?.shiftKey).toBe(true);
         });
 
         it('should set ctrlKey correctly', () => {
@@ -156,7 +156,7 @@ describe('simulateKeyboard', () => {
             simulateKeyboard(input, { key: 'c', ctrlKey: true });
 
             expect(capturedEvent).not.toBeNull();
-            expect(capturedEvent!.ctrlKey).toBe(true);
+            expect(capturedEvent?.ctrlKey).toBe(true);
         });
 
         it('should set altKey correctly', () => {
@@ -169,7 +169,7 @@ describe('simulateKeyboard', () => {
             simulateKeyboard(input, { key: 'Tab', altKey: true });
 
             expect(capturedEvent).not.toBeNull();
-            expect(capturedEvent!.altKey).toBe(true);
+            expect(capturedEvent?.altKey).toBe(true);
         });
 
         it('should set metaKey correctly', () => {
@@ -182,7 +182,7 @@ describe('simulateKeyboard', () => {
             simulateKeyboard(input, { key: 's', metaKey: true });
 
             expect(capturedEvent).not.toBeNull();
-            expect(capturedEvent!.metaKey).toBe(true);
+            expect(capturedEvent?.metaKey).toBe(true);
         });
 
         it('should handle multiple modifier keys', () => {
@@ -199,9 +199,9 @@ describe('simulateKeyboard', () => {
             });
 
             expect(capturedEvent).not.toBeNull();
-            expect(capturedEvent!.ctrlKey).toBe(true);
-            expect(capturedEvent!.shiftKey).toBe(true);
-            expect(capturedEvent!.altKey).toBe(false);
+            expect(capturedEvent?.ctrlKey).toBe(true);
+            expect(capturedEvent?.shiftKey).toBe(true);
+            expect(capturedEvent?.altKey).toBe(false);
         });
     });
 
@@ -220,7 +220,7 @@ describe('simulateKeyboard', () => {
             });
 
             expect(capturedEvent).not.toBeNull();
-            expect(capturedEvent!.key).toBe('Enter');
+            expect(capturedEvent?.key).toBe('Enter');
         });
 
         it('should handle Escape key', () => {
@@ -237,7 +237,7 @@ describe('simulateKeyboard', () => {
             });
 
             expect(capturedEvent).not.toBeNull();
-            expect(capturedEvent!.key).toBe('Escape');
+            expect(capturedEvent?.key).toBe('Escape');
         });
 
         it('should handle Tab key', () => {
@@ -250,7 +250,7 @@ describe('simulateKeyboard', () => {
             simulateKeyboard(input, { key: 'Tab', code: 'Tab', keyCode: 9 });
 
             expect(capturedEvent).not.toBeNull();
-            expect(capturedEvent!.key).toBe('Tab');
+            expect(capturedEvent?.key).toBe('Tab');
         });
 
         it('should handle Arrow keys', () => {
@@ -267,7 +267,7 @@ describe('simulateKeyboard', () => {
             });
 
             expect(capturedEvent).not.toBeNull();
-            expect(capturedEvent!.key).toBe('ArrowDown');
+            expect(capturedEvent?.key).toBe('ArrowDown');
         });
     });
 

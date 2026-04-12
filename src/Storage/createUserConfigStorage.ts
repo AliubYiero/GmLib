@@ -56,13 +56,11 @@ function inferDefaultValue(item: UserConfigItem): unknown {
  *   '滚动配置': {
  *     scrollLength: {
  *       title: '滚动距离 (px/s)',
- *       description: '滚动距离',
  *       type: 'number',
  *       default: 100,
  *     },
  *     focusMode: {
  *       title: '专注模式',
- *       description: '专注模式',
  *       type: 'checkbox',
  *       default: false,
  *     },

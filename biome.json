@@ -31,5 +31,17 @@
         "rules": {
             "recommended": true
         }
-    }
+    },
+    "overrides": [
+        {
+            "includes": ["types/**"],
+            "linter": {
+                "rules": {
+                    "suspicious": {
+                        "noExplicitAny": "off"
+                    }
+                }
+            }
+        }
+    ]
 }

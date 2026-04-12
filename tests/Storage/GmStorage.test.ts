@@ -34,7 +34,7 @@ describe('GmStorage', () => {
     });
 
     it('should register value change listener', () => {
-        const callback = (changeDetail: any) => {};
+        const callback = (_changeDetail: unknown) => {};
         storage.updateListener(callback);
 
         // 验证监听器已注册
@@ -43,8 +43,8 @@ describe('GmStorage', () => {
     });
 
     it('should remove listener when register new one', () => {
-        const callback1 = (changeDetail: any) => {};
-        const callback2 = (changeDetail: any) => {};
+        const callback1 = (_changeDetail: unknown) => {};
+        const callback2 = (_changeDetail: unknown) => {};
 
         storage.updateListener(callback1);
         const firstListenerId = Array.from(gmApiMock.getListeners().keys())[0];

@@ -17,7 +17,7 @@ describe('scroll', () => {
 
     describe('page scroll', () => {
         it('should scroll page to top when scrollPercent is undefined', () => {
-            let callArgs: any = null;
+            let callArgs: ScrollToOptions | null = null;
             window.scrollTo = (options: ScrollToOptions) => {
                 callArgs = options;
             };
@@ -38,7 +38,7 @@ describe('scroll', () => {
         });
 
         it('should scroll page to middle', () => {
-            let callArgs: any = null;
+            let callArgs: ScrollToOptions | null = null;
             window.scrollTo = (options: ScrollToOptions) => {
                 callArgs = options;
             };
@@ -58,7 +58,7 @@ describe('scroll', () => {
         });
 
         it('should scroll page to bottom', () => {
-            let callArgs: any = null;
+            let callArgs: ScrollToOptions | null = null;
             window.scrollTo = (options: ScrollToOptions) => {
                 callArgs = options;
             };
@@ -81,7 +81,7 @@ describe('scroll', () => {
         // 0 会被视为 falsy 值,导致实际使用默认值 0.5
         // 这是一个已知的边界情况
         it('should treat scrollPercent=0 as 0.5 due to falsy value handling', () => {
-            let callArgs: any = null;
+            let callArgs: ScrollToOptions | null = null;
             window.scrollTo = (options: ScrollToOptions) => {
                 callArgs = options;
             };
@@ -104,7 +104,7 @@ describe('scroll', () => {
 
     describe('element scroll', () => {
         it('should scroll element within container', () => {
-            let callArgs: any = null;
+            let callArgs: ScrollToOptions | null = null;
 
             // 创建 mock container
             const container = {
@@ -131,7 +131,7 @@ describe('scroll', () => {
         });
 
         it('should scroll element with window as container', () => {
-            let callArgs: any = null;
+            let callArgs: ScrollToOptions | null = null;
             window.scrollBy = (options: ScrollToOptions) => {
                 callArgs = options;
             };
@@ -163,6 +163,6 @@ describe('scroll', () => {
 });
 
 // 辅助函数,用于清理
-function afterEach(fn: () => void) {
+function afterEach(_fn: () => void) {
     // 在 rstest 中,可以在 beforeEach 中重置状态
 }

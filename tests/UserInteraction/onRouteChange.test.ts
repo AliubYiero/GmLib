@@ -221,9 +221,9 @@ describe('onRouteChange', () => {
             history.pushState({}, '', '/test-path');
 
             expect(receivedEvent).not.toBeNull();
-            expect(typeof receivedEvent!.to).toBe('string');
-            expect(typeof receivedEvent!.from).toBe('string');
-            expect(receivedEvent!.type).toBe('push');
+            expect(typeof receivedEvent?.to).toBe('string');
+            expect(typeof receivedEvent?.from).toBe('string');
+            expect(receivedEvent?.type).toBe('push');
         });
     });
 

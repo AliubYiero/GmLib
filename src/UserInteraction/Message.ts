@@ -453,7 +453,7 @@ function recalculateMessagePositions(): void {
         if (!positionGroups.has(pos)) {
             positionGroups.set(pos, []);
         }
-        positionGroups.get(pos)!.push(msg);
+        positionGroups.get(pos)?.push(msg);
     }
 
     // 对每组消息重新计算位置

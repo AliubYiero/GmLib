@@ -487,10 +487,12 @@ describe('onKeyup', () => {
             );
 
             expect(receivedEvent).not.toBeNull();
-            expect(receivedEvent!.key).toBe('Enter');
-            expect(receivedEvent!.code).toBe('Enter');
-            expect(receivedEvent!.ctrlKey).toBe(true);
-            expect(receivedEvent!.shiftKey).toBe(false);
+            // 类型断言：上面已验证 receivedEvent 不为 null
+            const event = receivedEvent as unknown as KeyboardEvent;
+            expect(event.key).toBe('Enter');
+            expect(event.code).toBe('Enter');
+            expect(event.ctrlKey).toBe(true);
+            expect(event.shiftKey).toBe(false);
         });
     });
 

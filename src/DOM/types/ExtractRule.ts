@@ -37,6 +37,7 @@ export interface ExtractRule {
      *
      * @default null
      */
+    // biome-ignore lint/suspicious/noExplicitAny: 用户可能传入任意类型作为默认值
     defaultValue?: any;
 }
 
@@ -44,5 +45,6 @@ export interface ExtractRule {
  * 提取结果类型
  */
 export type ExtractedResult<T extends ExtractRule> = {
+    // biome-ignore lint/suspicious/noExplicitAny: 泛型结果类型无法精确推断
     [K in T['key']]: any;
 };

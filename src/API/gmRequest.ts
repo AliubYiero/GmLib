@@ -17,7 +17,9 @@ import { parseResponseText } from './util/parseResponseText.ts';
  *
  * @see https://www.tampermonkey.net/documentation.php?ext=dhdg#api:GM_xmlhttpRequest
  */
-export function gmRequest<T extends string | Record<string, any> | Document>(
+export function gmRequest<
+    T extends string | Record<string, unknown> | Document,
+>(
     url: string,
     method?: 'GET',
     param?: Record<string, string>,
@@ -38,7 +40,10 @@ export function gmRequest<T extends string | Record<string, any> | Document>(
  *
  * @see https://www.tampermonkey.net/documentation.php?ext=dhdg#api:GM_xmlhttpRequest
  */
-export function gmRequest<T extends string | Record<string, any> | Document, K>(
+export function gmRequest<
+    T extends string | Record<string, unknown> | Document,
+    K,
+>(
     url: string,
     method: 'POST',
     data?: Record<string, K>,
@@ -56,14 +61,17 @@ export function gmRequest<T extends string | Record<string, any> | Document, K>(
  *
  * @see https://www.tampermonkey.net/documentation.php?ext=dhdg#api:GM_xmlhttpRequest
  */
-export function gmRequest<T extends string | Record<string, any> | Document>(
-    GMXmlHttpRequestConfig: GMTypes.XHRDetails,
-): Promise<T>;
+export function gmRequest<
+    T extends string | Record<string, unknown> | Document,
+>(GMXmlHttpRequestConfig: GMTypes.XHRDetails): Promise<T>;
 
 /**
  * 通过 GM_xmlhttpRequest 进行网络请求
  */
-export function gmRequest<T extends string | Record<string, any> | Document, K>(
+export function gmRequest<
+    T extends string | Record<string, unknown> | Document,
+    K,
+>(
     param1: string | GMTypes.XHRDetails,
     method?: 'POST' | 'GET',
     body?: Record<string, K>,
@@ -131,7 +139,7 @@ export function gmRequest<T extends string | Record<string, any> | Document, K>(
                 }
                 resolve(parseResponseText(response.responseText) as T);
             },
-            onerror(error: any) {
+            onerror(error: unknown) {
                 reject(error);
             },
             ontimeout() {

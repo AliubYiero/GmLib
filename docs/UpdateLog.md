@@ -1,6 +1,26 @@
 # 更新日志
 
-### 0.4.2 - feat
+### 0.4.2 - refactor
+
+**类型安全增强:**
+- 重构: 将代码中的 `any` 类型改为 `unknown`，提升类型安全性
+- 新增: 在必要位置添加 `// biome-ignore` 注释，显式忽略 `noExplicitAny` 规则
+- 新增: Biome 配置 `overrides`，对 `types/**` 目录关闭 `noExplicitAny` 规则
+
+**UserConfigItem 类型简化:**
+- 移除: `description` 字段（与 title 重复）
+- 移除: `values`、`bind` 字段（ScriptCat 特有，不属于库核心类型）
+- 移除: `min`、`max`、`unit`、`password` 字段（同上）
+
+**hookXhr 改进:**
+- 修复: 添加 `descriptor.get` 存在性检查，防止空指针异常
+- 改进: 使用显式参数替代 `arguments` 对象，提升代码可读性
+
+**代码规范优化:**
+- 改进: 使用可选链 `?.` 替代非空断言 `!`
+- 改进: 使用 `Number.isNaN` 替代全局 `isNaN`
+- 改进: 使用条件语句替代短路赋值表达式
+- 改进: 测试文件统一添加 biome-ignore 注释
 
 **Message 消息通知增强:**
 - 新增: 消息堆叠功能，同一位置的多条消息自动堆叠显示

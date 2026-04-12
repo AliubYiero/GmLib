@@ -4,9 +4,9 @@ import { afterAll, beforeAll, describe, expect, it } from '@rstest/core';
 const originalXhrOpen = XMLHttpRequest.prototype.open;
 
 describe('hookXhr', () => {
-    let hookXhr: <T extends string | Record<string, any> | Document>(
+    let hookXhr: <T extends string | Record<string, unknown> | Document>(
         hookUrl: (url: string) => boolean,
-        callback: (response: T, requestUrl: string) => void | string,
+        callback: (response: T, requestUrl: string) => undefined | string,
     ) => void;
 
     beforeAll(async () => {
@@ -38,7 +38,7 @@ describe('hookXhr', () => {
         // 再次调用 hookXhr
         hookXhr(
             (url) => url.includes('another'),
-            (response) => JSON.stringify({ modified: true }),
+            (_response) => JSON.stringify({ modified: true }),
         );
 
         // 验证 open 方法没有被再次替换（仍然是同一个函数引用）

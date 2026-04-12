@@ -116,7 +116,7 @@ describe('GmObjectStorage', () => {
         });
 
         it('should getItem return undefined for non-existent key', () => {
-            const dynamicStorage = new GmObjectStorage<Record<string, any>>(
+            const dynamicStorage = new GmObjectStorage<Record<string, unknown>>(
                 'dynamic',
                 {},
             );
@@ -156,6 +156,7 @@ describe('GmObjectStorage', () => {
         });
 
         it('should pick ignore non-existent keys', () => {
+            // biome-ignore lint/suspicious/noExplicitAny: 测试不存在的键需要 any
             const picked = storage.pick('theme', 'nonexistent' as any);
             expect(picked).toEqual({ theme: 'light' });
         });
@@ -177,7 +178,7 @@ describe('GmObjectStorage', () => {
 
     describe('Iteration', () => {
         it('should forEach iterate all properties', () => {
-            const entries: [string, any][] = [];
+            const entries: [string, unknown][] = [];
             storage.forEach((value, key) => {
                 entries.push([key, value]);
             });

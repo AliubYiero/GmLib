@@ -180,8 +180,12 @@ class gmMenuCommand {
     ) {
         const commandButton = gmMenuCommand.get(title);
 
-        details.onClick && (commandButton.onClick = details.onClick);
-        details.isActive && (commandButton.isActive = details.isActive);
+        if (details.onClick) {
+            commandButton.onClick = details.onClick;
+        }
+        if (details.isActive) {
+            commandButton.isActive = details.isActive;
+        }
         return gmMenuCommand;
     }
 

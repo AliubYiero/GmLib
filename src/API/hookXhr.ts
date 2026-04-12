@@ -7,7 +7,7 @@ let isHooked = false;
 /** Hook 管理器，存储所有注册的 hook */
 const hookRegistry: Array<{
     matcher: (url: string) => boolean;
-    callback: (response: any, requestUrl: string) => void | string;
+    callback: (response: unknown, requestUrl: string) => undefined | string;
 }> = [];
 
 /**
@@ -41,9 +41,9 @@ const hookRegistry: Array<{
  * );
  * ```
  */
-export const hookXhr = <T extends string | Record<string, any> | Document>(
+export const hookXhr = <T extends string | Record<string, unknown> | Document>(
     hookUrl: (url: string) => boolean,
-    callback: (response: T, requestUrl: string) => void | string,
+    callback: (response: T, requestUrl: string) => undefined | string,
 ) => {
     // 注册 hook
     hookRegistry.push({ matcher: hookUrl, callback });
@@ -54,16 +54,33 @@ export const hookXhr = <T extends string | Record<string, any> | Document>(
     }
     isHooked = true;
 
-    XMLHttpRequest.prototype.open = function () {
-        const requestUrl = arguments[1] as string; // 提前保存 URL
+    XMLHttpRequest.prototype.open = function (
+        method: string,
+        url: string,
+        async?: boolean,
+        username?: string | null,
+        password?: string | null,
+    ) {
+        const requestUrl = url; // 提前保存 URL
 
         // 查找匹配的 hook
         const matchedHook = hookRegistry.find((h) => h.matcher(requestUrl));
         if (matchedHook) {
-            const getter = Object.getOwnPropertyDescriptor(
+            const descriptor = Object.getOwnPropertyDescriptor(
                 XMLHttpRequest.prototype,
                 'responseText',
-            )!.get as Function;
+            );
+            if (!descriptor?.get) {
+                return originalXhrOpen.call(
+                    this,
+                    method,
+                    url,
+                    async,
+                    username,
+                    password,
+                );
+            }
+            const getter = descriptor.get as () => string;
 
             Object.defineProperty(this, 'responseText', {
                 get: () => {
@@ -78,7 +95,13 @@ export const hookXhr = <T extends string | Record<string, any> | Document>(
                 },
             });
         }
-        // @ts-expect-error
-        return originalXhrOpen.apply(this, arguments);
+        return originalXhrOpen.call(
+            this,
+            method,
+            url,
+            async,
+            username,
+            password,
+        );
     };
 };

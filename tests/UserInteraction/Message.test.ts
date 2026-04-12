@@ -248,12 +248,14 @@ describe('Message', () => {
 
         it('should throw error for invalid type', () => {
             expect(() =>
+                // biome-ignore lint/suspicious/noExplicitAny: 测试无效类型需要 any
                 Message({ message: 'test', type: 'invalid' as any }),
             ).toThrow('type');
         });
 
         it('should throw error for invalid position', () => {
             expect(() =>
+                // biome-ignore lint/suspicious/noExplicitAny: 测试无效位置需要 any
                 Message({ message: 'test', position: 'invalid' as any }),
             ).toThrow('position');
         });
@@ -378,8 +380,8 @@ describe('Message', () => {
             rs.useFakeTimers();
 
             const instance1 = Message('message 1');
-            const instance2 = Message('message 2');
-            const instance3 = Message('message 3');
+            const _instance2 = Message('message 2');
+            const _instance3 = Message('message 3');
             Message('message 4'); // 第4条消息
 
             // 等待关闭动画完成 (300ms)

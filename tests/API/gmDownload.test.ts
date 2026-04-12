@@ -10,10 +10,14 @@ describe('gmDownload', () => {
 
     describe('download', () => {
         it('should resolve true on success', async () => {
-            gmApiMock.GM_download.mockImplementation((config: any) => {
-                setTimeout(() => config.onload?.(), 0);
-                return {} as any;
-            });
+            gmApiMock.GM_download.mockImplementation(
+                // biome-ignore lint/suspicious/noExplicitAny: mock 实现需要灵活类型
+                (config: any) => {
+                    setTimeout(() => config.onload?.(), 0);
+                    // biome-ignore lint/suspicious/noExplicitAny: mock 返回值
+                    return {} as any;
+                },
+            );
 
             const result = await gmDownload(
                 'https://example.com/file.txt',
@@ -25,13 +29,17 @@ describe('gmDownload', () => {
         });
 
         it('should reject on error', async () => {
-            gmApiMock.GM_download.mockImplementation((config: any) => {
-                setTimeout(
-                    () => config.onerror?.({ error: 'download_failed' }),
-                    0,
-                );
-                return {} as any;
-            });
+            gmApiMock.GM_download.mockImplementation(
+                // biome-ignore lint/suspicious/noExplicitAny: mock 实现需要灵活类型
+                (config: any) => {
+                    setTimeout(
+                        () => config.onerror?.({ error: 'download_failed' }),
+                        0,
+                    );
+                    // biome-ignore lint/suspicious/noExplicitAny: mock 返回值
+                    return {} as any;
+                },
+            );
 
             await expect(
                 gmDownload('https://example.com/file.txt', 'file.txt'),
@@ -39,10 +47,14 @@ describe('gmDownload', () => {
         });
 
         it('should reject on timeout', async () => {
-            gmApiMock.GM_download.mockImplementation((config: any) => {
-                setTimeout(() => config.ontimeout?.(), 0);
-                return {} as any;
-            });
+            gmApiMock.GM_download.mockImplementation(
+                // biome-ignore lint/suspicious/noExplicitAny: mock 实现需要灵活类型
+                (config: any) => {
+                    setTimeout(() => config.ontimeout?.(), 0);
+                    // biome-ignore lint/suspicious/noExplicitAny: mock 返回值
+                    return {} as any;
+                },
+            );
 
             await expect(
                 gmDownload('https://example.com/file.txt', 'file.txt'),
@@ -64,12 +76,17 @@ describe('gmDownload', () => {
                 revokeObjectURL: (url: string) => {
                     revokedUrl = url;
                 },
+                // biome-ignore lint/suspicious/noExplicitAny: mock URL 对象需要灵活类型
             } as any;
 
-            gmApiMock.GM_download.mockImplementation((config: any) => {
-                setTimeout(() => config.onload?.(), 0);
-                return {} as any;
-            });
+            gmApiMock.GM_download.mockImplementation(
+                // biome-ignore lint/suspicious/noExplicitAny: mock 实现需要灵活类型
+                (config: any) => {
+                    setTimeout(() => config.onload?.(), 0);
+                    // biome-ignore lint/suspicious/noExplicitAny: mock 返回值
+                    return {} as any;
+                },
+            );
 
             const blob = new Blob(['test content'], { type: 'text/plain' });
             const result = await gmDownload.blob(blob, 'test.txt');
@@ -91,12 +108,17 @@ describe('gmDownload', () => {
                     return mockUrl;
                 },
                 revokeObjectURL: () => {},
+                // biome-ignore lint/suspicious/noExplicitAny: mock URL 对象需要灵活类型
             } as any;
 
-            gmApiMock.GM_download.mockImplementation((config: any) => {
-                setTimeout(() => config.onload?.(), 0);
-                return {} as any;
-            });
+            gmApiMock.GM_download.mockImplementation(
+                // biome-ignore lint/suspicious/noExplicitAny: mock 实现需要灵活类型
+                (config: any) => {
+                    setTimeout(() => config.onload?.(), 0);
+                    // biome-ignore lint/suspicious/noExplicitAny: mock 返回值
+                    return {} as any;
+                },
+            );
 
             const result = await gmDownload.text('Hello World', 'hello.txt');
 
@@ -114,12 +136,17 @@ describe('gmDownload', () => {
                     return mockUrl;
                 },
                 revokeObjectURL: () => {},
+                // biome-ignore lint/suspicious/noExplicitAny: mock URL 对象需要灵活类型
             } as any;
 
-            gmApiMock.GM_download.mockImplementation((config: any) => {
-                setTimeout(() => config.onload?.(), 0);
-                return {} as any;
-            });
+            gmApiMock.GM_download.mockImplementation(
+                // biome-ignore lint/suspicious/noExplicitAny: mock 实现需要灵活类型
+                (config: any) => {
+                    setTimeout(() => config.onload?.(), 0);
+                    // biome-ignore lint/suspicious/noExplicitAny: mock 返回值
+                    return {} as any;
+                },
+            );
 
             const result = await gmDownload.text(
                 '{"key": "value"}',
