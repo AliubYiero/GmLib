@@ -46,7 +46,13 @@ export const hookXhr = <T extends string | Record<string, unknown> | Document>(
     callback: (response: T, requestUrl: string) => undefined | string,
 ) => {
     // 注册 hook
-    hookRegistry.push({ matcher: hookUrl, callback });
+    hookRegistry.push({
+        matcher: hookUrl,
+        callback: callback as (
+            response: unknown,
+            requestUrl: string,
+        ) => undefined | string,
+    });
 
     // 只 hook 一次
     if (isHooked) {
@@ -57,7 +63,7 @@ export const hookXhr = <T extends string | Record<string, unknown> | Document>(
     XMLHttpRequest.prototype.open = function (
         method: string,
         url: string,
-        async?: boolean,
+        async: boolean = true,
         username?: string | null,
         password?: string | null,
     ) {
