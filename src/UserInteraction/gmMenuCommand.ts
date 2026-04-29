@@ -40,6 +40,11 @@ class gmMenuCommand {
      * */
     static list: MenuCommand[] = [];
 
+    /**
+     * 是否暂停渲染（用于 batch 批量操作）
+     * */
+    private static _renderSuspended = false;
+
     private constructor() {}
 
     /**
@@ -68,33 +73,35 @@ class gmMenuCommand {
      * @param details 状态配置对象，包含 active 和 inactive 两个状态
      * @returns gmMenuCommand 实例（支持链式调用）
      */
-    static createToggle(details: {
-        active: Omit<MenuCommand, 'id' | 'isActive'>;
-        inactive: Omit<MenuCommand, 'id' | 'isActive'>;
-    }) {
-        gmMenuCommand
-            .create(
-                details.active.title,
-                () => {
-                    // 创建激活状态的菜单按钮
-                    gmMenuCommand.toggleActive(details.active.title);
-                    gmMenuCommand.toggleActive(details.inactive.title);
-                    details.active.onClick();
-                    gmMenuCommand.render();
-                },
-                true,
-            )
-            .create(
-                details.inactive.title,
-                () => {
-                    gmMenuCommand.toggleActive(details.active.title); // 创建未激活状态的菜单按钮
-                    gmMenuCommand.toggleActive(details.inactive.title);
-                    details.inactive.onClick();
-                    gmMenuCommand.render();
-                },
-                false,
-            );
-        return gmMenuCommand;
+    static createToggle(
+        details: {
+            active: Omit<MenuCommand, 'id' | 'isActive'>;
+            inactive: Omit<MenuCommand, 'id' | 'isActive'>;
+        },
+        defaultState: 'active' | 'inactive' = 'active',
+    ) {
+        const isActiveInitially = defaultState === 'active';
+        gmMenuCommand.list.push({
+            title: details.active.title,
+            onClick: () => {
+                gmMenuCommand.toggleActive(details.active.title);
+                gmMenuCommand.toggleActive(details.inactive.title);
+                details.active.onClick();
+            },
+            isActive: isActiveInitially,
+            id: 0,
+        });
+        gmMenuCommand.list.push({
+            title: details.inactive.title,
+            onClick: () => {
+                gmMenuCommand.toggleActive(details.active.title);
+                gmMenuCommand.toggleActive(details.inactive.title);
+                details.inactive.onClick();
+            },
+            isActive: !isActiveInitially,
+            id: 0,
+        });
+        return gmMenuCommand.render();
     }
 
     /**
@@ -134,7 +141,7 @@ class gmMenuCommand {
         }
 
         gmMenuCommand.list.push({ title, onClick: onClick, isActive, id: 0 });
-        return gmMenuCommand;
+        return gmMenuCommand.render();
     }
 
     /**
@@ -147,7 +154,41 @@ class gmMenuCommand {
         gmMenuCommand.list = gmMenuCommand.list.filter(
             (commandButton) => commandButton.title !== title,
         );
-        return gmMenuCommand;
+        return gmMenuCommand.render();
+    }
+
+    /**
+     * 清空所有菜单按钮
+     */
+    static reset() {
+        gmMenuCommand.list = [];
+        return gmMenuCommand.render();
+    }
+
+    /**
+     * 批量操作菜单命令
+     *
+     * 在回调函数中进行的所有菜单操作不会触发多次渲染，
+     * 而是在回调结束后统一渲染一次。
+     *
+     * @param callback 批量操作回调
+     * @returns gmMenuCommand 实例（支持链式调用）
+     *
+     * @example
+     * ```ts
+     * gmMenuCommand.batch(() => {
+     *   gmMenuCommand.create('菜单1', () => {});
+     *   gmMenuCommand.create('菜单2', () => {});
+     *   gmMenuCommand.create('菜单3', () => {});
+     * });
+     * // 只会在最后渲染一次
+     * ```
+     */
+    static batch(callback: () => void) {
+        gmMenuCommand._renderSuspended = true;
+        callback();
+        gmMenuCommand._renderSuspended = false;
+        return gmMenuCommand.render();
     }
 
     /**
@@ -168,7 +209,7 @@ class gmMenuCommand {
             gmMenuCommand.list[index2],
             gmMenuCommand.list[index1],
         ];
-        return gmMenuCommand;
+        return gmMenuCommand.render();
     }
 
     /**
@@ -186,7 +227,7 @@ class gmMenuCommand {
         if (details.isActive) {
             commandButton.isActive = details.isActive;
         }
-        return gmMenuCommand;
+        return gmMenuCommand.render();
     }
 
     /**
@@ -196,13 +237,16 @@ class gmMenuCommand {
         const commandButton = gmMenuCommand.get(title);
 
         commandButton.isActive = !commandButton.isActive;
-        return gmMenuCommand;
+        return gmMenuCommand.render();
     }
 
     /**
      * 渲染所有激活的菜单按钮
      */
     static render() {
+        if (gmMenuCommand._renderSuspended) {
+            return gmMenuCommand;
+        }
         gmMenuCommand.list.forEach((commandButton) => {
             // 清除原先的菜单按钮
             GM_unregisterMenuCommand(commandButton.id);
@@ -214,6 +258,7 @@ class gmMenuCommand {
                 );
             }
         });
+        return gmMenuCommand;
     }
 }
 
