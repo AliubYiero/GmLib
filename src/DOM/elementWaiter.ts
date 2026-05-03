@@ -29,7 +29,7 @@ export interface IElementWaiterOption {
  *
  * 在指定延迟后尝试获取元素，成功则 resolve，失败则 reject
  */
-const returnElement = <T>(
+export const returnElement = <T>(
     selector: string,
     options: IElementWaiterOption,
     resolve: (value: T | PromiseLike<T>) => void,
@@ -54,7 +54,7 @@ const returnElement = <T>(
  *
  * 当浏览器不支持 MutationObserver 时使用的降级方案
  */
-const getElementByTimer = <T>(
+export const getElementByTimer = <T>(
     selector: string,
     options: IElementWaiterOption,
     resolve: (value: T | PromiseLike<T>) => void,

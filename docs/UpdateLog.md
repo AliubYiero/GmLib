@@ -1,5 +1,24 @@
 # 更新日志
 
+### 0.4.5 - feat
+
+**elementGetter 新增:**
+- 新增函数: `elementGetter`, 通过定时器轮询获取元素
+- 与 `elementWaiter` 的区别：仅使用定时器轮询，不使用 MutationObserver
+- 新增测试文件: `tests/DOM/elementGetter.test.ts`
+- 新增 API 文档: `docs/DOM/elementGetter.md`
+- 改进: 导出 `elementWaiter` 的辅助函数 `returnElement` 和 `getElementByTimer`
+
+### 0.4.4 - update
+
+**gmMenuCommand 增强:**
+
+- 新增: `createToggle` 方法新增 `defaultState` 参数，支持控制初始显示状态 (`'active'` | `'inactive'`)
+- 新增: `reset()` 方法，用于清空所有菜单命令
+- 新增: `batch()` 方法，用于批量操作菜单命令，统一渲染一次
+- 改进: 所有变更操作（`create`、`remove`、`swap`、`modify`、`toggleActive`、`reset`、`createToggle`）现在会自动调用 `render()`，无需手动调用
+- 改进: `render()` 方法现在返回 `typeof gmMenuCommand`，支持链式调用
+
 ### 0.4.3 - refactor
 
 **类型安全增强:**

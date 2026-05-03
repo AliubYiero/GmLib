@@ -18,12 +18,15 @@ pnpm test:watch   # 监听模式运行测试
 pnpm pack         # 打包为 npm 包
 ```
 
+运行单个测试文件: `pnpm test -- <file>`
+
 ## 技术栈
 
-- **构建工具**: rslib (Rust-based bundler)
-- **测试框架**: rstest (基于 Rust 的测试框架，使用 `@rstest/adapter-rslib` 适配)
-- **代码检查/格式化**: Biome
-- **类型检查**: TypeScript (strict 模式)
+- **包管理器**: pnpm
+- **构建工具**: rslib (Rust-based bundler)，输出 ESM 格式，启用 dts 生成
+- **测试框架**: rstest (jsdom 环境，通过 `@rstest/adapter-rslib` 适配 rslib)
+- **代码检查/格式化**: Biome (启用 VCS 集成，自动识别 gitignore；开启 organizeImports on save)
+- **类型检查**: TypeScript strict 模式，target ES2022
 
 ## 代码架构
 
@@ -31,49 +34,18 @@ pnpm pack         # 打包为 npm 包
 src/
 ├── index.ts              # 统一导出入口
 ├── API/                  # 网络请求封装
-│   ├── getCookie.ts      # 获取 Cookie
-│   ├── gmDownload.ts     # 文件下载
-│   ├── gmRequest.ts      # GM_xmlhttpRequest Promise 封装
-│   ├── hookXhr.ts         # XHR 请求劫持
-│   └── util/
-│       └── parseResponseText.ts
 ├── DOM/                  # DOM 操作
-│   ├── elementWaiter.ts  # 等待元素出现
-│   ├── extractDOMInfo.ts # 批量提取 DOM 数据
-│   ├── scroll.ts         # 页面滚动
-│   ├── setValue.ts       # 设置输入框值
-│   ├── simulateClick.ts  # 模拟鼠标点击
-│   ├── simulateKeyboard.ts
-│   └── types/
 ├── Env/                  # 环境检测
-│   ├── environmentTest.ts # 检测运行环境
-│   └── isIframe.ts
 ├── Storage/              # 存储管理
-│   ├── GmStorage.ts      # 基类
-│   ├── GmArrayStorage.ts # 数组存储
-│   ├── GmObjectStorage.ts
-│   ├── createUserConfigStorage.ts
-│   └── types/
 ├── UI/                   # 界面工具
-│   └── uiImporter.ts     # 解析并载入 HTML/CSS
 └── UserInteraction/      # 用户交互
-    ├── Message.ts        # 消息通知组件
-    ├── gmMenuCommand.ts  # 菜单命令
-    ├── onKeydown.ts      # 键盘事件
-    ├── onKeyup.ts
-    ├── onRouteChange.ts  # 路由变化监听
-    └── types/
-```
 
-## 测试模式
+types/                    # ScriptCat / Navigation API 类型声明（非源码，全局声明）
+  ├── scriptcat.d.ts
+  └── navigation.d.ts
 
-测试使用 rstest 框架，GM API 通过 `tests/__mocks__/gmApi.ts` 进行 mock。
-
-```
-// 测试文件结构
 tests/
-├── __mocks__/
-│   └── gmApi.ts          # GM API mock (GM_getValue, GM_xmlhttpRequest 等)
+├── __mocks__/gmApi.ts    # GM API mock (核心: gmApiMock + setupGlobalGmApi)
 ├── API/
 ├── DOM/
 ├── Env/
@@ -82,11 +54,18 @@ tests/
 └── UserInteraction/
 ```
 
-运行单个测试文件: `pnpm test -- <file>`
+## 测试规范
+
+- 使用 rstest (基于 rstest)，测试文件与被测文件结构对应
+- GM API 通过 `tests/__mocks__/gmApi.ts` 的 `gmApiMock` 对象进行 mock，测试前需调用 `setupGlobalGmApi()` 注入全局对象
+- 请求相关测试使用 `mockRequestSuccess()` / `mockRequestError()` / `mockRequestTimeout()` 辅助函数
+- 测试运行后调用 `gmApiMock.reset()` 清理状态
+- 测试配置在 `rstest.config.ts` 中，使用 jsdom 环境
 
 ## 代码规范
 
 - 缩进: 4 空格
 - 引号: 单引号
 - TypeScript: strict 模式
-- 类型定义文件放在 `types/` 目录
+- 类型定义文件放在 `types/` 目录（而非 `src/types/`）
+- Biome 配置: 类型目录 (`types/**`) 关闭 `noExplicitAny` 规则

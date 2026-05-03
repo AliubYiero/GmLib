@@ -5,6 +5,7 @@ export { gmRequest } from './API/gmRequest';
 export { hookXhr } from './API/hookXhr';
 
 // DOM
+export { elementGetter } from './DOM/elementGetter';
 export { elementWaiter } from './DOM/elementWaiter';
 export { extractDOMInfo } from './DOM/extractDOMInfo';
 export { scroll } from './DOM/scroll';

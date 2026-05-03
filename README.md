@@ -50,6 +50,7 @@ Message.success('操作成功');
 
 | 函数 | 说明 |
 | :--- | :--- |
+| [`elementGetter`](docs/DOM/elementGetter.md) | 通过定时器轮询获取元素 |
 | [`elementWaiter`](docs/DOM/elementWaiter.md) | 等待元素加载完成 |
 | [`extractDOMInfo`](docs/DOM/extractDOMInfo.md) | 从 DOM 节点批量提取数据 |
 | [`scroll`](docs/DOM/scroll.md) | 页面滚动到指定位置 |
