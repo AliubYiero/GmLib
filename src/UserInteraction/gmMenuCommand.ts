@@ -71,6 +71,7 @@ class gmMenuCommand {
      * 点击激活态菜单时执行回调并切换到未激活态，反之亦然。
      *
      * @param details 状态配置对象，包含 active 和 inactive 两个状态
+     * @param defaultState 默认状态
      * @returns gmMenuCommand 实例（支持链式调用）
      */
     static createToggle(
@@ -152,7 +153,13 @@ class gmMenuCommand {
      */
     static remove(title: string) {
         gmMenuCommand.list = gmMenuCommand.list.filter(
-            (commandButton) => commandButton.title !== title,
+            (commandButton) => {
+	            const isRemove = commandButton.title !== title
+	            if ( isRemove ) {
+					gmMenuCommand.unregisterMenuCommand(commandButton.id)
+	            }
+	            return isRemove
+            },
         );
         return gmMenuCommand.render();
     }
@@ -161,6 +168,9 @@ class gmMenuCommand {
      * 清空所有菜单按钮
      */
     static reset() {
+        gmMenuCommand.list.forEach(({id}) => {
+            gmMenuCommand.unregisterMenuCommand(id)
+        })
         gmMenuCommand.list = [];
         return gmMenuCommand.render();
     }
@@ -249,7 +259,7 @@ class gmMenuCommand {
         }
         gmMenuCommand.list.forEach((commandButton) => {
             // 清除原先的菜单按钮
-            GM_unregisterMenuCommand(commandButton.id);
+            gmMenuCommand.unregisterMenuCommand(commandButton.id);
             // 重新注册激活状态的菜单按钮
             if (commandButton.isActive) {
                 commandButton.id = GM_registerMenuCommand(
@@ -260,6 +270,13 @@ class gmMenuCommand {
         });
         return gmMenuCommand;
     }
+	
+	/**
+	 * 清除指定 id 的绑定状态
+	 */
+	private static unregisterMenuCommand(id: number) {
+		GM_unregisterMenuCommand(id);
+	}
 }
 
 export { gmMenuCommand };

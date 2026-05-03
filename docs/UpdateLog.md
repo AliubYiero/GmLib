@@ -1,5 +1,10 @@
 # 更新日志
 
+### 0.4.6 - fix
+
+**gmMenuCommand**
+-  修复 `gmMenuCommand` 在进行删除操作时, 只删除显示UI, 没有彻底销毁. 导致命名相同时, 重置后会重复触发的问题. 
+
 ### 0.4.5 - feat
 
 **elementGetter 新增:**
